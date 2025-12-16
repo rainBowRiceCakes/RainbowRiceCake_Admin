@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --mng-sidebar-width: 240px;
+  --mng-sidebar-title-font-color: #adb5bd;
+  --mng-sidebar-item-font-color: #c2c7d0;
+  --mng-font-size-sidebar: 14px;
+  --mng-font-weight: 900px;
+  --mng-font-gray: #343a40;
+  --mng-font-green: #2ecc71;
+  --mng-font-blue: #3498db;
+  --mng-font-red: #e74c3c;
+  --mng-content-border-boottom: #dee2e6;
+  --mng-button-content: #fff;
+  --mng-font-size-title: 18px;
+  --mng-font-size-sub-title: 16px;
+  --mng-font-size-content: 12px;
+  --mng-container-padding: 20px;
+}
