@@ -1,0 +1,180 @@
+/* 1. 전체 컨테이너 */
+.order-container {
+  flex: 1; /* 화면 꽉 채우기 */
+  background-color: #F6F6F6; /* 배경: 연한 회색 */
+  padding: 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.order-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+/* 3. 헤더 영역 (Flexbox) */
+.order-main-head {
+  display: flex;
+  justify-content: space-between; /* 양 끝 정렬 */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.toggle-container {
+  display: flex;
+  background-color: #EEEEEE; /* 연한 회색 배경 */
+  padding: 4px;
+  border-radius: 24px; /* 둥근 알약 모양 */
+  width: fit-content; /* 내용물만큼만 넓이 차지 */
+}
+
+/* 토글 버튼 기본 (선택 안 된 상태) */
+.toggle-btn {
+  background: transparent; /* 배경 투명 */
+  border: none;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #757575; /* 선택 안 됐을 때 글자색 */
+  cursor: pointer;
+  border-radius: 20px; /* 버튼도 둥글게 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* ★ 선택된 버튼 (Active) */
+.toggle-btn.active {
+  background-color: #000000; /* Uber Black 배경 */
+  color: #FFFFFF; /* 흰색 글씨 */
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 살짝 그림자 */
+}
+
+/* 버튼에 마우스 올렸을 때 */
+.toggle-btn:hover:not(.active) {
+  background-color: #E0E0E0; /* 살짝 진해짐 */
+  color: #333333;
+}
+
+/* 우측 액션 그룹 */
+.head-action-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* 검색창 */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 0 12px;
+  width: 240px;
+}
+.search-icon { font-size: 14px; color: #999; margin-right: 8px; }
+.search-input {
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* 버튼 스타일 (공통) */
+.btn-outline {
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  color: #000000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-outline:hover { background-color: #F9F9F9; }
+
+.btn-black {
+  background-color: #000000;
+  border: 1px solid #000000;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-black:hover { opacity: 0.9; }
+
+
+/* 4. 본문 테이블 영역 (Card UI) */
+.order-main-content {
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  overflow: hidden; /* 둥근 모서리 유지 */
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th {
+  min-width: 130px;
+  text-align: left;
+  padding: 16px 24px;
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 12px;
+  color: #5E5E5E;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.order-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #F0F0F0;
+  font-size: 14px;
+  color: #000000;
+  vertical-align: middle;
+}
+
+.order-table-check-box {
+  min-width: 30px;
+}
+
+.order-table tr:hover { background-color: #FAFAFA; }
+.order-table tr:last-child td { border-bottom: none; }
+
+.fw-bold { font-weight: 700; }
+
+/* 상태 배지 스타일 */
+.status-badge {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-badge.WAITING { background-color: #F5F5F5; color: #5E5E5E; }
+.status-badge.MATCHED { background-color: #E3F2FD; color: #1565C0; } /* 파란색 */
+.status-badge.PICKUP { background-color: #FFF3E0; color: #E65100; } /* 주황색 */
+.status-badge.COMPLETE { background-color: #E8F5E9; color: #2E7D32; } /* 초록색 */
+.status-badge.CANCEL { background-color: #FFEBEE; color: #C62828; } /* 빨간색 */
+
+.order-detail-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}

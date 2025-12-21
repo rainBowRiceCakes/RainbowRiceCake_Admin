@@ -1,7 +1,17 @@
+import { Outlet } from 'react-router-dom';
 import './App.css';
+import SideBar from './components/common/SideBar.jsx';
 
 function App() {
-  <h1>Admin입니다~</h1>
+  return(
+
+    <>
+      <div className='app_container'>
+        <SideBar />
+        <Outlet />
+      </div>
+    </>
+  )
 }
 
 export default App;

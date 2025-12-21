@@ -1,0 +1,181 @@
+/* 1. 전체 컨테이너 */
+.partner-container {
+  flex: 1;
+  background-color: #F6F6F6;
+  padding: 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.partner-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+/* 3. 헤더 영역 */
+.partner-main-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 토글 버튼 그룹 */
+.partner-toggle-container {
+  display: flex;
+  background-color: #EEEEEE;
+  padding: 4px;
+  border-radius: 24px;
+  width: fit-content;
+}
+
+.partner-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #757575;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.partner-toggle-btn.active {
+  background-color: #000000;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.partner-toggle-btn:hover:not(.active) {
+  background-color: #E0E0E0;
+  color: #333333;
+}
+
+/* 우측 액션 그룹 */
+.partner-action-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* 검색창 */
+.partner-search-box {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 0 12px;
+  width: 240px;
+}
+.partner-search-icon { font-size: 14px; color: #999; margin-right: 8px; }
+.partner-search-input {
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* 버튼 스타일 */
+.partner-btn-outline {
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  color: #000000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.partner-btn-outline:hover { background-color: #F9F9F9; }
+
+.partner-btn-black {
+  background-color: #000000;
+  border: 1px solid #000000;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.partner-btn-black:hover { opacity: 0.9; }
+
+/* 작은 버튼 (테이블 내부용) */
+.partner-btn-small {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+.partner-btn-small.blue { background-color: #276EF1; }
+.partner-btn-small.gray { background-color: #EEEEEE; color: #333; }
+
+
+/* 4. 본문 테이블 영역 */
+.partner-main-content {
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  overflow: hidden;
+}
+
+.partner-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.partner-table th {
+  min-width: 130px;
+  text-align: left;
+  padding: 16px 24px;
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 12px;
+  color: #5E5E5E;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.partner-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #F0F0F0;
+  font-size: 14px;
+  color: #000000;
+  vertical-align: middle;
+}
+
+.partner-table tr:hover { background-color: #FAFAFA; }
+.partner-table tr:last-child td { border-bottom: none; }
+
+.fw-bold { font-weight: 700; }
+
+/* 상태 표시 (점 + 텍스트) */
+.partner-status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.ACTIVE { background-color: #27AE60; }
+.status-dot.PENDING { background-color: #F2994A; }
+.status-dot.REJECTED { background-color: #EB5757; }
