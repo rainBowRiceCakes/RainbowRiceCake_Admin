@@ -1,0 +1,128 @@
+/* 1. 전체 컨테이너 */
+.notice-container {
+  flex: 1;
+  background-color: var(--adm-bg-primary); /* 배경: 연한 회색 */
+  padding: var(--adm-spacing-xl);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.notice-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+}
+
+/* 3. 폼 카드 (흰색 박스) */
+.notice-form-card {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xl);
+  max-width: 800px; /* 폼이 너무 넓어지지 않도록 제한 */
+  box-shadow: var(--adm-shadow-light);
+}
+
+/* 폼 그룹 (라벨 + 인풋) */
+.form-group {
+  margin-bottom: var(--adm-spacing-l);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-link);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+/* --- Role 선택 (커스텀 라디오 버튼) --- */
+.role-selector {
+  display: flex;
+  gap: 10px;
+  background-color: var(--adm-border-secondary);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-medium);
+  width: fit-content; /* 내용물만큼만 너비 차지 */
+}
+
+/* 라벨 스타일 (버튼처럼 보이게 함) */
+.role-option {
+  padding: 10px var(--adm-spacing-l);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+/* 실제 input radio는 숨김 */
+.role-option input[type="radio"] {
+  display: none;
+}
+
+/* 선택된 상태 스타일 */
+.role-option.active {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive);
+}
+
+.role-option:hover:not(.active) {
+  background-color: var(--adm-border-primary);
+  color: #333;
+}
+
+/* --- 입력 필드 스타일 --- */
+.notice-input,
+.notice-textarea {
+  width: 100%;
+  padding: var(--adm-spacing-s) var(--adm-font-large);
+  font-size: 15px;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.notice-input:focus,
+.notice-textarea:focus {
+  outline: none;
+  border-color: var(--adm-text-primary); /* 포커스 시 검은 테두리 */
+  background-color: var(--adm-bg-tertiary);
+}
+
+.notice-textarea {
+  resize: vertical; /* 세로 크기 조절만 허용 */
+  line-height: 1.6;
+}
+
+/* --- 버튼 영역 --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin-top: 32px;
+}
+
+.notice-btn-submit {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  border: none;
+  padding: var(--adm-font-base) 32px;
+  font-size: var(--adm-font-large);
+  font-weight: var(--adm-font-weight-semibold);
+  border-radius: var(--adm-radius-medium);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.notice-btn-submit:hover {
+  opacity: 0.9;
+}

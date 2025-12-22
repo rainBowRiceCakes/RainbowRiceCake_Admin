@@ -2,16 +2,49 @@ import React, { useState } from 'react';
 import './Partner.css';
 
 // 더미 데이터 (파트너 목록)
+// 더미 데이터 (파트너 목록)
 const mockPartners = [
-  { id: 'P-1001', name: '올리브영 명동본점', manager: '매니저', address: '서울 중구 명동길 12', businessNum: '123-45-67890', status: 'ACTIVE' },
-  { id: 'P-1002', name: '어디어디매장', manager: '매니저', address: '서울 중구 동호로 249', businessNum: '987-65-43210', status: 'ACTIVE' },
-  { id: 'P-1003', name: '강남 기념품샵', manager: '매니저', address: '서울 강남구 테헤란로 1', businessNum: '111-22-33333', status: 'PENDING' },
-  { id: 'P-1004', name: '인천공항 T1', manager: '매니저', address: '인천 중구 공항로', businessNum: '000-00-00000', status: 'ACTIVE' },
-  { id: 'P-1005', name: '홍대 굿즈샵', manager: '매니저', address: '서울 마포구 양화로', businessNum: '444-55-66666', status: 'REJECTED' },
+  { id: 'P-1001', name: '올리브영 명동본점', manager: '매니저', address: '서울 중구 명동길 12', businessNum: '123-45-67890', status: 'RES' },
+  { id: 'P-1002', name: '어디어디매장', manager: '매니저', address: '서울 중구 동호로 249', businessNum: '987-65-43210', status: 'RES' },
+  { id: 'P-1003', name: '강남 기념품샵', manager: '매니저', address: '서울 강남구 테헤란로 1', businessNum: '111-22-33333', status: 'REQ' },
+  { id: 'P-1004', name: '인천공항 T1', manager: '매니저', address: '인천 중구 공항로', businessNum: '000-00-00000', status: 'RES' },
+  { id: 'P-1005', name: '홍대 굿즈샵', manager: '매니저', address: '서울 마포구 양화로', businessNum: '444-55-66666', status: 'REJ' },
 ];
+
+const getStatusText = (status) => {
+  switch (status) {
+    case 'REQ':
+      return '대기중';
+    case 'RES':
+      return '승인';
+    case 'REJ':
+      return '거절';
+    default:
+      return status;
+  }
+};
 
 function Partner() {
   const [viewType, setViewType] = useState('all'); // all(전체) | pending(승인대기)
+  const [searchPartner, setSearchPartner] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // // 필터링 로직
+  const filteredPartners = mockPartners.filter((partner) => {
+    const isStatusMatched = viewType === 'pending' ? partner.status === 'REQ' : true;
+
+    const isSearchMatched = partner.name.toLowerCase().includes(searchPartner.toLowerCase());
+
+    return isStatusMatched && isSearchMatched;
+  });
+
+  // 페이지네이션 로직
+  const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
+  const currentItems = filteredPartners.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="partner-container">
@@ -42,7 +75,7 @@ function Partner() {
         <div className="partner-action-group">
           <div className="partner-search-box">
             <span className="partner-search-icon">🔍</span>
-            <input type="text" placeholder="매장명, 주소 검색" className="partner-search-input" />
+            <input type="text" placeholder="매장명, 주소 검색" className="partner-search-input" value={searchPartner} onChange={(e) => setSearchPartner(e.target.value)} />
           </div>
           <button className="partner-btn-outline">엑셀 다운로드</button>
           <button className="partner-btn-black">+ 매장 등록</button>
@@ -65,7 +98,7 @@ function Partner() {
             </tr>
           </thead>
           <tbody>
-            {mockPartners.map((partner) => (
+            {currentItems.map((partner) => (
               <tr key={partner.id}>
                 <td className="fw-bold">{partner.id}</td>
                 <td>{partner.name}</td>
@@ -75,11 +108,11 @@ function Partner() {
                 <td>
                   <div className="partner-status-cell">
                     <span className={`status-dot ${partner.status}`}></span>
-                    {partner.status}
+                    {getStatusText(partner.status)}
                   </div>
                 </td>
                 <td>
-                  {partner.status === 'PENDING' ? (
+                  {partner.status === 'REQ' ? (
                     <button className="partner-btn-small blue">승인</button>
                   ) : (
                     <button className="partner-btn-small gray">관리</button>
@@ -87,8 +120,36 @@ function Partner() {
                 </td>
               </tr>
             ))}
+            {currentItems.length === 0 && (
+              <tr><td colSpan="7" style={{textAlign:'center', padding:'30px'}}>데이터가 없습니다.</td></tr>
+            )}
           </tbody>
         </table>
+
+        {/* 6. 페이지네이션 */}
+        <div className="pagination">
+          <button 
+            disabled={currentPage === 1} 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+            <button 
+              key={num} 
+              className={currentPage === num ? 'active' : ''}
+              onClick={() => setCurrentPage(num)}
+            >
+              {num}
+            </button>
+          ))}
+          <button 
+            disabled={currentPage === totalPages} 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
 
     </div>

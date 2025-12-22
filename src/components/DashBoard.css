@@ -3,36 +3,36 @@
 /* 1. 전체 컨테이너 */
 .dash-container {
   flex: 1; /* 부모가 flex일 때 남은 공간을 모두 차지함 */
-  background-color: #F6F6F6; /* 전체 배경: 아주 연한 회색 (Uber Style) */
-  padding: 40px;
+  background-color: var(--adm-bg-primary); /* 전체 배경: 아주 연한 회색 (Uber Style) */
+  padding: var(--adm-spacing-xl);
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* 2. 페이지 타이틀 */
 .dash-title {
-  font-size: 28px;
-  font-weight: 700; /* Bold */
-  color: #000000;
-  margin-bottom: 24px;
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold); /* Bold */
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
   letter-spacing: -0.5px;
 }
 
 /* 3. 요약 위젯 컨테이너 (Flex Row) */
 .dash-sum-container {
   display: flex;
-  gap: 20px; /* 카드 사이 간격 */
+  gap: var(--adm-spacing-m); /* 카드 사이 간격 */
   margin-bottom: 30px;
 }
 
 /* 4. 개별 요약 카드 (White Box) */
 .dash-sum {
   flex: 1; /* 3개의 카드가 동일한 너비를 가짐 */
-  background-color: #FFFFFF;
-  padding: 24px;
-  border-radius: 8px; /* 살짝 둥근 모서리 */
-  border: 1px solid #E0E0E0; /* 옅은 테두리 */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02); /* 아주 은은한 그림자 */
+  background-color: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-l);
+  border-radius: var(--adm-radius-medium); /* 살짝 둥근 모서리 */
+  border: 1px solid var(--adm-border-primary); /* 옅은 테두리 */
+  box-shadow: var(--adm-shadow-light); /* 아주 은은한 그림자 */
   transition: all 0.2s ease;
   cursor: default;
 }
@@ -40,28 +40,28 @@
 /* 카드 내부 텍스트 */
 .dash-sum-title {
   font-size: 13px;
-  font-weight: 600;
-  color: #5E5E5E; /* 보조 텍스트 색상 */
-  margin-bottom: 8px;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary); /* 보조 텍스트 색상 */
+  margin-bottom: var(--adm-spacing-xs);
   text-transform: uppercase; /* 대문자로 변환 */
 }
 
 .dash-sum-value {
   font-size: 36px;
   font-weight: 800; /* Extra Bold */
-  color: #000000;
+  color: var(--adm-text-primary);
 }
 
 /* (옵션) Pending 숫자는 빨간색으로 강조하고 싶다면 사용 */
 .dash-sum:last-child .dash-sum-value {
-  color: #D93025; /* Uber Red */
+  color: var(--adm-accent-red); /* Uber Red */
 }
 
 /* 5. 지도 영역 컨테이너 */
 .dash-map-container {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  border: 1px solid #E0E0E0;
+  background-color: var(--adm-bg-secondary);
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid var(--adm-border-primary);
   height: 600px; /* 지도 높이 확보 */
   width: 100%;
   
@@ -69,8 +69,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999999;
-  font-size: 16px;
-  font-weight: 500;
-  background-color: #FAFAFA; /* 지도 없을 때 배경색 */
+  color: var(--adm-text-placeholder);
+  font-size: var(--adm-font-large);
+  font-weight: var(--adm-font-weight-medium);
+  background-color: var(--adm-bg-tertiary); /* 지도 없을 때 배경색 */
 }

@@ -3,20 +3,38 @@ import './Hotel.css';
 
 // 더미 데이터 (호텔 목록 - 담당자/전화번호 추가)
 const mockHotels = [
-  { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: 'ACTIVE' },
-  { id: 'H-1002', name: '조선 팰리스', manager: '이영희 매니저', phone: '02-555-1234', address: '서울 강남구 테헤란로 231', status: 'ACTIVE' },
-  { id: 'H-1003', name: '롯데호텔 서울', manager: '박민수 팀장', phone: '02-771-1000', address: '서울 중구 을지로 30', status: 'INACTIVE' },
-  { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: 'ACTIVE' },
-  { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: 'INACTIVE' },
+  { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: true },
+  { id: 'H-1002', name: '조선 팰리스', manager: '이영희 매니저', phone: '02-555-1234', address: '서울 강남구 테헤란로 231', status: true },
+  { id: 'H-1003', name: '롯데호텔 서울', manager: '박민수 팀장', phone: '02-771-1000', address: '서울 중구 을지로 30', status: false },
+  { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: true },
+  { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: false },
 ];
 
 function Hotels() {
   const [viewType, setViewType] = useState('all'); // all(전체) | active(활동중)
+  const [searchHotel, setSearchHotel] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // 필터링 로직
-  const filteredHotels = viewType === 'active' 
-    ? mockHotels.filter(h => h.status === 'ACTIVE') 
-    : mockHotels;
+  // 1. viewType 조건 (토글)과 2. searchHotel 조건 (검색)을 모두 만족(AND)해야 함
+  const filteredHotels = mockHotels.filter((hotel) => {
+    // 1. 토글 상태 체크 ('active'면 status가 true여야 함, 'all'이면 무조건 통과)
+    const isStatusMatched = viewType === 'active' ? hotel.status : true;
+    
+    // 2. 검색어 체크 (호텔 이름에 검색어가 포함되어 있는지, 대소문자 무시)
+    const isSearchMatched = hotel.name.toLowerCase().includes(searchHotel.toLowerCase());
+
+    // 두 조건 모두 참이어야 결과에 포함
+    return isStatusMatched && isSearchMatched;
+  });
+
+  // 페이지네이션 로직
+  const totalPages = Math.ceil(filteredHotels.length / itemsPerPage);
+  const currentItems = filteredHotels.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="hotel-container">
@@ -47,7 +65,7 @@ function Hotels() {
         <div className="hotel-action-group">
           <div className="hotel-search-box">
             <span className="hotel-search-icon">🔍</span>
-            <input type="text" placeholder="호텔명, 담당자 검색" className="hotel-search-input" />
+            <input type="text" placeholder="호텔명" className="hotel-search-input" value={searchHotel} onChange={(e) => setSearchHotel(e.target.value)} />
           </div>
           <button className="hotel-btn-outline">엑셀 다운로드</button>
           <button className="hotel-btn-black">+ 호텔 등록</button>
@@ -69,7 +87,7 @@ function Hotels() {
             </tr>
           </thead>
           <tbody>
-            {filteredHotels.map((hotel) => (
+            {currentItems.map((hotel) => (
               <tr key={hotel.id}>
                 <td className="fw-bold">{hotel.id}</td>
                 <td>{hotel.name}</td>
@@ -78,8 +96,8 @@ function Hotels() {
                 <td>{hotel.address}</td>
                 <td>
                   <div className="hotel-status-cell">
-                    <span className={`status-dot ${hotel.status}`}></span>
-                    {hotel.status === 'ACTIVE' ? '활동 중' : '활동 안함'}
+                    <span className={`status-dot status-${hotel.status}`}></span>
+                    {hotel.status ? '활동 중' : '활동 안함'}
                   </div>
                 </td>
                 <td>
@@ -87,8 +105,36 @@ function Hotels() {
                 </td>
               </tr>
             ))}
+            {currentItems.length === 0 && (
+              <tr><td colSpan="7" style={{textAlign:'center', padding:'30px'}}>데이터가 없습니다.</td></tr>
+            )}
           </tbody>
         </table>
+
+        {/* 6. 페이지네이션 */}
+        <div className="pagination">
+          <button 
+            disabled={currentPage === 1} 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+            <button 
+              key={num} 
+              className={currentPage === num ? 'active' : ''}
+              onClick={() => setCurrentPage(num)}
+            >
+              {num}
+            </button>
+          ))}
+          <button 
+            disabled={currentPage === totalPages} 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
 
     </div>

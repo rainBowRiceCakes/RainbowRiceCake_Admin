@@ -1,18 +1,18 @@
 /* 1. 전체 컨테이너 */
 .hotel-container {
   flex: 1;
-  background-color: #F6F6F6;
-  padding: 40px;
+  background-color: var(--adm-bg-primary);
+  padding: var(--adm-spacing-xl);
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* 2. 제목 */
 .hotel-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 24px;
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
   letter-spacing: -0.5px;
 }
 
@@ -21,111 +21,111 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--adm-spacing-m);
 }
 
 /* 토글 버튼 그룹 */
 .hotel-toggle-container {
   display: flex;
-  background-color: #EEEEEE;
-  padding: 4px;
-  border-radius: 24px;
+  background-color: var(--adm-bg-interactive);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-large);
   width: fit-content;
 }
 
 .hotel-toggle-btn {
   background: transparent;
   border: none;
-  padding: 8px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #757575;
+  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary);
   cursor: pointer;
   border-radius: 20px;
   transition: all 0.3s ease;
 }
 
 .hotel-toggle-btn.active {
-  background-color: #000000;
-  color: #FFFFFF;
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive);
 }
 
 .hotel-toggle-btn:hover:not(.active) {
-  background-color: #E0E0E0;
-  color: #333333;
+  background-color: var(--adm-border-primary);
+  color: var(--adm-text-link);
 }
 
 /* 우측 액션 그룹 */
 .hotel-action-group {
   display: flex;
-  gap: 12px;
+  gap: var(--adm-spacing-s);
 }
 
 /* 검색창 */
 .hotel-search-box {
   display: flex;
   align-items: center;
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0E0;
-  border-radius: 8px;
-  padding: 0 12px;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
   width: 240px;
 }
-.hotel-search-icon { font-size: 14px; color: #999; margin-right: 8px; }
+.hotel-search-icon { font-size: var(--adm-font-base); color: var(--adm-text-placeholder); margin-right: var(--adm-spacing-xs); }
 .hotel-search-input {
   border: none;
   outline: none;
   padding: 10px 0;
-  font-size: 14px;
+  font-size: var(--adm-font-base);
   width: 100%;
 }
 
 /* 버튼 스타일 */
 .hotel-btn-outline {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0E0;
-  color: #000000;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
   cursor: pointer;
 }
 .hotel-btn-outline:hover { background-color: #F9F9F9; }
 
 .hotel-btn-black {
-  background-color: #000000;
-  border: 1px solid #000000;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
+  background-color: var(--adm-text-primary);
+  border: 1px solid var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
   cursor: pointer;
 }
 .hotel-btn-black:hover { opacity: 0.9; }
 
 /* 작은 버튼 */
 .hotel-btn-small {
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
   border: none;
   cursor: pointer;
   color: white;
 }
-.hotel-btn-small.gray { background-color: #EEEEEE; color: #333; }
+.hotel-btn-small.gray { background-color: var(--adm-bg-interactive); color: #333; }
 
 
 /* 4. 본문 테이블 영역 */
 .hotel-main-content {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0E0;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-shadow: var(--adm-shadow-light);
   overflow: hidden;
 }
 
@@ -137,27 +137,27 @@
 .hotel-table th {
   min-width: 130px;
   text-align: left;
-  padding: 16px 24px;
-  background-color: #FAFAFA;
-  border-bottom: 1px solid #E0E0E0;
-  font-size: 12px;
-  color: #5E5E5E;
-  font-weight: 600;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  background-color: var(--adm-bg-tertiary);
+  border-bottom: 1px solid var(--adm-border-primary);
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-semibold);
   text-transform: uppercase;
 }
 
 .hotel-table td {
-  padding: 16px 24px;
-  border-bottom: 1px solid #F0F0F0;
-  font-size: 14px;
-  color: #000000;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
   vertical-align: middle;
 }
 
-.hotel-table tr:hover { background-color: #FAFAFA; }
+.hotel-table tr:hover { background-color: var(--adm-bg-tertiary); }
 .hotel-table tr:last-child td { border-bottom: none; }
 
-.fw-bold { font-weight: 700; }
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
 
 /* --- 호텔 전용 스타일 --- */
 
@@ -165,10 +165,10 @@
 .hotel-type-tag {
   background-color: #E3F2FD; /* 호텔용 파란색 배경 */
   color: #1565C0;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: var(--adm-radius-small) var(--adm-spacing-xs);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-tiny);
+  font-weight: var(--adm-font-weight-bold);
   display: inline-block;
 }
 
@@ -176,17 +176,17 @@
 .hotel-status-cell {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 500;
+  gap: var(--adm-spacing-xs);
+  font-weight: var(--adm-font-weight-medium);
   font-size: 13px;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: var(--adm-spacing-xs);
+  height: var(--adm-spacing-xs);
   border-radius: 50%;
   display: inline-block;
 }
 
-.status-dot.ACTIVE { background-color: #27AE60; } /* 초록색 */
-.status-dot.INACTIVE { background-color: #BDBDBD; } /* 회색 (활동 안함) */
+.status-dot.status-true { background-color: var(--adm-accent-green); } /* 초록색 */
+.status-dot.status-false { background-color: var(--adm-text-tertiary); } /* 회색 (활동 안함) */

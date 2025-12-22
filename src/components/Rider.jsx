@@ -2,16 +2,49 @@ import { useState } from 'react';
 import './Rider.css';
 
 // 더미 데이터 (기사 목록)
+// 더미 데이터 (기사 목록)
 const mockRiders = [
-  { id: 'R-1001', name: '김철수', phone: '010-1234-5678', work: true, status: 'ACTIVE', create: '2025-11-12' },
-  { id: 'R-1002', name: '이영희', phone: '010-9876-5432', work: false, status: 'PENDING', create: '2025-12-01' },
-  { id: 'R-1003', name: '박민수', phone: '010-5555-4444', work: false, status: 'SUSPENDED', create: '2025-12-12' },
-  { id: 'R-1004', name: '최지훈', phone: '010-1111-2222', work: true, status: 'ACTIVE', create: '2025-11-12' },
-  { id: 'R-1005', name: '정수진', phone: '010-7777-8888', work: false, status: 'ACTIVE', create: '2025-11-25' },
+  { id: 'R-1001', name: '김철수', phone: '010-1234-5678', work: true, status: 'RES', create: '2025-11-12' },
+  { id: 'R-1002', name: '이영희', phone: '010-9876-5432', work: false, status: 'REQ', create: '2025-12-01' },
+  { id: 'R-1003', name: '박민수', phone: '010-5555-4444', work: false, status: 'REJ', create: '2025-12-12' },
+  { id: 'R-1004', name: '최지훈', phone: '010-1111-2222', work: true, status: 'RES', create: '2025-11-12' },
+  { id: 'R-1005', name: '정수진', phone: '010-7777-8888', work: false, status: 'RES', create: '2025-11-25' },
 ];
+
+const getStatusText = (status) => {
+  switch (status) {
+    case 'REQ':
+      return '대기중';
+    case 'RES':
+      return '승인';
+    case 'REJ':
+      return '거절';
+    default:
+      return status;
+  }
+};
 
 function Riders() {
   const [viewType, setViewType] = useState('all'); // all(전체) | pending(승인대기)
+  const [searchRider, setSearchRider] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // 필터링 로직
+  const filteredRiders = mockRiders.filter((rider) => {
+    const isStatusMatched = viewType === 'pending' ? rider.status === 'REQ' : true;
+
+    const isSearchMatched = rider.name.toLowerCase().includes(searchRider.toLowerCase());
+
+    return isStatusMatched && isSearchMatched;
+  });
+
+  // 페이지네이션 로직
+  const totalPages = Math.ceil(filteredRiders.length / itemsPerPage);
+  const currentItems = filteredRiders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="rider-container">
@@ -42,7 +75,7 @@ function Riders() {
         <div className="rider-action-group">
           <div className="rider-search-box">
             <span className="rider-search-icon">🔍</span>
-            <input type="text" placeholder="이름, 전화번호 검색" className="rider-search-input" />
+            <input type="text" placeholder="이름, 전화번호 검색" className="rider-search-input" value={searchRider} onChange={(e) => setSearchRider(e.target.value)} />
           </div>
           <button className="rider-btn-outline">엑셀 다운로드</button>
           <button className="rider-btn-black">+ 기사 등록</button>
@@ -64,7 +97,7 @@ function Riders() {
             </tr>
           </thead>
           <tbody>
-            {mockRiders.map((rider) => (
+            {currentItems.map((rider) => (
               <tr key={rider.id}>
                 <td className="fw-bold">{rider.id}</td>
                 <td>{rider.name}</td>
@@ -74,12 +107,12 @@ function Riders() {
                   {/* 상태에 따른 점(Dot) + 텍스트 표시 */}
                   <div className="rider-status-cell">
                     <span className={`status-dot ${rider.status}`}></span>
-                    {rider.status}
+                    {getStatusText(rider.status)}
                   </div>
                 </td>
                 <td>{rider.create.toLocaleString()}</td>
                 <td>
-                  {rider.status === 'PENDING' ? (
+                  {rider.status === 'REQ' ? (
                     <button className="rider-btn-small blue">승인</button>
                   ) : (
                     <button className="rider-btn-small gray">관리</button>
@@ -87,8 +120,36 @@ function Riders() {
                 </td>
               </tr>
             ))}
+            {currentItems.length === 0 && (
+              <tr><td colSpan="7" style={{textAlign:'center', padding:'30px'}}>데이터가 없습니다.</td></tr>
+            )}
           </tbody>
         </table>
+
+        {/* 6. 페이지네이션 */}
+        <div className="pagination">
+          <button 
+            disabled={currentPage === 1} 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+            <button 
+              key={num} 
+              className={currentPage === num ? 'active' : ''}
+              onClick={() => setCurrentPage(num)}
+            >
+              {num}
+            </button>
+          ))}
+          <button 
+            disabled={currentPage === totalPages} 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
 
     </div>
