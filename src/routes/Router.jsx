@@ -7,6 +7,7 @@ import Partner from "../components/Partner.jsx";
 import Hotel from "../components/Hotel.jsx";
 import Settlement from "../components/Settlement.jsx";
 import Notice from "../components/Notice.jsx";
+import QnA from "../components/QnA.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       { 
         path: '/admin/notice', 
         element: <Notice />
+      },
+      { 
+        path: '/admin/qna', 
+        element: <QnA />
       },
 
       {

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import './Hotel.css';
+import { excelDown } from '../api/utils/excelDown.js';
+// import { useDispatch } from 'react-redux';
+// import { hotelShowThunk } from '../store/thunks/hotelShowThunk.js';
 
+// const dispatch = useDispatch();
 // 더미 데이터 (호텔 목록 - 담당자/전화번호 추가)
 const mockHotels = [
   { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: true },
@@ -9,6 +13,8 @@ const mockHotels = [
   { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: true },
   { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: false },
 ];
+
+// const mockHotels = await dispatch(hotelShowThunk).unwrap();
 
 function Hotels() {
   const [viewType, setViewType] = useState('all'); // all(전체) | active(활동중)
@@ -35,6 +41,27 @@ function Hotels() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // ★ 엑셀 다운로드 핸들러
+  const handleDownloadExcel = () => {
+    // 1. 엑셀에 정의할 컬럼 설정 (width로 너비 조절 가능)
+    const columns = [
+      { header: 'Hotel ID', key: 'id', width: 15 },
+      { header: '고객명', key: 'name', width: 15 },
+      { header: '매니저', key: 'manager', width: 15 },
+      { header: '전화번호', key: 'phone', width: 20 },
+      { header: '주소', key: 'address', width: 20 },
+      { header: '주소', key: 'address', width: 20 },
+      { header: '주소', key: 'address', width: 20 },
+      { header: '주소', key: 'address', width: 20 },
+    ];
+
+    // 2. 파일명 생성 (예: Hotels_2025-06-25)
+    const today = new Date().toISOString().slice(0, 10);
+    
+    // 3. 함수 실행 (데이터는 현재 필터링된 데이터를 넣거나 전체 데이터를 넣음)
+    excelDown(mockHotels, `Hotels_${today}`, columns);
+  };
 
   return (
     <div className="hotel-container">
@@ -67,7 +94,7 @@ function Hotels() {
             <span className="hotel-search-icon">🔍</span>
             <input type="text" placeholder="호텔명" className="hotel-search-input" value={searchHotel} onChange={(e) => setSearchHotel(e.target.value)} />
           </div>
-          <button className="hotel-btn-outline">엑셀 다운로드</button>
+          <button className="hotel-btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="hotel-btn-black">+ 호텔 등록</button>
         </div>
       </div>

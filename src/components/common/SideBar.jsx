@@ -11,6 +11,7 @@ const MENU_ITEMS = [
   { id: 'hotel', name: 'Hotels(제휴호텔)', path: '/admin/hotel' },
   { id: 'settlement', name: 'Settlements(정산)', path: '/admin/settlement' },
   { id: 'notice', name: 'Notices(공지발송)', path: '/admin/notice' },
+  { id: 'qna', name: 'QnA(질문목록)', path: '/admin/qna' },
 ];
 
 const Sidebar = () => {

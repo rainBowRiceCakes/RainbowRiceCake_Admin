@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Order.css';
+import { excelDown } from '../api/utils/excelDown.js';
 
 // 더미 데이터
 const mockOrders = [
@@ -21,6 +22,25 @@ function Order() {
     // TODO: DB에 새로운 정렬 기준으로 데이터를 요청할 곳.
     // 예: fetchOrders({ orderBy: type });
     console.log(`DB 요청: 정렬기준 -> ${type}`); 
+  };
+
+  const handleDownloadExcel = () => {
+    // 1. 엑셀에 정의할 컬럼 설정 (width로 너비 조절 가능)
+    const columns = [
+      { header: 'Order ID', key: 'id', width: 15 },
+      { header: '고객명', key: 'customer', width: 15 },
+      { header: '출발지', key: 'from', width: 20 },
+      { header: '도착지', key: 'to', width: 20 },
+      { header: '상태', key: 'status', width: 12 },
+      { header: '예약 시간', key: 'time', width: 15 },
+      { header: '금액', key: 'price', width: 15 },
+    ];
+
+    // 2. 파일명 생성 (예: Orders_2025-06-25)
+    const today = new Date().toISOString().slice(0, 10);
+    
+    // 3. 함수 실행 (데이터는 현재 필터링된 데이터를 넣거나 전체 데이터를 넣음)
+    excelDown(mockOrders, `Orders_${today}`, columns);
   };
 
   return (
@@ -53,7 +73,7 @@ function Order() {
             <span className="search-icon">🔍</span>
             <input type="text" placeholder="ID, 고객명 검색" className="search-input" />
           </div>
-          <button className="btn-outline">엑셀 다운로드</button>
+          <button className="btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="btn-black">+ 예약 등록</button>
         </div>
       </div>

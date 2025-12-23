@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Partner.css';
+import { excelDown } from '../api/utils/excelDown.js';
 
 // 더미 데이터 (파트너 목록)
 // 더미 데이터 (파트너 목록)
@@ -45,6 +46,24 @@ function Partner() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  
+    const handleDownloadExcel = () => {
+      // 1. 엑셀에 정의할 컬럼 설정 (width로 너비 조절 가능)
+      const columns = [
+        { header: 'Partner ID', key: 'id', width: 15 },
+        { header: '매장명', key: 'name', width: 15 },
+        { header: '매니저', key: 'manager', width: 20 },
+        { header: '주소', key: 'address', width: 20 },
+        { header: '사업자번호', key: 'businessNum', width: 20 },
+        { header: '상태', key: 'status', width: 15 },
+      ];
+  
+      // 2. 파일명 생성 (예: Partners_2025-06-25)
+      const today = new Date().toISOString().slice(0, 10);
+      
+      // 3. 함수 실행 (데이터는 현재 필터링된 데이터를 넣거나 전체 데이터를 넣음)
+      excelDown(mockPartners, `Partners_${today}`, columns);
+    };
 
   return (
     <div className="partner-container">
@@ -77,7 +96,7 @@ function Partner() {
             <span className="partner-search-icon">🔍</span>
             <input type="text" placeholder="매장명, 주소 검색" className="partner-search-input" value={searchPartner} onChange={(e) => setSearchPartner(e.target.value)} />
           </div>
-          <button className="partner-btn-outline">엑셀 다운로드</button>
+          <button className="partner-btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="partner-btn-black">+ 매장 등록</button>
         </div>
       </div>
