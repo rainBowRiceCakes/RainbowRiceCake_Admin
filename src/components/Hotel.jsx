@@ -1,22 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Hotel.css';
 import { excelDown } from '../api/utils/excelDown.js';
-// import { useDispatch } from 'react-redux';
-// import { hotelShowThunk } from '../store/thunks/hotelShowThunk.js';
+import { useDispatch } from 'react-redux';
+import { hotelShowThunk } from '../../src/store/thunks/hotelShowThunk.js';
 
-// const dispatch = useDispatch();
 // 더미 데이터 (호텔 목록 - 담당자/전화번호 추가)
-const mockHotels = [
-  { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: true },
-  { id: 'H-1002', name: '조선 팰리스', manager: '이영희 매니저', phone: '02-555-1234', address: '서울 강남구 테헤란로 231', status: true },
-  { id: 'H-1003', name: '롯데호텔 서울', manager: '박민수 팀장', phone: '02-771-1000', address: '서울 중구 을지로 30', status: false },
-  { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: true },
-  { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: false },
-];
-
-// const mockHotels = await dispatch(hotelShowThunk).unwrap();
+// const mockHotels = [
+//     { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: true },
+//     { id: 'H-1002', name: '조선 팰리스', manager: '이영희 매니저', phone: '02-555-1234', address: '서울 강남구 테헤란로 231', status: true },
+//     { id: 'H-1003', name: '롯데호텔 서울', manager: '박민수 팀장', phone: '02-771-1000', address: '서울 중구 을지로 30', status: false },
+//     { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: true },
+//     { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: false },
+//   ];
 
 function Hotels() {
+  const dispatch = useDispatch();
+  const [mockHotels, setMockHotels] = useState([]);
+
+  useEffect(() => {
+    async function test() {
+      const result = await dispatch(hotelShowThunk()).unwrap();
+      console.log(result.data);
+      setMockHotels(result.data);
+    }
+    test();
+  },[])
+  
   const [viewType, setViewType] = useState('all'); // all(전체) | active(활동중)
   const [searchHotel, setSearchHotel] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +38,7 @@ function Hotels() {
     const isStatusMatched = viewType === 'active' ? hotel.status : true;
     
     // 2. 검색어 체크 (호텔 이름에 검색어가 포함되어 있는지, 대소문자 무시)
-    const isSearchMatched = hotel.name.toLowerCase().includes(searchHotel.toLowerCase());
+    const isSearchMatched = hotel.krName.toLowerCase().includes(searchHotel.toLowerCase());
 
     // 두 조건 모두 참이어야 결과에 포함
     return isStatusMatched && isSearchMatched;
@@ -47,7 +56,7 @@ function Hotels() {
     // 1. 엑셀에 정의할 컬럼 설정 (width로 너비 조절 가능)
     const columns = [
       { header: 'Hotel ID', key: 'id', width: 15 },
-      { header: '고객명', key: 'name', width: 15 },
+      { header: '고객명', key: 'krName', width: 15 },
       { header: '매니저', key: 'manager', width: 15 },
       { header: '전화번호', key: 'phone', width: 20 },
       { header: '주소', key: 'address', width: 20 },
@@ -117,7 +126,7 @@ function Hotels() {
             {currentItems.map((hotel) => (
               <tr key={hotel.id}>
                 <td className="fw-bold">{hotel.id}</td>
-                <td>{hotel.name}</td>
+                <td>{hotel.krName}</td>
                 <td>{hotel.manager}</td>
                 <td>{hotel.phone}</td>
                 <td>{hotel.address}</td>
