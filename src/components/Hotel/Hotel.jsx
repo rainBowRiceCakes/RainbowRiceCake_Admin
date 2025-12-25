@@ -41,7 +41,7 @@ const refreshList = useCallback(() => {
   // --- 상세 페이지로 이동 ---
   const handleManageClick = (hotel) => {
     // '/admin/hotel/:id' 경로로 이동하며, hotel 데이터를 state로 넘겨줍니다.
-    navigate(`/admin/hotel/${hotel.id}`, { state: { hotel } });
+    navigate(`/admin/hotel/${hotel.id}`);
   };
 
   // 필터링 로직

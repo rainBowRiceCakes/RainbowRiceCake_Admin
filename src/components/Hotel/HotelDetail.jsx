@@ -1,27 +1,33 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import './Hotel.css'; // 스타일은 기존 CSS 재사용
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { hotelPostThunk } from '../../store/thunks/hotelThunk.js';
+import './Hotel.css';
+import { hotelDetailThunk, hotelUpdateThunk } from '../../store/thunks/hotelThunk.js';
 
 function HotelDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
+  
+  // [삭제됨] const location = useLocation(); 
   const { id } = useParams(); // URL 파라미터에서 ID 가져오기
 
-  // 넘겨받은 데이터가 있으면 사용, 없으면 초기값(새로고침 대비)
-  const [editData, setEditData] = useState(location.state?.hotel || null);
+  // [수정됨] location.state 확인 없이 초기값은 null (로딩 상태)
+  const [editData, setEditData] = useState(null);
 
-  // 만약 새로고침해서 location.state가 날아갔다면, ID로 다시 조회하는 로직 필요
+  // [수정됨] 페이지 진입 시 무조건 ID로 최신 데이터 조회
   useEffect(() => {
-    if (!editData) {
-      // TODO: 여기서 id를 이용해 백엔드에서 다시 데이터를 fetch 해야 합니다.
-      // dispatch(getHotelDetailThunk(id))...
-      alert("데이터를 불러오지 못했습니다. 목록으로 돌아갑니다.");
-      navigate('/admin/hotel');
+    async function fetchData() {
+      try {
+        // ID를 이용해 백엔드에서 데이터 fetch
+        const result = await dispatch(hotelDetailThunk(id)).unwrap();
+        setEditData(result.data); // 받아온 데이터로 state 업데이트
+      } catch (error) {
+        alert("데이터를 불러오지 못했습니다. 목록으로 돌아갑니다.");
+        navigate('/admin/hotel');
+      }
     }
-  }, [editData, id, navigate]);
+    fetchData();
+  }, [dispatch, id, navigate]);
 
   // 입력 핸들러
   const handleInputChange = (e) => {
@@ -35,23 +41,32 @@ function HotelDetail() {
   };
 
   // 수정 완료 핸들러
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!window.confirm(`${editData.krName} 정보를 수정하시겠습니까?`)) return;
-    delete editData.createdAt
-    delete editData.updatedAt
-    delete editData.deletedAt
 
-    // TODO : 이곳에서 도로명주소 -> 위도/경도 추가하는 처리 필요
-    // formData.lat = 
-    // formData.lng = 
+    // [삭제됨] location.state와 비교하는 로직 삭제 (이전 데이터가 없으므로)
 
-    dispatch(hotelPostThunk(editData));
-    alert('수정이 완료되었습니다.');
-    
-    navigate('/admin/hotel'); // 목록으로 복귀
+    try {
+      // [권장] state를 직접 수정(delete)하기보다 복사본(payload)을 만들어 전송하는 것이 안전합니다.
+      const payload = { ...editData };
+      
+      // 불필요한 필드 제거
+      delete payload.createdAt;
+      delete payload.updatedAt;
+      delete payload.deletedAt;
+
+      await dispatch(hotelUpdateThunk(payload)).unwrap();
+      
+      alert('수정이 완료되었습니다.');
+      navigate('/admin/hotel'); // 목록으로 복귀
+
+    } catch (error) {
+      console.error('수정 실패:', error);
+      alert('수정 중 오류가 발생했습니다.');
+    }
   };
 
-  // 데이터가 로딩 전이면 아무것도 보여주지 않음
+  // 데이터가 로딩 전이면 로딩 화면 표시
   if (!editData) return <div>Loading...</div>;
 
   return (
@@ -70,7 +85,7 @@ function HotelDetail() {
           </div>
           <div className="form-group">
             <label>생성일</label>
-            <input type="text" value={editData.createAt || '-'} disabled className="input-disabled" />
+            <input type="text" value={editData.createdAt || '-'} disabled className="input-disabled" />
           </div>
           <div className="form-group">
             <label>수정일</label>
