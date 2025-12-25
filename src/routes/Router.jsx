@@ -4,10 +4,11 @@ import Order from "../components/Order.jsx";
 import DashBoard from "../components/DashBoard.jsx";
 import Rider from "../components/Rider.jsx";
 import Partner from "../components/Partner.jsx";
-import Hotel from "../components/Hotel.jsx";
+import Hotel from "../components/Hotel/Hotel.jsx";
 import Settlement from "../components/Settlement.jsx";
 import Notice from "../components/Notice.jsx";
 import QnA from "../components/QnA.jsx";
+import HotelDetail from "../components/Hotel/HotelDetail.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       { 
         path: '/admin/hotel', 
         element: <Hotel />
+      },
+      { 
+        path: '/admin/hotel/:id',
+        element: <HotelDetail />
       },
       { 
         path: '/admin/settlement', 

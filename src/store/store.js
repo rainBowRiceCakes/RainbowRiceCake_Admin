@@ -5,9 +5,10 @@
  */
 
 import { configureStore } from "@reduxjs/toolkit";
+import hotelShowReducer from "../store/slices/hotelSlice.js"
 
 export default configureStore ({
   reducer: {
-
+    hotelShow: hotelShowReducer,
   }
 });
