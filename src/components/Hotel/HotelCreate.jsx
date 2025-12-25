@@ -86,14 +86,16 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal-container">
+      {/* ★ [수정됨] 스크롤용 클래스 추가 */}
+      <div className="modal-container scrollable-modal">
         <div className="modal-header">
           <h2>New Hotel Registration</h2>
           <button className="btn-close" onClick={onClose}>×</button>
         </div>
         
         <form onSubmit={handleSubmit} className="modal-form">
-          <div className="modal-body">
+          {/* ★ [수정됨] 스크롤용 클래스 추가 */}
+          <div className="modal-body modal-body-scroll">
             
             {/* 호텔명 입력 */}
             <div className="form-row">

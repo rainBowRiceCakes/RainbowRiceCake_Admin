@@ -33,7 +33,7 @@ const refreshList = useCallback(() => {
   const [viewType, setViewType] = useState('all'); // all(전체) | active(활동중)
   const [searchHotel, setSearchHotel] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 7;
 
   // --- 모달 Open 상태 관리 ---
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);

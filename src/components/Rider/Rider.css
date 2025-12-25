@@ -1,0 +1,250 @@
+/* 1. 전체 컨테이너 */
+.rider-container {
+  flex: 1;
+  background-color: var(--adm-bg-primary);
+  padding: var(--adm-spacing-xl);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.rider-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+  letter-spacing: -0.5px;
+}
+
+/* 3. 헤더 영역 */
+.rider-main-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--adm-spacing-m);
+}
+
+/* 토글 버튼 그룹 (Uber Style Pill) */
+.rider-toggle-container {
+  display: flex;
+  background-color: var(--adm-bg-interactive);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-large);
+  width: fit-content;
+}
+
+.rider-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary);
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.rider-toggle-btn.active {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive);
+}
+
+.rider-toggle-btn:hover:not(.active) {
+  background-color: var(--adm-border-primary);
+  color: var(--adm-text-link);
+}
+
+/* 우측 액션 그룹 */
+.rider-action-group {
+  display: flex;
+  gap: var(--adm-spacing-s);
+}
+
+/* 검색창 */
+.rider-search-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
+  width: 240px;
+}
+.rider-search-icon { font-size: var(--adm-font-base); color: var(--adm-text-placeholder); margin-right: var(--adm-spacing-xs); }
+.rider-search-input {
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  font-size: var(--adm-font-base);
+  width: 100%;
+}
+
+/* 버튼 스타일 */
+.rider-btn-outline {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.rider-btn-outline:hover { background-color: #F9F9F9; }
+
+.rider-btn-black {
+  background-color: var(--adm-text-primary);
+  border: 1px solid var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.rider-btn-black:hover { opacity: 0.9; }
+
+/* 작은 버튼 (테이블 내부용) */
+.rider-btn-small {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+.rider-btn-small.blue { background-color: var(--adm-accent-blue); } /* Uber Blue */
+.rider-btn-small.gray { background-color: var(--adm-bg-interactive); color: #333; }
+
+/* 4. 본문 테이블 영역 */
+.rider-main-content {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-shadow: var(--adm-shadow-light);
+  overflow: hidden;
+}
+
+.rider-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rider-table th {
+  min-width: 130px;
+  text-align: left;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  background-color: var(--adm-bg-tertiary);
+  border-bottom: 1px solid var(--adm-border-primary);
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.rider-table td {
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+  vertical-align: middle;
+}
+
+.rider-table tr:hover { background-color: var(--adm-bg-tertiary); }
+.rider-table tr:last-child td { border-bottom: none; }
+
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
+
+/* --- 기사 전용 스타일 --- */
+
+/* 출근 태그 */
+.rider-work-tag {
+  background-color: #F3F3F3;
+  padding: var(--adm-radius-small) var(--adm-spacing-xs);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  color: #555;
+  font-weight: var(--adm-font-weight-medium);
+}
+
+.rider-work {
+  background-color: #E8F5E9;
+  color: var(--adm-accent-green);
+}
+
+/* 상태 표시 (점 + 텍스트) */
+.rider-status-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--adm-spacing-xs);
+  font-weight: var(--adm-font-weight-medium);
+  font-size: 13px;
+}
+
+.status-dot {
+  width: var(--adm-spacing-xs);
+  height: var(--adm-spacing-xs);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.RES { background-color: var(--adm-accent-green); } /* 초록색 */
+.status-dot.REQ { background-color: var(--adm-accent-orange); } /* 주황색 */
+.status-dot.REJ { background-color: #EB5757; } /* 빨간색 */
+
+/* --- 리스트용 출근 태그 --- */
+.rider-work-tag {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.rider-work-tag.on { background-color: #E8F5E9; color: #27AE60; }
+.rider-work-tag.off { background-color: #F5F5F5; color: #999; }
+
+/* --- 상세페이지용 토글 스위치 --- */
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.toggle-switch {
+  width: 50px;
+  height: 26px;
+  background-color: #ccc;
+  border-radius: 13px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.toggle-switch.on {
+  background-color: #27AE60; /* 켜졌을 때 색상 */
+}
+
+.toggle-handle {
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.on .toggle-handle {
+  left: 26px; /* 오른쪽으로 이동 */
+}
+
+.toggle-label {
+  font-weight: 600;
+  color: #555;
+}
