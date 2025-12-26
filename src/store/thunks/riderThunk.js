@@ -69,3 +69,25 @@ export const riderUpdateThunk = createAsyncThunk(
     }
   }
 );
+
+export const postLicenseImageUploadThunk = createAsyncThunk(
+  'postLicenseImageUpload/postLicenseImageUploadThunk', // Thunk 고유명
+  async (file, { rejectWithValue }) => {
+    try {
+      const url = `/api/files/licenses`;
+      const headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+      
+      // 폼데이터 생성
+      const formData = new FormData();
+      formData.append('licenseImage', file);
+
+      const response = await axiosInstance.post(url, formData, { headers });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

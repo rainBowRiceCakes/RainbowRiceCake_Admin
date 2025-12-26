@@ -44,10 +44,8 @@ function HotelDetail() {
   const handleUpdate = async () => {
     if (!window.confirm(`${editData.krName} 정보를 수정하시겠습니까?`)) return;
 
-    // [삭제됨] location.state와 비교하는 로직 삭제 (이전 데이터가 없으므로)
-
     try {
-      // [권장] state를 직접 수정(delete)하기보다 복사본(payload)을 만들어 전송하는 것이 안전합니다.
+      // state를 직접 수정하기보다 복사본(payload)을 만들어 전송하는 것이 안전.
       const payload = { ...editData };
       
       // 불필요한 필드 제거
@@ -55,12 +53,15 @@ function HotelDetail() {
       delete payload.updatedAt;
       delete payload.deletedAt;
 
+      // address를 lan,lng으로 변경하는 처리 필요
+
       await dispatch(hotelUpdateThunk(payload)).unwrap();
       
       alert('수정이 완료되었습니다.');
       navigate('/admin/hotel'); // 목록으로 복귀
 
     } catch (error) {
+      console.log(editData);
       console.error('수정 실패:', error);
       alert('수정 중 오류가 발생했습니다.');
     }

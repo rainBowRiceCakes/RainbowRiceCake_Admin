@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Rider.css'; 
-import { riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
+import { postLicenseImageUploadThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
 
 function RiderDetail() {
   const navigate = useNavigate();
@@ -60,32 +60,23 @@ function RiderDetail() {
     if (!window.confirm(`${editData.name} 정보를 수정하시겠습니까?`)) return;
 
     try {
-      const formData = new FormData();
+      const resultUpload = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
+      // state를 직접 수정하기보다 복사본(payload)을 만들어 전송하는 것이 안전.
+      const payload = { ...editData };
 
-      // JSON Blob
-      const riderData = {
-        id: editData.id,
-        userId: editData.userId,
-        name: editData.rider_user.name,
-        phone: editData.phone,
-        address: editData.address,
-        bank: editData.bank,
-        bankNum: editData.bankNum,
-        isWorking: editData.isWorking, // boolean
-        status: editData.status,
-        pickupAt: editData.pickupAt,
-      };
-      
-      const jsonBlob = new Blob([JSON.stringify(riderData)], { type: "application/json" });
-      formData.append("requestDto", jsonBlob);
+      payload.image = resultUpload.data.path;
 
-      // File
-      if (file) {
-        formData.append("licenseImg", file);
-      }
+      // 불필요한 필드 제거
+      delete payload.createdAt;
+      delete payload.updatedAt;
+      delete payload.deletedAt;
 
-      await dispatch(riderUpdateThunk(formData)).unwrap();
-      alert('수정 완료');
+      // TODO: address를 lan,lng으로 변경하는 처리 필요
+
+      // API 전송
+      await dispatch(riderUpdateThunk(payload)).unwrap();
+        
+      alert('수정이 완료되었습니다.');
       navigate('/admin/rider');
     } catch (e) {
       console.error(e);

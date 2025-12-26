@@ -103,3 +103,25 @@ export const partnerUpdateThunk = createAsyncThunk(
     }
   }
 );
+
+export const postLogoImageUploadThunk = createAsyncThunk(
+  'postLogoImageUpload/postLogoImageUploadThunk', // Thunk 고유명
+  async (file, { rejectWithValue }) => {
+    try {
+      const url = `/api/files/logos`;
+      const headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+      
+      // 폼데이터 생성
+      const formData = new FormData();
+      formData.append('logoImage', file);
+
+      const response = await axiosInstance.post(url, formData, { headers });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

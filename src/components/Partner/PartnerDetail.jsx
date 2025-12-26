@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Partner.css'; 
-import { partnerDetailThunk, partnerUpdateThunk } from '../../store/thunks/partnerThunk.js';
+import { partnerDetailThunk, partnerUpdateThunk, postLogoImageUploadThunk } from '../../store/thunks/partnerThunk.js';
 
 function PartnerDetail() {
   const navigate = useNavigate();
@@ -65,36 +65,21 @@ function PartnerDetail() {
     if (!window.confirm(`${editData.krName} 정보를 수정하시겠습니까?`)) return;
 
     try {
-      // Multer로 이미지를 보내려면 반드시 FormData를 사용해야 함
-      const formData = new FormData();
-      
-      // 1. 식별자 및 필수 데이터
-      formData.append('id', editData.id); 
-      formData.append('userId', editData.userId);
+      const resultUpload = await dispatch(postLogoImageUploadThunk(file)).unwrap();
+      // state를 직접 수정하기보다 복사본(payload)을 만들어 전송하는 것이 안전.
+      const payload = { ...editData };
 
-      // 2. 수정 가능한 텍스트 데이터
-      formData.append('businessNum', editData.businessNum); // 사업자번호
-      formData.append('krName', editData.krName);
-      formData.append('enName', editData.enName || '');
-      formData.append('manager', editData.manager || '');
-      formData.append('phone', editData.phone || '');
-      formData.append('address', editData.address);
-      formData.append('status', editData.status); // RES, REQ, REJ
-      formData.append('lat', 34.12);
-      formData.append('lng', 124.66);
+      payload.image = resultUpload.data.path;
 
-      // 3. 이미지 파일 (파일이 변경되었을 때만 추가)
-      if (file) {
-        formData.append('logoImg', file);
-      }
+      // 불필요한 필드 제거
+      delete payload.createdAt;
+      delete payload.updatedAt;
+      delete payload.deletedAt;
 
-      // form data 확인하는 디버깅용
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
-      }
+      // TODO: address를 lan,lng으로 변경하는 처리 필요
 
-      // 4. API 전송
-      await dispatch(partnerUpdateThunk(formData)).unwrap();
+      // API 전송
+      await dispatch(partnerUpdateThunk(payload)).unwrap();
         
       alert('수정이 완료되었습니다.');
       navigate('/admin/partner');
