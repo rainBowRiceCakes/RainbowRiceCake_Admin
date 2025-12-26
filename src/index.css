@@ -18,6 +18,28 @@
 .pagination button:disabled { opacity: 0.5; cursor: default; }
 .pagination button.active { background: var(--adm-text-primary); color: #FFF; border-color: var(--adm-text-primary); }
 
+/* --- Common Detail Page Styles --- */
+.btn-back-page {
+  position: absolute;
+  top: var(--adm-spacing-xl);
+  right: var(--adm-spacing-xl);
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--common-border-light);
+  padding: var(--adm-spacing-xs) var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  cursor: pointer;
+  color: var(--common-text-secondary-dark);
+  z-index: 10;
+  transition: all 0.2s;
+}
+.btn-back-page:hover { 
+  color: var(--adm-text-primary);
+  background-color: var(--common-bg-hover);
+  border-color: #bbb;
+}
+
 :root {
   --mng-sidebar-width: 240px;
   --mng-sidebar-title-font-color: #adb5bd;
@@ -78,4 +100,24 @@
   --adm-font-weight-bold: 700;
   --adm-font-weight-semibold: 600;
   --adm-font-weight-medium: 500;
+
+  /* --- Common Component Variables --- */
+  --common-bg-hover: #F9F9F9;
+  --common-text-secondary-dark: #555;
+  --common-border-light: #CCC;
+  --common-color-error: #EB5757;
+  --common-color-warning-dark: #E65100;
+  --common-text-disabled: #888;
+
+  --common-border-radius-s: 6px;
+  --common-spacing-xxs: 2px;
+  --common-spacing-xs-alt: 10px;
+
+  --common-font-base-small: 13px;
+  --common-font-base-large: 15px;
+
+  --common-toggle-width: 50px;
+  --common-toggle-height: 26px;
+  --common-toggle-handle-radius: 13px; /* half of height */
+  --common-toggle-handle-size: 22px;
 }

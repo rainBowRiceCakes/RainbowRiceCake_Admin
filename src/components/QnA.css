@@ -70,18 +70,38 @@
 .status-dot.complete { background: #27AE60; } /* 완료: 초록 */
 
 /* 4. 상세 페이지 스타일 */
-.qna-detail-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
-.btn-back { background: none; border: none; font-size: 15px; font-weight: 600; cursor: pointer; color: #555; }
-.btn-back:hover { color: #000; text-decoration: underline; }
-
-.status-badge { padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; }
-.status-badge.waiting { background: #FFF3E0; color: #E65100; }
-.status-badge.complete { background: #E8F5E9; color: #2E7D32; }
+.qna-detail-wrapper {
+  position: relative;
+  flex: 1;
+  background-color: #F6F6F6;
+  padding: 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
 
 .qna-detail-card {
-  background: #fff; border-radius: 8px; border: 1px solid #E0E0E0; padding: 40px;
-  max-width: 800px; margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #E0E0E0;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative; /* for status positioning if needed, though static should be fine */
 }
+
+.detail-status {
+  margin-bottom: 24px;
+  text-align: left; /* Aligns the badge to the left */
+}
+
+.status-badge { 
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.status-badge.waiting { background: #FFF3E0; color: #E65100; }
+.status-badge.complete { background: #E8F5E9; color: #2E7D32; }
 
 .q-title { font-size: 22px; margin: 0 0 10px 0; }
 .q-meta-info { margin-bottom: 20px; font-size: 13px; color: #888; }

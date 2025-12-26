@@ -89,8 +89,9 @@ function RiderDetail() {
 
   return (
     <div className="rider-container">
+      <button className="btn-back-page" onClick={() => navigate('/admin/rider')}>← 목록으로</button>
+
       <div className="rider-detail-header">
-        <button className="btn-back" onClick={() => navigate('/admin/rider')}>← 목록으로</button>
         <h2>기사 상세 정보 수정</h2>
       </div>
 

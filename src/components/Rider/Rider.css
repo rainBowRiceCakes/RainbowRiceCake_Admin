@@ -1,5 +1,6 @@
 /* 1. 전체 컨테이너 */
 .rider-container {
+  position: relative;
   flex: 1;
   background-color: var(--adm-bg-primary);
   padding: var(--adm-spacing-xl);
@@ -77,7 +78,7 @@
 .rider-search-input {
   border: none;
   outline: none;
-  padding: 10px 0;
+  padding: var(--common-spacing-xs-alt) 0;
   font-size: var(--adm-font-base);
   width: 100%;
 }
@@ -87,19 +88,19 @@
   background-color: var(--adm-bg-secondary);
   border: 1px solid var(--adm-border-primary);
   color: var(--adm-text-primary);
-  padding: 10px var(--adm-spacing-m);
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
   border-radius: var(--adm-radius-medium);
   font-weight: var(--adm-font-weight-semibold);
   font-size: var(--adm-font-base);
   cursor: pointer;
 }
-.rider-btn-outline:hover { background-color: #F9F9F9; }
+.rider-btn-outline:hover { background-color: var(--common-bg-hover); }
 
 .rider-btn-black {
   background-color: var(--adm-text-primary);
   border: 1px solid var(--adm-text-primary);
   color: var(--adm-text-contrast);
-  padding: 10px var(--adm-spacing-m);
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
   border-radius: var(--adm-radius-medium);
   font-weight: var(--adm-font-weight-semibold);
   font-size: var(--adm-font-base);
@@ -115,10 +116,10 @@
   font-weight: var(--adm-font-weight-semibold);
   border: none;
   cursor: pointer;
-  color: white;
+  color: var(--adm-text-contrast);
 }
 .rider-btn-small.blue { background-color: var(--adm-accent-blue); } /* Uber Blue */
-.rider-btn-small.gray { background-color: var(--adm-bg-interactive); color: #333; }
+.rider-btn-small.gray { background-color: var(--adm-bg-interactive); color: var(--adm-text-link); }
 
 /* 4. 본문 테이블 영역 */
 .rider-main-content {
@@ -159,20 +160,49 @@
 
 .fw-bold { font-weight: var(--adm-font-weight-bold); }
 
+/* --------------------------------- */
+/* --- 상세(수정) 페이지 스타일 추가 --- */
+/* --------------------------------- */
+
+.rider-detail-header {
+  max-width: 900px;
+  margin: 0 auto var(--adm-spacing-m);
+}
+.rider-detail-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.rider-detail-card {
+  background: var(--adm-bg-secondary);
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid var(--adm-border-primary);
+  padding: var(--adm-spacing-m);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--adm-spacing-s);
+  margin-bottom: var(--adm-spacing-m);
+}
+
 /* --- 기사 전용 스타일 --- */
 
 /* 출근 태그 */
 .rider-work-tag {
-  background-color: #F3F3F3;
+  background-color: #F3F3F3; /* This value is unique, so I will keep it as is */
   padding: var(--adm-radius-small) var(--adm-spacing-xs);
   border-radius: var(--adm-radius-small);
   font-size: var(--adm-font-small);
-  color: #555;
+  color: var(--common-text-secondary-dark); /* This value is unique, so I will keep it as is */
   font-weight: var(--adm-font-weight-medium);
 }
 
 .rider-work {
-  background-color: #E8F5E9;
+  background-color: var(--adm-bg-success-light);
   color: var(--adm-accent-green);
 }
 
@@ -182,7 +212,7 @@
   align-items: center;
   gap: var(--adm-spacing-xs);
   font-weight: var(--adm-font-weight-medium);
-  font-size: 13px;
+  font-size: var(--common-font-base-small);
 }
 
 .status-dot {
@@ -194,48 +224,48 @@
 
 .status-dot.RES { background-color: var(--adm-accent-green); } /* 초록색 */
 .status-dot.REQ { background-color: var(--adm-accent-orange); } /* 주황색 */
-.status-dot.REJ { background-color: #EB5757; } /* 빨간색 */
+.status-dot.REJ { background-color: var(--common-color-error); } /* 빨간색 */
 
 /* --- 리스트용 출근 태그 --- */
 .rider-work-tag {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
+  padding: 4px var(--common-spacing-xs-alt);
+  border-radius: var(--adm-spacing-s); /* 12px -> adm-spacing-s */
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-bold);
 }
-.rider-work-tag.on { background-color: #E8F5E9; color: #27AE60; }
-.rider-work-tag.off { background-color: #F5F5F5; color: #999; }
+.rider-work-tag.on { background-color: var(--adm-bg-success-light); color: var(--adm-accent-green); }
+.rider-work-tag.off { background-color: var(--adm-bg-disabled); color: var(--adm-text-placeholder); }
 
 /* --- 상세페이지용 토글 스위치 --- */
 .toggle-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--adm-spacing-s);
   cursor: pointer;
   width: fit-content;
 }
 
 .toggle-switch {
-  width: 50px;
-  height: 26px;
-  background-color: #ccc;
-  border-radius: 13px;
+  width: var(--common-toggle-width);
+  height: var(--common-toggle-height);
+  background-color: var(--common-border-light);
+  border-radius: var(--common-toggle-handle-radius);
   position: relative;
   transition: background-color 0.3s;
 }
 
 .toggle-switch.on {
-  background-color: #27AE60; /* 켜졌을 때 색상 */
+  background-color: var(--adm-accent-green); /* 켜졌을 때 색상 */
 }
 
 .toggle-handle {
-  width: 22px;
-  height: 22px;
-  background-color: white;
+  width: var(--common-toggle-handle-size);
+  height: var(--common-toggle-handle-size);
+  background-color: var(--adm-text-contrast);
   border-radius: 50%;
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: var(--common-spacing-xxs);
+  left: var(--common-spacing-xxs);
   transition: left 0.3s;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -245,6 +275,6 @@
 }
 
 .toggle-label {
-  font-weight: 600;
-  color: #555;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--common-text-secondary-dark);
 }

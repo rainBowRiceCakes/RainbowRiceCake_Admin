@@ -72,8 +72,9 @@ function HotelDetail() {
 
   return (
     <div className="hotel-container">
+      <button className="btn-back-page" onClick={() => navigate('/admin/hotel')}>← 목록으로 돌아가기</button>
+      
       <div className="hotel-detail-header">
-        <button className="btn-back" onClick={() => navigate('/admin/hotel')}>← 목록으로 돌아가기</button>
         <h2>호텔 상세 정보 수정</h2>
       </div>
 

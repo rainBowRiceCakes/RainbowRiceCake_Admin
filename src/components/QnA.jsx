@@ -99,9 +99,11 @@ function QnA() {
   // ==========================================
   if (view === 'detail' && selectedItem) {
     return (
-      <div className="qna-container">
-        <div className="qna-detail-header">
-          <button className="btn-back" onClick={() => setView('list')}>← 목록으로 돌아가기</button>
+      <div className="qna-detail-wrapper"> 
+        <button className="btn-back-page" onClick={() => setView('list')}>← 목록으로 돌아가기</button>
+
+        <div className="qna-detail-card">
+          {/* 답변상태(status)가 container 내부 상단에 배치 */}
           <div className="detail-status">
             {selectedItem.status ? (
               <span className="status-badge complete">답변 완료</span>
@@ -109,9 +111,6 @@ function QnA() {
               <span className="status-badge waiting">답변 대기</span>
             )}
           </div>
-        </div>
-
-        <div className="qna-detail-card">
           {/* 질문 내용 */}
           <div className="question-section">
             <h2 className="q-title">{selectedItem.title}</h2>
@@ -120,14 +119,14 @@ function QnA() {
             </div>
             
             <div className="q-content-box">
-              <p>{selectedItem.content}</p>
-              
               {/* 이미지가 있을 경우에만 렌더링 */}
               {selectedItem.qna_img && (
                 <div className="q-img-wrapper">
                   <img src={selectedItem.qna_img} alt="첨부 이미지" />
                 </div>
               )}
+              <p>{selectedItem.content}</p>
+              
             </div>
           </div>
 
