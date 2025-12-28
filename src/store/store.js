@@ -5,12 +5,14 @@
  */
 
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from './slices/authSlice.js';
 import hotelShowReducer from "../store/slices/hotelSlice.js";
 import partnerShowReducer from "../store/slices/partnerSlice.js";
 import riderShowReducer from "../store/slices/riderSlice.js";
 
 export default configureStore ({
   reducer: {
+    auth: authReducer,
     hotelShow: hotelShowReducer,
     partnerShow: partnerShowReducer,
     riderShow: riderShowReducer,

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import './Sidebar.css'; // 위에서 만든 CSS 파일 import
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'; // ★ Redux 훅 추가
+import './Sidebar.css'; 
+
+// ★ authSlice에서 만든 초기화 액션 import (경로 확인 필요)
+import { clearAuth } from '../../store/slices/authSlice.js';
 
 // 메뉴 설정
 const MENU_ITEMS = [
@@ -16,40 +20,56 @@ const MENU_ITEMS = [
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 URL 확인 훅
-  
-  // 현재 선택된 메뉴를 저장하는 상태 (기본값: Dashboard)
+  const location = useLocation();
+  const dispatch = useDispatch(); // ★ Dispatch 생성
+
+  // ★ Redux Store에서 로그인 상태와 유저 정보 가져오기
+  const { isLoggedIn, name } = useSelector((state) => state.auth);
   const [activeMenu, setActiveMenu] = useState("Dashboard");
 
-  // 새로고침 해도 현재 URL에 맞춰서 메뉴 하이라이트 유지하기
+  // URL 변경 감지
   useEffect(() => {
-    // 현재 URL(location.pathname)과 일치하는 메뉴 찾기
     const currentMenu = MENU_ITEMS.find(menu => location.pathname.startsWith(menu.path));
     if (currentMenu) {
       setActiveMenu(currentMenu.id);
-    } else setActiveMenu("Dashboard");
-    
+    } else {
+      // admin 경로가 아니면 대시보드 기본값 혹은 비활성 처리
+      setActiveMenu("dashboard"); 
+    }
   }, [location.pathname]);
 
-  // 로고 클릭 핸들러
+  // 로고 클릭
   const handleLogoClick = () => {
-    navigate('/admin/dashboard')
-    setActiveMenu('dashboard')
-  }
-  // 메뉴 클릭 핸들러
+    navigate('/admin/dashboard');
+    setActiveMenu('dashboard');
+  };
+
+  // 메뉴 클릭
   const handleMenuClick = (menu) => {
-    navigate(menu.path)
+    navigate(menu.path);
     setActiveMenu(menu.id);
-    // 추후 여기에 페이지 이동 로직(navigate) 추가
+  };
+
+  // ★ 로그아웃 핸들러
+  const handleLogout = () => {
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      dispatch(clearAuth()); // 1. Redux 상태 초기화
+      navigate('/');         // 2. 로그인 화면으로 이동
+    }
+  };
+
+  // ★ 로그인 버튼 핸들러 (비로그인 상태일 때)
+  const handleLoginRedirect = () => {
+    navigate('/');
   };
 
   return (
     <div className="sidebar-container">
       <div className="side-flexbox">
         {/* 로고 영역 */}
-        <div className="side-title" onClick={() => handleLogoClick()}>RainBowRiceCake</div>
+        <div className="side-title" onClick={handleLogoClick}>RainBowRiceCake</div>
         
-        {/* 5. 배열을 map으로 반복 렌더링 (코드가 확 줄어듭니다) */}
+        {/* 메뉴 목록 */}
         {MENU_ITEMS.map((menu) => (
           <div 
             key={menu.id}
@@ -61,9 +81,27 @@ const Sidebar = () => {
         ))}
       </div>
 
+      {/* ★ 하단 정보 영역 (조건부 렌더링) */}
       <div className="side-info">
-        <div className="side-admin">반갑습니다 OO관리자님</div>
-        <div className="side-logout" onClick={() => navigate('/')}>로그아웃</div>
+        {isLoggedIn ? (
+          // 로그인 상태일 때
+          <>
+            <div className="side-admin">
+              반갑습니다 <strong>{name || '관리자'}</strong>님
+            </div>
+            <div className="side-logout" onClick={handleLogout}>
+              로그아웃
+            </div>
+          </>
+        ) : (
+          // 비로그인 상태일 때 (혹은 토큰 만료)
+          <>
+            <div className="side-admin">로그인이 필요합니다</div>
+            <div className="side-logout" onClick={handleLoginRedirect}>
+              로그인
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

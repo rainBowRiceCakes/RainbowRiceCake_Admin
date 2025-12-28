@@ -11,17 +11,17 @@ import QnA from "../components/QnA.jsx";
 import HotelDetail from "../components/Hotel/HotelDetail.jsx";
 import PartnerDetail from "../components/Partner/PartnerDetail.jsx";
 import RiderDetail from "../components/Rider/RiderDetail.jsx";
+import Login from "../components/common/Login.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
   {
     element: <App />, // App.jsx를 최상위 Layout으로 사용 (Header, Footer 포함)
     children: [
-      // TODO : 초기화면 로그인화면
-      // {
-      //   path: '/',
-      //   element: <div>로그인화면 예정</div>
-      // },
+      {
+        path: '/',
+        element: <Login />
+      },
       {
         path: '/admin/dashboard',
         // path: '/dashboard',

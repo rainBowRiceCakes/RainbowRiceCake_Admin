@@ -9,7 +9,6 @@ export const loginThunk = createAsyncThunk(
       const { email, password } = args;
       
       const response = await axiosInstance.post(url, { email, password });
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

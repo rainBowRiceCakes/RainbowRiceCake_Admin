@@ -31,7 +31,7 @@ function RiderDetail() {
       }
     }
     fetchDetail();
-  }, [dispatch, id, navigate]);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -153,7 +153,7 @@ function RiderDetail() {
           </div>
 
           <div className="form-group full-width">
-            <label>픽업 가능 시간 (Pickup At)</label>
+            <label>픽업 시간 (Pickup At)</label>
             <input type="text" name="pickupAt" value={editData.pickupAt || ''} onChange={handleInputChange} placeholder="예: 09:00 - 18:00" className="input-editable" />
           </div>
 
