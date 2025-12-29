@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './Partner.css'; // 제공해주신 CSS 파일 import
@@ -24,11 +24,11 @@ function Partner() {
 
   // ★ 1. Redux Store 구독 (state.partner.partners)
   const { show, loading } = useSelector(state => state.partnerShow);
-
+  console.log(show);
   // ★ 2. 데이터 새로고침 함수
   const refreshList = useCallback(() => {
-    dispatch(partnerShowThunk());
-  }, []);
+    dispatch(partnerShowThunk())
+  }, [dispatch]);
 
   useEffect(() => {
     refreshList();
@@ -73,7 +73,6 @@ function Partner() {
   // --- Filtering & Pagination ---
   
   const safePartners = show || [];
-
   const filteredPartners = safePartners.filter((partner) => {
     // 1. 상태 필터 ('REQ'가 대기중)
     const isStatusMatched = viewType === 'pending' ? partner.status === 'REQ' : true;

@@ -178,3 +178,146 @@
   cursor: pointer;
   color: #333;
 }
+
+/* --- OrderDetail Page Styles --- */
+
+/* 버튼 위치 잡기용 relative 부모 */
+.relative-container {
+  position: relative; 
+}
+
+/* 제목 헤더 */
+.order-detail-header {
+  margin-bottom: var(--adm-spacing-m);
+  margin-top: var(--adm-spacing-m); /* 버튼과 겹침 방지 여백 */
+  text-align: center; 
+}
+
+.order-detail-header h2 {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+}
+
+/* 카드 박스 */
+.order-detail-card {
+  background: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-xl);
+  border-radius: var(--adm-radius-medium);
+  box-shadow: var(--adm-shadow-light);
+  max-width: 900px;
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 섹션 타이틀 */
+.section-title {
+  border-bottom: 1px solid var(--adm-border-secondary);
+  padding-bottom: var(--adm-spacing-s);
+  margin-bottom: var(--adm-spacing-m);
+  font-size: var(--adm-font-large);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-bold);
+}
+
+.mt-40 { margin-top: 40px; }
+.mb-10 { margin-bottom: 10px; display: block; }
+
+/* 그리드 레이아웃 (반응형) */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 기본 2열 */
+  gap: var(--adm-spacing-m);
+}
+
+/* 화면이 좁을 때 1열로 변경 */
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* 폼 요소 스타일 */
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+}
+
+.input-disabled {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--adm-border-secondary);
+  background-color: var(--adm-bg-tertiary);
+  color: var(--common-text-disabled);
+  border-radius: var(--adm-radius-small);
+  cursor: not-allowed;
+}
+
+.input-editable, .select-editable {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-base);
+  transition: border-color 0.2s;
+}
+
+.input-editable:focus, .select-editable:focus {
+  border-color: var(--adm-text-primary);
+  outline: none;
+}
+
+/* ★ 짐 수량 그리드 (반응형 해결 핵심) ★ */
+.luggage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* 최소 120px 확보, 공간 남으면 늘어남 */
+  gap: var(--adm-spacing-m);
+  background-color: var(--adm-bg-tertiary); /* 구분감 주는 배경 */
+  padding: var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+}
+
+.luggage-item span {
+  display: block;
+  font-size: var(--adm-font-tiny);
+  color: var(--adm-text-tertiary);
+  margin-bottom: 4px;
+}
+
+/* 하단 액션 버튼 */
+.detail-actions {
+  margin-top: var(--adm-spacing-xl);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--adm-spacing-s);
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: var(--adm-bg-interactive);
+  border: none;
+  border-radius: var(--adm-radius-small);
+  cursor: pointer;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+}
+
+.btn-save {
+  padding: 10px 20px;
+  background-color: var(--adm-text-primary); /* Black */
+  color: var(--adm-text-contrast); /* White */
+  border: none;
+  border-radius: var(--adm-radius-small);
+  cursor: pointer;
+  font-weight: var(--adm-font-weight-semibold);
+}
+
+.btn-save:hover {
+  opacity: 0.9;
+}

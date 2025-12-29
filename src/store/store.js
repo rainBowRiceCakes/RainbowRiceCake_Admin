@@ -9,6 +9,7 @@ import authReducer from './slices/authSlice.js';
 import hotelShowReducer from "../store/slices/hotelSlice.js";
 import partnerShowReducer from "../store/slices/partnerSlice.js";
 import riderShowReducer from "../store/slices/riderSlice.js";
+import orderShowReducer from "../store/slices/orderSlice.js";
 
 export default configureStore ({
   reducer: {
@@ -16,5 +17,6 @@ export default configureStore ({
     hotelShow: hotelShowReducer,
     partnerShow: partnerShowReducer,
     riderShow: riderShowReducer,
+    orderShow: orderShowReducer,
   }
 });

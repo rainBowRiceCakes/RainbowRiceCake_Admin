@@ -12,6 +12,7 @@ import HotelDetail from "../components/Hotel/HotelDetail.jsx";
 import PartnerDetail from "../components/Partner/PartnerDetail.jsx";
 import RiderDetail from "../components/Rider/RiderDetail.jsx";
 import Login from "../components/common/Login.jsx";
+import OrderDetail from "../components/Order/OrderDetail.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       { 
         path: '/admin/order', 
         element: <Order />
+      },
+      { 
+        path: '/admin/order/:id', 
+        element: <OrderDetail />
       },
       { 
         path: '/admin/rider', 

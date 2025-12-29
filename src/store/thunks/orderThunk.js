@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 
 export const orderIndexThunk = createAsyncThunk(
-  'order/orderIndex',
+  'orderIndex/orderIndexThunk',
   async ({ page = 1, limit = 9, from }, { rejectWithValue }) => {
     try {
       // 쿼리 파라미터 생성
@@ -10,6 +10,35 @@ export const orderIndexThunk = createAsyncThunk(
       if (from) query += `&from=${from}`;
 
       const response = await axiosInstance.get(`/api/admins/orderindex${query}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// store/thunks/orderThunk.js
+
+// 1. 상세 조회
+export const orderDetailThunk = createAsyncThunk(
+  'orderDetail/orderDetailThunk',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/api/admins/order/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// 2. 정보 수정
+export const orderUpdateThunk = createAsyncThunk(
+  'orderUpdate/orderUpdateThunk',
+  async (data, { rejectWithValue }) => {
+    try {
+      // data는 { id, status, price, cntS, ... } 형태
+      const response = await axiosInstance.put(`/api/admins/order`, data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

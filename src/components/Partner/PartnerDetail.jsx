@@ -117,6 +117,10 @@ function PartnerDetail() {
             <input type="text" value={editData.userId} disabled className="input-disabled" />
           </div>
           <div className="form-group">
+            <label>유저명</label>
+            <input type="text" value={editData.partner_user.name || '-'} disabled className="input-disabled" />
+          </div>
+          <div className="form-group">
             <label>생성일</label>
             <input type="text" value={editData.createdAt || '-'} disabled className="input-disabled" />
           </div>
