@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "../App.jsx";
-import Order from "../components/Order.jsx";
+import Order from "../components/Order/Order.jsx";
 import DashBoard from "../components/DashBoard.jsx";
 import Rider from "../components/Rider/Rider.jsx";
 import Partner from "../components/Partner/Partner.jsx";
 import Hotel from "../components/Hotel/Hotel.jsx";
 import Settlement from "../components/Settlement.jsx";
-import Notice from "../components/Notice.jsx";
+import Notice from "../components/Notice/Notice.jsx";
 import QnA from "../components/QnA.jsx";
 import HotelDetail from "../components/Hotel/HotelDetail.jsx";
 import PartnerDetail from "../components/Partner/PartnerDetail.jsx";

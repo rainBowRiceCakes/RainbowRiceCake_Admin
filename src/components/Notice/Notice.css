@@ -1,0 +1,320 @@
+/* 1. 전체 컨테이너 */
+.notice-container {
+  flex: 1;
+  background-color: var(--adm-bg-primary); /* 배경: 연한 회색 */
+  padding: var(--adm-spacing-xl);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.notice-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+}
+
+/* 3. 폼 카드 (흰색 박스) */
+.notice-form-card {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xl);
+  max-width: 800px; /* 폼이 너무 넓어지지 않도록 제한 */
+  box-shadow: var(--adm-shadow-light);
+}
+
+/* 폼 그룹 (라벨 + 인풋) */
+.form-group {
+  margin-bottom: var(--adm-spacing-l);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-link);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+/* --- Role 선택 (커스텀 라디오 버튼) --- */
+.role-selector {
+  display: flex;
+  gap: 10px;
+  background-color: var(--adm-border-secondary);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-medium);
+  width: fit-content; /* 내용물만큼만 너비 차지 */
+}
+
+/* 라벨 스타일 (버튼처럼 보이게 함) */
+.role-option {
+  padding: 10px var(--adm-spacing-l);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+/* 실제 input radio는 숨김 */
+.role-option input[type="radio"] {
+  display: none;
+}
+
+/* 선택된 상태 스타일 */
+.role-option.active {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive);
+}
+
+.role-option:hover:not(.active) {
+  background-color: var(--adm-border-primary);
+  color: #333;
+}
+
+/* --- 입력 필드 스타일 --- */
+.notice-input,
+.notice-textarea {
+  width: 100%;
+  padding: var(--adm-spacing-s) var(--adm-font-large);
+  font-size: 15px;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.notice-input:focus,
+.notice-textarea:focus {
+  outline: none;
+  border-color: var(--adm-text-primary); /* 포커스 시 검은 테두리 */
+  background-color: var(--adm-bg-tertiary);
+}
+
+.notice-textarea {
+  resize: vertical; /* 세로 크기 조절만 허용 */
+  line-height: 1.6;
+}
+
+/* --- 버튼 영역 --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin-top: 32px;
+}
+
+.notice-btn-submit {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  border: none;
+  padding: var(--adm-font-base) 32px;
+  font-size: var(--adm-font-large);
+  font-weight: var(--adm-font-weight-semibold);
+  border-radius: var(--adm-radius-medium);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.notice-btn-submit:hover {
+  opacity: 0.9;
+}
+
+/* --- 기존 CSS 유지 --- */
+
+/* ... (기존 notice-container, form 스타일 등은 유지) ... */
+
+/* --- 새로 추가된 스타일 --- */
+
+/* 폼과 리스트를 감싸는 래퍼 (반응형 대비) */
+.notice-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* 폼과 리스트 사이 간격 */
+  max-width: 900px; /* 전체 너비 제한 */
+}
+
+.card-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #F0F0F0;
+  padding-bottom: 10px;
+}
+
+/* 히스토리 카드 스타일 */
+.notice-history-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+/* 히스토리 테이블 */
+.history-table-wrapper {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  text-align: left;
+  padding: 12px;
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 13px;
+  color: #5E5E5E;
+}
+
+.history-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #F0F0F0;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.history-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 테이블 내부 요소 */
+.target-badge {
+  display: inline-block;
+  background-color: #F3F3F3;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
+}
+
+.text-left { text-align: left; }
+
+.history-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.history-content-preview {
+  font-size: 13px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* 내용 길면 ... 처리 */
+}
+
+.text-date {
+  font-size: 13px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid #E0E0E0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: #D93025; /* 빨간색 텍스트 */
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #D93025;
+  color: #FFF;
+  border-color: #D93025;
+}
+
+.no-data {
+  text-align: center;
+  color: #AAA;
+  padding: 30px !important;
+}
+
+/* --- 기존 CSS 유지 부분은 건드리지 마시고, 아래 부분만 수정/추가하세요 --- */
+
+/* 1. 레이아웃 래퍼 (좌우 배치 핵심) */
+.notice-content-wrapper {
+  display: flex;
+  flex-direction: row; /* 가로 배치 */
+  gap: 24px; /* 좌우 간격 */
+  width: 100%;
+  max-width: 1400px; /* 와이드 화면에서도 너무 퍼지지 않게 제한 */
+}
+
+/* 2. 좌측: 작성 폼 카드 */
+.notice-form-card {
+  flex: 1; /* 공간 1 차지 (약 50%) */
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 30px;
+  height: fit-content; /* 내용물만큼만 높이 잡기 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+/* 3. 우측: 히스토리 카드 */
+.notice-history-card {
+  flex: 1; /* 공간 1 차지 (약 50%) */
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 30px;
+  height: fit-content;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  min-width: 0; /* Flex 내부에서 말줄임표(...) 작동을 위해 필수 */
+}
+
+/* --- 히스토리 테이블 스타일 (좁아진 폭에 맞춤) --- */
+.history-table th, 
+.history-table td {
+  padding: 12px 8px; /* 좌우 패딩을 조금 줄임 */
+  font-size: 13px;
+}
+
+.history-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.history-content-preview {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* 좁아진 폭에 맞춰 말줄임 제한 */
+}
+
+/* 날짜 폰트 사이즈 조정 */
+.text-date {
+  font-size: 11px;
+  color: #999;
+}
+
+/* --- 반응형 (태블릿/모바일에서는 다시 위아래로) --- */
+@media (max-width: 1024px) {
+  .notice-content-wrapper {
+    flex-direction: column; /* 세로 배치로 변경 */
+  }
+  
+  .history-content-preview {
+    max-width: 400px; /* 넓어졌으니 제한 풀기 */
+  }
+}
