@@ -181,52 +181,59 @@
 
 /* --- OrderDetail Page Styles --- */
 
-/* 버튼 위치 잡기용 relative 부모 */
-.relative-container {
-  position: relative; 
-}
-
-/* 제목 헤더 */
+/* 제목 헤더 영역 */
 .order-detail-header {
-  margin-bottom: var(--adm-spacing-m);
-  margin-top: var(--adm-spacing-m); /* 버튼과 겹침 방지 여백 */
-  text-align: center; 
+  display: flex; /* Flexbox 적용 */
+  justify-content: space-between; /* 제목은 왼쪽, 버튼은 오른쪽 끝으로 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 24px; /* 아래 카드와 간격 */
+  padding-bottom: 10px;
 }
 
 .order-detail-header h2 {
-  font-size: var(--adm-font-title);
-  font-weight: var(--adm-font-weight-bold);
-  color: var(--adm-text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0; /* 기본 마진 제거 */
+  text-align: left; /* 좌측 정렬 강제 */
 }
 
-/* 카드 박스 */
+/* 뒤로가기 버튼 (위치 재조정) */
+.btn-back-page {
+  /* position: absolute;  <-- 이거 지움 (흐름에 맡김) */
+  /* top: ... right: ...  <-- 이것도 지움 */
+  
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  /* Flex 아이템으로서 동작 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-back-page:hover {
+  background-color: #F9F9F9;
+  color: #000;
+  border-color: #CCC;
+}
+
+/* (참고) 카드 박스 등 나머지 스타일은 그대로 유지 */
 .order-detail-card {
-  background: var(--adm-bg-secondary);
-  padding: var(--adm-spacing-xl);
-  border-radius: var(--adm-radius-medium);
-  box-shadow: var(--adm-shadow-light);
-  max-width: 900px;
-  margin: 0 auto; /* 중앙 정렬 */
-}
-
-/* 섹션 타이틀 */
-.section-title {
-  border-bottom: 1px solid var(--adm-border-secondary);
-  padding-bottom: var(--adm-spacing-s);
-  margin-bottom: var(--adm-spacing-m);
-  font-size: var(--adm-font-large);
-  color: var(--adm-text-secondary);
-  font-weight: var(--adm-font-weight-bold);
-}
-
-.mt-40 { margin-top: 40px; }
-.mb-10 { margin-bottom: 10px; display: block; }
-
-/* 그리드 레이아웃 (반응형) */
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 기본 2열 */
-  gap: var(--adm-spacing-m);
+  background: #FFFFFF;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #E0E0E0;
+  max-width: 1000px;
+  margin: 0 auto 40px auto; /* 중앙 정렬 */
 }
 
 /* 화면이 좁을 때 1열로 변경 */
@@ -320,4 +327,109 @@
 
 .btn-save:hover {
   opacity: 0.9;
+}
+
+/* --- 검색 가능한 드롭다운 스타일 --- */
+
+/* 부모 컨테이너 (기준점) */
+.search-dropdown-container {
+  position: relative; /* 자식 absolute 배치를 위해 필수 */
+}
+
+/* 드롭다운 목록 박스 */
+.dropdown-list {
+  position: absolute;
+  top: 100%; /* 입력창 바로 아래 */
+  left: 0;
+  width: 100%;
+  max-height: 200px; /* 너무 길어지면 스크롤 */
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-small);
+  box-shadow: var(--adm-shadow-interactive);
+  z-index: 100; /* 다른 요소보다 위에 뜨게 */
+  margin-top: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+/* 리스트 아이템 */
+.dropdown-list li {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-list li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-list li:hover {
+  background-color: var(--adm-bg-interactive);
+}
+
+/* 검색 결과 없음 */
+.dropdown-list li.no-result {
+  color: #999;
+  cursor: default;
+  text-align: center;
+}
+
+/* 호텔 이름과 주소 스타일 */
+.hotel-name {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.hotel-addr {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* --- 짐 수량 그리드 (모달용 소형 스타일) --- */
+.luggage-grid {
+  display: grid;
+  /* 핵심: 무조건 3열로 고정하고, 비율을 1:1:1로 맞춤 */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px; /* 칸 사이 간격을 좁힘 */
+  background-color: #FAFAFA;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.luggage-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 라벨과 인풋 가운데 정렬 */
+}
+
+.luggage-item span {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* 짐 수량 입력칸 스타일 재정의 (더 작게) */
+.luggage-item input[type="number"] {
+  width: 100%;       /* 부모 너비에 맞춤 */
+  max-width: 80px;   /* 너무 커지지 않게 제한 */
+  padding: 6px;      /* 패딩을 줄여서 높이 축소 */
+  font-size: 14px;
+  text-align: center; /* 숫자 가운데 정렬 */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* 포커스 시 스타일 */
+.luggage-item input[type="number"]:focus {
+  border-color: #000;
+  outline: none;
 }

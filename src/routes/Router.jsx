@@ -13,6 +13,8 @@ import PartnerDetail from "../components/Partner/PartnerDetail.jsx";
 import RiderDetail from "../components/Rider/RiderDetail.jsx";
 import Login from "../components/common/Login.jsx";
 import OrderDetail from "../components/Order/OrderDetail.jsx";
+import User from "../components/User/User.jsx";
+import UserDetail from "../components/User/UserDetail.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
       { 
         path: '/admin/order/:id', 
         element: <OrderDetail />
+      },
+      { 
+        path: '/admin/user', 
+        element: <User />
+      },
+      { 
+        path: '/admin/user/:id', 
+        element: <UserDetail />
       },
       { 
         path: '/admin/rider', 

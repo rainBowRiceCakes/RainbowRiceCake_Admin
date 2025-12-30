@@ -54,14 +54,14 @@ function HotelDetail() {
       delete payload.deletedAt;
 
       // address를 lan,lng으로 변경하는 처리 필요
-
+      payload.lat = 33.3333
+      payload.lng = 124.4444
       await dispatch(hotelUpdateThunk(payload)).unwrap();
       
       alert('수정이 완료되었습니다.');
       navigate('/admin/hotel'); // 목록으로 복귀
 
     } catch (error) {
-      console.log(editData);
       console.error('수정 실패:', error);
       alert('수정 중 오류가 발생했습니다.');
     }

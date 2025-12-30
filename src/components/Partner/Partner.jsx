@@ -24,7 +24,6 @@ function Partner() {
 
   // ★ 1. Redux Store 구독 (state.partner.partners)
   const { show, loading } = useSelector(state => state.partnerShow);
-  console.log(show);
   // ★ 2. 데이터 새로고침 함수
   const refreshList = useCallback(() => {
     dispatch(partnerShowThunk())
@@ -94,7 +93,7 @@ function Partner() {
     <div className="partner-container">
       
       {/* 1. 제목 영역 */}
-      <div className="partner-title">Partner (제휴 관리)</div>
+      <div className="partner-title">Partner (제휴 매장)</div>
 
       {/* 2. 헤더 영역 */}
       <div className="partner-main-head">

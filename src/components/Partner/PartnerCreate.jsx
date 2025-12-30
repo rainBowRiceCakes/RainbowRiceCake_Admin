@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './Partner.css'; 
-import { partnerCreateThunk } from '../../store/thunks/partnerThunk'; // 경로 확인 필요
+// ★ 이미지 업로드용 Thunk 추가 import
+import { partnerCreateThunk, postLogoImageUploadThunk } from '../../store/thunks/partnerThunk'; 
 
 function PartnerCreate({ isOpen, onClose, onRefresh }) {
   const dispatch = useDispatch();
 
   // 초기값 설정
   const initialFormState = {
+    userId: '',      // ★ User ID 입력 필드 추가
     businessNum: '',
     krName: '',
     enName: '',
     manager: '',
     phone: '',
     address: '',
-    status: 'RES', // 기본값: 승인(RES)
-    lat: 37.5665,  // 기본 위도 (필요시 주소 API 연동)
-    lng: 126.9780, // 기본 경도
-    userId: 1      // 임시 관리자 ID (실제론 로그인 유저 ID)
+    status: 'RES', 
+    lat: 37.5665,  
+    lng: 126.9780, 
   };
 
   const [formData, setFormData] = useState(initialFormState);
-  const [file, setFile] = useState(null); // 파일 객체
-  const [previewUrl, setPreviewUrl] = useState(null); // 미리보기
+  const [file, setFile] = useState(null); 
+  const [previewUrl, setPreviewUrl] = useState(null); 
 
   // 모달 열릴 때 초기화
   useEffect(() => {
@@ -39,12 +40,10 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ★ 상태 변경 핸들러 (String 값 그대로 사용)
   const handleStatusChange = (e) => {
     setFormData((prev) => ({ ...prev, status: e.target.value }));
   };
 
-  // 파일 핸들러
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -53,47 +52,46 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     }
   };
 
+  // ★ 수정된 제출 핸들러 (JSON 전송 + 이미지 선 업로드)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.krName || !formData.address || !formData.businessNum) {
-      alert('매장명, 주소, 사업자번호는 필수입니다.');
+    // 유효성 검사
+    if (!formData.userId || !formData.krName || !formData.address || !formData.businessNum) {
+      alert('UserID, 매장명, 주소, 사업자번호는 필수입니다.');
       return;
     }
 
     if (!window.confirm('새로운 제휴 매장을 등록하시겠습니까?')) return;
 
     try {
-      const submitFormData = new FormData();
+      let imagePath = null;
 
-      // 1. 텍스트 데이터 -> JSON Blob 변환 (PartnerDetail과 동일 방식)
-      const partnerData = {
-        ...formData,
-        // 필요하다면 숫자 변환 등 전처리 수행
-        // userId: Number(formData.userId) 
-      };
-
-      const jsonBlob = new Blob([JSON.stringify(partnerData)], { type: "application/json" });
-      submitFormData.append("requestDto", jsonBlob);
-
-      // 2. 파일 데이터
+      // 1. 이미지가 있다면 먼저 업로드
       if (file) {
-        submitFormData.append("logoImg", file);
-      } else {
-        // (선택사항) 이미지가 필수라면 여기서 막거나, 기본 이미지를 처리해야 함
-        // alert("로고 이미지는 필수입니다."); return; 
+        // postLogoImageUploadThunk는 PartnerDetail에서 사용했던 것과 동일한 것으로 가정
+        const uploadResult = await dispatch(postLogoImageUploadThunk(file)).unwrap();
+        // 서버 응답 구조에 맞춰 경로 추출 (예: result.data.path)
+        imagePath = uploadResult.data.path; 
       }
 
-      // 3. 전송
-      await dispatch(partnerCreateThunk(submitFormData)).unwrap();
+      // 2. 최종 전송할 JSON 데이터 구성
+      const payload = {
+        ...formData,
+        userId: Number(formData.userId), // 숫자로 변환
+        logoImg: imagePath || null,      // 업로드된 이미지 경로 (없으면 null)
+      };
+
+      // 3. 파트너 등록 요청 (JSON)
+      await dispatch(partnerCreateThunk(payload)).unwrap();
       
       alert('성공적으로 등록되었습니다.');
-      onRefresh(); // 목록 새로고침
-      onClose();   // 모달 닫기
+      onRefresh(); 
+      onClose();   
 
     } catch (error) {
       console.error('등록 실패:', error);
-      alert('등록 실패: ' + (error || '알 수 없는 오류'));
+      alert('등록 실패: ' + (error.message || '알 수 없는 오류'));
     }
   };
 
@@ -108,7 +106,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      {/* 모달 컨테이너: 최대 높이 설정 필요 */}
       <div className="modal-container scrollable-modal">
         <div className="modal-header">
           <h2>New Partner Registration</h2>
@@ -116,14 +113,14 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
         </div>
         
         <form onSubmit={handleSubmit} className="modal-form">
-          {/* ★ 여기가 스크롤 영역입니다 */}
           <div className="modal-body modal-body-scroll">
             
-            {/* 로고 이미지 */}
+            {/* ★ [수정됨] 로고 이미지와 User ID를 한 줄에 배치 */}
             <div className="form-row">
-              <div className="form-group full">
+              {/* 왼쪽: 로고 이미지 (절반) */}
+              <div className="form-group">
                 <label>매장 로고 (Image)</label>
-                <div className="image-upload-wrapper">
+                <div className="image-upload-wrapper small-box">
                     {previewUrl && (
                         <div className="img-preview">
                              <img src={previewUrl} alt="Preview" />
@@ -131,6 +128,23 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
                     )}
                     <input type="file" accept="image/*" onChange={handleFileChange} />
                 </div>
+              </div>
+
+              {/* 오른쪽: User ID 입력 (절반) */}
+              <div className="form-group">
+                <label>User ID (회원 번호) <span className="required">*</span></label>
+                <input 
+                  type="number" 
+                  name="userId" 
+                  value={formData.userId} 
+                  onChange={handleChange} 
+                  placeholder="User ID 입력" 
+                  required 
+                  style={{ height: '45px' }} /* 높이를 이미지 박스와 얼추 맞춤 */
+                />
+                <p style={{fontSize:'12px', color:'#999', marginTop:'5px'}}>
+                   * 등록할 파트너 계정의 User PK를 입력하세요.
+                </p>
               </div>
             </div>
 
@@ -174,22 +188,19 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
               </div>
             </div>
 
-            {/* ★ 3가지 상태 선택 (RES, REQ, REJ) */}
+            {/* 상태 선택 */}
             <div className="form-row">
               <div className="form-group full">
                 <label>운영 상태</label>
                 <div className="status-selector">
-                  {/* 승인 */}
                   <label className={`radio-label res ${formData.status === 'RES' ? 'active' : ''}`}>
                     <input type="radio" name="status" value="RES" checked={formData.status === 'RES'} onChange={handleStatusChange} />
                     승인
                   </label>
-                  {/* 대기 */}
                   <label className={`radio-label req ${formData.status === 'REQ' ? 'active' : ''}`}>
                     <input type="radio" name="status" value="REQ" checked={formData.status === 'REQ'} onChange={handleStatusChange} />
                     대기
                   </label>
-                  {/* 반려 */}
                   <label className={`radio-label rej ${formData.status === 'REJ' ? 'active' : ''}`}>
                     <input type="radio" name="status" value="REJ" checked={formData.status === 'REJ'} onChange={handleStatusChange} />
                     반려

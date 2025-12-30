@@ -27,7 +27,7 @@ function Riders() {
   // 데이터 새로고침
   const refreshList = useCallback(() => {
     dispatch(riderShowThunk());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     refreshList();
@@ -80,7 +80,6 @@ function Riders() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  console.log(currentItems)
 
   return (
     <div className="rider-container">

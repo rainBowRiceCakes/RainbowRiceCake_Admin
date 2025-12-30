@@ -9,7 +9,8 @@ import { clearAuth } from '../../store/slices/authSlice.js';
 // 메뉴 설정
 const MENU_ITEMS = [
   { id: 'dashboard', name: 'Dashboard(대시보드)', path: '/admin/dashboard' },
-  { id: 'order', name: 'Orders(예약)', path: '/admin/order' },
+  { id: 'order', name: 'Orders(주문)', path: '/admin/order' },
+  { id: 'user', name: 'Users(유저)', path: '/admin/user' },
   { id: 'rider', name: 'Riders(기사)', path: '/admin/rider' },
   { id: 'partner', name: 'Partners(제휴매장)', path: '/admin/partner' },
   { id: 'hotel', name: 'Hotels(제휴호텔)', path: '/admin/hotel' },

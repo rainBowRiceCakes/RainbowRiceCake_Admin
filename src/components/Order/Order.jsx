@@ -2,10 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './Order.css';
 import { excelDown } from '../../api/utils/excelDown.js';
-
-// ★ Thunk Import (경로 확인 필요)
 import { orderIndexThunk } from '../../store/thunks/orderThunk.js';
 import { useNavigate } from 'react-router-dom';
+import OrderCreate from './OrderCreate.jsx';
 
 function Order() {
   const dispatch = useDispatch();
@@ -14,12 +13,13 @@ function Order() {
   // ★ 1. Redux Store 구독
   // 백엔드 응답: { orders: [], pagination: { page, total, totalPages ... } }
   const { orders, pagination, loading } = useSelector((state) => state.orderShow);
-  console.log(orders)
   // --- Local States ---
   const [sortBy, setSortBy] = useState('latest'); // 정렬 (UI용)
   const [searchId, setSearchId] = useState('');   // 검색
   const [currentPage, setCurrentPage] = useState(1); // ★ 현재 페이지 (서버 요청용)
   
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   // 백엔드 기본 설정이 limit 9이므로 맞춤 (변경 가능)
   const limit = 9; 
 
@@ -41,8 +41,6 @@ function Order() {
   // 정렬 변경 (백엔드 API에 정렬 기능이 추가되면 파라미터로 보냄)
   const handleSortChange = (type) => {
     setSortBy(type);
-    // 현재 백엔드 코드는 created_at DESC 고정이므로, 추후 API가 지원하면 fetchOrders에 sort param 추가
-    console.log(`정렬 변경: ${type}`); 
   };
 
   // 페이지 변경 핸들러
@@ -100,7 +98,7 @@ function Order() {
     <div className="order-container">
       
       {/* 1. 제목 영역 */}
-      <div className="order-title">Order (예약 관리)</div>
+      <div className="order-title">Order (주문 관리)</div>
  
       {/* 2. 헤더 영역 (필터, 검색, 버튼) */}
       <div className="order-main-head">
@@ -126,14 +124,14 @@ function Order() {
             <span className="search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="예약 번호 검색" 
+              placeholder="주문 번호 검색" 
               className="search-input" 
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
             />
           </div>
           <button className="btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
-          <button className="btn-black">+ 예약 등록</button>
+          <button className="btn-black" onClick={() => setIsCreateModalOpen(true)}>+ 주문 등록</button>
         </div>
       </div>
 
@@ -219,6 +217,11 @@ function Order() {
         )}
       </div>
 
+      <OrderCreate 
+      isOpen={isCreateModalOpen} 
+      onClose={() => setIsCreateModalOpen(false)}
+      onRefresh={fetchOrders} // 등록 성공 시 목록 새로고침
+      />
     </div>
   );
 }

@@ -45,3 +45,20 @@ export const orderUpdateThunk = createAsyncThunk(
     }
   }
 );
+
+export const orderCreateThunk = createAsyncThunk(
+  'orderCreate/orderCreateThunk', // Thunk 고유명
+  async (data, { rejectWithValue }) => {
+    try {
+      const url = `/api/admins/order`;
+      
+      const response = await axiosInstance.post(url, data);
+      if(!response.data) {
+        throw new Error('주문정보 등록 실패');
+      }
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
