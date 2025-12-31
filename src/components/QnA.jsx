@@ -100,7 +100,7 @@ function QnA() {
   if (view === 'detail' && selectedItem) {
     return (
       <div className="qna-detail-wrapper"> 
-        <button className="btn-back-page" onClick={() => setView('list')}>← 목록으로 돌아가기</button>
+        <button className="btn-back-page" onClick={() => setView('list')}>&lt; 목록으로 돌아가기</button>
 
         <div className="qna-detail-card">
           {/* 답변상태(status)가 container 내부 상단에 배치 */}

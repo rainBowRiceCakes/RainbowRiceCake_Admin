@@ -95,7 +95,7 @@ function PartnerDetail() {
 
   return (
     <div className="partner-container">
-      <button className="btn-back-page" onClick={() => navigate('/admin/partner')}>← 목록으로 돌아가기</button>
+      <button className="btn-back-page" onClick={() => navigate('/admin/partner')}>&lt; 목록으로 돌아가기</button>
 
       <div className="partner-detail-header">
         <h2>제휴 매장 상세 정보 수정</h2>

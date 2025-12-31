@@ -106,7 +106,7 @@ function NoticeDetail() {
     <div className="notice-container">
       {/* 뒤로가기 버튼 (index.css 스타일 활용) */}
       <button className="btn-back-page" onClick={() => navigate('/admin/notice')}>
-        &lt; Back to List
+        &lt; 목록으로 돌아가기
       </button>
 
       <div className="notice-header">

@@ -69,7 +69,7 @@ function UserDetail() {
       <div className="user-detail-header">
         <h2>회원 상세 정보 (User Detail)</h2>
         <button className="btn-back-page" onClick={() => navigate('/admin/user')}>
-          ← 목록으로 돌아가기
+          &lt; 목록으로 돌아가기
         </button>
       </div>
 

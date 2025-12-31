@@ -89,7 +89,7 @@ function RiderDetail() {
 
   return (
     <div className="rider-container">
-      <button className="btn-back-page" onClick={() => navigate('/admin/rider')}>← 목록으로 돌아가기</button>
+      <button className="btn-back-page" onClick={() => navigate('/admin/rider')}>&lt; 목록으로 돌아가기</button>
 
       <div className="rider-detail-header">
         <h2>기사 상세 정보 수정</h2>

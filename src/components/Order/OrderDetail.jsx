@@ -137,7 +137,7 @@ function OrderDetail() {
       <div className="order-detail-header">
         <h2>예약 상세 정보 (Order Detail)</h2>
         <button className="btn-back-page" onClick={() => navigate('/admin/order')}>
-          ← 목록으로 돌아가기
+          &lt; 목록으로 돌아가기
         </button>
       </div>
 

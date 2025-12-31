@@ -1,23 +1,23 @@
-/* --- User Page Container --- */
+/* User.css */
+
+/* =========================================
+   1. 공통 레이아웃 & 리스트 페이지
+   ========================================= */
+
+/* 메인 컨테이너 */
 .user-container {
-  /* ★ [수정] 화면 전체 너비 차지하도록 설정 */
   width: 100%;
-  flex: 1; /* 부모가 flex일 경우 남은 공간 모두 차지 */
-  box-sizing: border-box; /* 패딩 포함해서 너비 계산 */
-  
-  padding: var(--adm-spacing-m); /* 20px */
-  background-color: var(--adm-bg-primary); /* #F6F6F6 */
+  flex: 1;
+  box-sizing: border-box;
+  padding: var(--adm-spacing-xl);
+  background-color: var(--adm-bg-primary);
   min-height: 100vh;
-  position: relative; /* for relative-container logic */
+  position: relative; 
 }
 
-.relative-container {
-  position: relative;
-}
-
-/* --- Page Title --- */
+/* 페이지 타이틀 (리스트용) */
 .user-title {
-  font-size: var(--adm-font-title); /* 28px */
+  font-size: var(--adm-font-title);
   font-weight: var(--adm-font-weight-bold);
   color: var(--adm-text-primary);
   margin-bottom: var(--adm-spacing-m);
@@ -29,20 +29,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--adm-spacing-m);
-  width: 100%; /* 헤더도 꽉 차게 */
+  width: 100%;
 }
 
 .head-action-group {
   display: flex;
-  gap: var(--adm-spacing-xs); /* 8px */
+  gap: var(--adm-spacing-xs);
 }
 
 /* 검색 박스 */
 .search-box {
-  background: var(--adm-bg-secondary); /* #FFF */
-  border: 1px solid var(--adm-border-primary); /* #E0E0E0 */
-  border-radius: var(--adm-radius-medium); /* 8px */
-  padding: 8px 12px;
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xs) var(--adm-spacing-s);
   display: flex;
   align-items: center;
   width: 250px;
@@ -50,7 +50,7 @@
 }
 
 .search-box:focus-within {
-  border-color: var(--adm-text-primary); /* Focus 시 검정 테두리 */
+  border-color: var(--adm-text-primary);
 }
 
 .search-icon {
@@ -60,18 +60,18 @@
 .search-input {
   border: none;
   outline: none;
-  margin-left: 8px;
+  margin-left: var(--adm-spacing-xs);
   width: 100%;
   font-size: var(--adm-font-base);
   color: var(--adm-text-primary);
 }
 
-/* 공통 버튼 스타일 (블랙) */
+/* 버튼 스타일 */
 .btn-black {
-  background-color: var(--adm-text-primary); /* #000 */
-  color: var(--adm-text-contrast); /* #FFF */
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
   border: none;
-  padding: 10px 16px;
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
   border-radius: var(--adm-radius-medium);
   cursor: pointer;
   font-weight: var(--adm-font-weight-semibold);
@@ -79,38 +79,17 @@
   transition: opacity 0.2s;
 }
 
-.btn-black:hover {
-  opacity: 0.9;
-}
+.btn-black:hover { opacity: 0.9; }
 
-/* 공통 버튼 스타일 (아웃라인) */
-.btn-outline {
-  background-color: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  color: var(--adm-text-primary);
-  padding: 10px 16px;
-  border-radius: var(--adm-radius-medium);
-  cursor: pointer;
-  font-size: var(--adm-font-base);
-  font-weight: var(--adm-font-weight-medium);
-  transition: background-color 0.2s;
-}
-
-.btn-outline:hover {
-  background-color: var(--adm-bg-primary);
-}
-
-/* --- Table Styles --- */
+/* 리스트 테이블 컨테이너 */
 .user-main-content {
-  /* ★ [수정] 테이블 컨테이너도 꽉 차게 */
   width: 100%; 
   box-sizing: border-box;
-  
   background: var(--adm-bg-secondary);
-  border-radius: var(--adm-radius-medium); /* 12px or 8px */
+  border-radius: var(--adm-radius-medium);
   box-shadow: var(--adm-shadow-light);
-  padding: var(--adm-spacing-m);
   border: 1px solid var(--adm-border-primary);
+  overflow: hidden;
 }
 
 .user-table {
@@ -120,28 +99,26 @@
 
 .user-table th {
   text-align: left;
-  padding: 16px;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  background-color: var(--adm-bg-tertiary);
   border-bottom: 1px solid var(--adm-border-primary);
-  color: var(--adm-text-secondary); /* #5E5E5E */
-  font-size: var(--common-font-base-small); /* 13px */
+  color: var(--adm-text-secondary);
+  font-size: var(--adm-font-small);
   font-weight: var(--adm-font-weight-semibold);
+  text-transform: uppercase;
 }
 
 .user-table td {
-  padding: 16px;
-  border-bottom: 1px solid var(--adm-border-secondary); /* #F0F0F0 */
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  border-bottom: 1px solid var(--adm-border-secondary);
   font-size: var(--adm-font-base);
   color: var(--adm-text-primary);
 }
 
-.fw-bold {
-  font-weight: var(--adm-font-weight-bold);
-}
-
-/* 관리 버튼 (테이블 내부) */
+/* 테이블 내부 버튼 */
 .btn-detail {
   padding: 6px 12px;
-  background: var(--adm-bg-primary); /* #F6F6F6 */
+  background: var(--adm-bg-primary);
   border: 1px solid var(--adm-border-secondary);
   border-radius: var(--adm-radius-small);
   cursor: pointer;
@@ -155,7 +132,7 @@
   color: var(--adm-text-primary);
 }
 
-/* --- Role Badge --- */
+/* Role Badge */
 .role-badge {
   padding: 4px 8px;
   border-radius: var(--adm-radius-small);
@@ -164,15 +141,11 @@
   text-transform: uppercase;
   display: inline-block;
 }
-
-/* Admin: 초록색 계열 (변수 활용) */
 .role-badge.admin {
-  background-color: rgba(39, 174, 96, 0.1); /* --adm-accent-green with opacity */
+  background-color: rgba(39, 174, 96, 0.1);
   color: var(--adm-accent-green);
-  border: 1px solid rgba(39, 174, 96, 0.2);
+  border: 1px solid var(--adm-accent-green);
 }
-
-/* User: 회색 계열 */
 .role-badge.user {
   background-color: var(--adm-bg-interactive);
   color: var(--adm-text-secondary);
@@ -181,15 +154,19 @@
 
 
 /* =========================================
-   User Detail Page Styles
+   2. User Detail Page Styles (수정됨)
    ========================================= */
 
-/* Header Area (Detail) */
+/* 헤더 영역 (타이틀 + 뒤로가기 버튼) */
 .user-detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--adm-spacing-l); /* 24px */
+  
+  /* ★ [핵심] 900px에 맞추고 중앙 정렬 */
+  max-width: 900px; 
+  width: 100%;
+  margin: 0 auto var(--adm-spacing-m); /* 위 0, 좌우 auto, 아래 margin */
 }
 
 .user-detail-header h2 {
@@ -199,7 +176,23 @@
   margin: 0;
 }
 
-/* Detail Card */
+/* 뒤로가기 버튼 스타일 */
+.btn-back-page {
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  padding: 8px 16px;
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+  color: var(--adm-text-secondary);
+  transition: all 0.2s;
+}
+.btn-back-page:hover {
+  background-color: var(--common-bg-hover);
+  color: var(--adm-text-primary);
+}
+
+/* 상세 정보 카드 */
 .user-detail-card {
   background: var(--adm-bg-secondary);
   padding: var(--adm-spacing-xl); /* 40px */
@@ -207,17 +200,17 @@
   box-shadow: var(--adm-shadow-light);
   border: 1px solid var(--adm-border-primary);
   
-  /* ★ 상세 페이지도 화면을 꽉 채우고 싶으면 max-width를 100%로 변경하세요 */
-  /* max-width: 900px;  <-- 기존: 너무 넓어지는 것 방지용 */
-  max-width: 100%;   /* <-- 수정: 화면 전체 사용 */
+  /* ★ [핵심] 너비 900px 고정 및 중앙 정렬 */
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
 }
 
-/* Section Title */
+/* 섹션 타이틀 */
 .section-title {
   font-size: var(--adm-font-large);
   font-weight: var(--adm-font-weight-bold);
-  color: var(--adm-text-secondary);
+  color: var(--adm-text-primary); /* 색상 진하게 변경 */
   margin-bottom: var(--adm-spacing-m);
   padding-bottom: var(--adm-spacing-s);
   border-bottom: 1px solid var(--adm-border-secondary);
@@ -241,30 +234,32 @@
 /* Form Elements */
 .form-group label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: var(--adm-spacing-xs);
   font-size: var(--adm-font-small);
   font-weight: var(--adm-font-weight-semibold);
   color: var(--adm-text-secondary);
 }
 
 .input-disabled {
-  background: var(--adm-bg-tertiary); /* #FAFAFA */
+  background: var(--adm-bg-tertiary);
   border: 1px solid var(--adm-border-secondary);
-  padding: 10px;
+  padding: var(--adm-spacing-s);
   width: 100%;
-  border-radius: var(--adm-radius-small);
+  border-radius: var(--adm-radius-medium);
   color: var(--common-text-disabled);
   font-size: var(--adm-font-base);
+  box-sizing: border-box;
 }
 
 .input-editable {
   background: var(--adm-bg-secondary);
   border: 1px solid var(--adm-border-primary);
-  padding: 10px;
+  padding: var(--adm-spacing-s);
   width: 100%;
-  border-radius: var(--adm-radius-small);
+  border-radius: var(--adm-radius-medium);
   font-size: var(--adm-font-base);
   color: var(--adm-text-primary);
+  box-sizing: border-box;
   transition: border-color 0.2s;
 }
 
@@ -279,26 +274,30 @@
   justify-content: flex-end;
   gap: var(--adm-spacing-s);
   margin-top: var(--adm-spacing-xl);
+  padding-top: var(--adm-spacing-m);
+  border-top: 1px solid var(--adm-border-secondary);
 }
 
 .btn-save {
-  background: var(--adm-text-primary);
+  background: var(--adm-text-link);
   color: var(--adm-text-contrast);
-  padding: 10px 20px;
-  border-radius: var(--adm-radius-small);
+  padding: 10px 24px;
+  border-radius: var(--adm-radius-medium);
   border: none;
   cursor: pointer;
   font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
 }
 
 .btn-cancel {
   background: var(--adm-bg-interactive);
   color: var(--adm-text-secondary);
-  padding: 10px 20px;
-  border-radius: var(--adm-radius-small);
+  padding: 10px 24px;
+  border-radius: var(--adm-radius-medium);
   border: none;
   cursor: pointer;
   font-weight: var(--adm-font-weight-medium);
+  font-size: var(--adm-font-base);
 }
 
 .btn-save:hover { opacity: 0.9; }

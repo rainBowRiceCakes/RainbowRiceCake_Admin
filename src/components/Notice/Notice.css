@@ -252,7 +252,47 @@
    3. NoticeDetail.jsx (상세 페이지 전용)
    ========================================= */
 
-/* 상세 페이지 헤더 영역 (Status 포함) */
+/* 상세 페이지 헤더 영역 (타이틀) - RiderDetail 스타일 참고 */
+.notice-header {
+  max-width: 900px; /* RiderDetail과 동일한 너비 */
+  margin: var(--adm-spacing-l) auto var(--adm-spacing-m); /* 중앙 정렬 및 하단 여백 */
+  text-align: left; /* 좌측 정렬 */
+}
+
+.page-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin: 0 0 var(--adm-spacing-xs) 0; /* 상단 여백 제거 */
+}
+
+.page-subtitle {
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-tertiary);
+}
+
+/* 컨텐츠 래퍼 - 중앙 정렬을 위한 설정 */
+.notice-content-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 메인 카드 스타일 - RiderDetail 스타일 참고 */
+.notice-card {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xl);
+  box-shadow: var(--adm-shadow-light);
+  
+  /* 크기 및 정렬 수정 */
+  width: 100%;
+  max-width: 900px; /* 넓어진 너비 */
+  margin: 0 auto;   /* 중앙 정렬 */
+}
+
+/* 카드 내부 헤더 Row (Status 포함) */
 .card-header-row {
   display: flex;
   justify-content: space-between;
