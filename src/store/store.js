@@ -11,6 +11,7 @@ import partnerShowReducer from "../store/slices/partnerSlice.js";
 import riderShowReducer from "../store/slices/riderSlice.js";
 import orderShowReducer from "../store/slices/orderSlice.js";
 import userShowReducer from "../store/slices/userSlice.js";
+import noticeShowReducer from "../store/slices/noticeSlice.js";
 
 export default configureStore ({
   reducer: {
@@ -20,5 +21,6 @@ export default configureStore ({
     riderShow: riderShowReducer,
     orderShow: orderShowReducer,
     userShow: userShowReducer,
+    noticeShow: noticeShowReducer,
   }
 });

@@ -15,6 +15,7 @@ import Login from "../components/common/Login.jsx";
 import OrderDetail from "../components/Order/OrderDetail.jsx";
 import User from "../components/User/User.jsx";
 import UserDetail from "../components/User/UserDetail.jsx";
+import NoticeDetail from "../components/Notice/NoticeDetail.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       { 
         path: '/admin/notice', 
         element: <Notice />
+      },
+      { 
+        path: '/admin/notice/:id', 
+        element: <NoticeDetail />
       },
       { 
         path: '/admin/qna', 

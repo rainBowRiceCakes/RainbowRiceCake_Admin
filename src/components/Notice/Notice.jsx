@@ -1,123 +1,108 @@
-import { useState } from 'react';
-import './Notice.css';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import './Notice.css'; // 기존 CSS 사용
+import { noticeCreateThunk, noticeShowThunk } from '../../store/thunks/noticeThunk.js';
 
 function Notice() {
-  // 상태 관리
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  // Redux Store에서 공지 리스트 가져오기 (store 구조에 따라 state.notice.notices 등으로 수정 필요)
+  const { show, isLoading } = useSelector((state) => state.noticeShow); 
+
+  // 입력 폼 상태 관리
   const [role, setRole] = useState('ALL'); // ALL | DLV | PTN
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  // 보낸 공지 내역 리스트 (더미 데이터 초기값 포함)
-  const [sentNotices, setSentNotices] = useState([
-    { id: 1, target: 'ALL', title: '서버 점검 안내', content: '새벽 2시부터 점검이 있습니다.', date: '2025-06-20 14:00' },
-    { id: 2, target: 'DLV', title: '우천 시 안전 운행 당부', content: '빗길 미끄러짐 주의 바랍니다.', date: '2025-06-21 09:30' },
-  ]);
+  // 1. 초기 데이터 로드 (더미 데이터 제거됨)
+  useEffect(() => {
+    dispatch(noticeShowThunk());
+  }, [dispatch]);
 
-  // 공지 발송 핸들러
-  const handleSubmit = (e) => {
+  // 2. 공지 발송 핸들러
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 유효성 검사
     if (!title.trim() || !content.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
-    // 전송할 데이터 객체 생성
+    if (!window.confirm('새로운 공지를 등록하시겠습니까?')) return;
+
     const newNotice = {
-      id: sentNotices.length + 1, // 간단한 ID 생성
-      target: role,
+      targetRole: role,
       title: title,
       content: content,
-      date: new Date().toLocaleString(), // 현재 시간 포맷
+      // status는 서버에서 default(true)로 생성된다고 가정
     };
 
-    // 1. API 전송 로직 (여기에 백엔드 호출 코드 들어감)
-    console.log('공지 전송 데이터:', newNotice);
-    
-    // 2. 화면 리스트에 추가 (최신순으로 배치)
-    setSentNotices([newNotice, ...sentNotices]);
-
-    alert(`[${role}] 대상으로 공지가 발송되었습니다.`);
-
-    // 폼 초기화
-    setTitle('');
-    setContent('');
-    setRole('ALL');
+    try {
+      await dispatch(noticeCreateThunk(newNotice)).unwrap();
+      alert(`[${role}] 대상으로 공지가 발송되었습니다.`);
+      
+      // 성공 후 폼 초기화 및 리스트 재조회
+      setTitle('');
+      setContent('');
+      setRole('ALL');
+      dispatch(noticeShowThunk()); // 리스트 갱신
+    } catch (error) {
+      console.error('등록 실패:', error);
+      alert('공지 등록 실패: ' + (error?.message || '오류가 발생했습니다.'));
+    }
   };
 
-  // 삭제 핸들러 (옵션 기능)
-  const handleDelete = (id) => {
-    if (window.confirm('이 공지 내역을 삭제하시겠습니까?')) {
-      setSentNotices(sentNotices.filter(notice => notice.id !== id));
-    }
+  // 3. 상세 페이지 이동 핸들러
+  const handleManage = (id) => {
+    navigate(`/admin/notice/${id}`);
   };
 
   return (
     <div className="notice-container">
-      
-      {/* 1. 페이지 타이틀 */}
       <div className="notice-title">Notice (공지 발송)</div>
 
       <div className="notice-content-wrapper">
-        {/* 2. 공지 작성 폼 (Form Card) */}
+        {/* 공지 작성 폼 */}
         <div className="notice-form-card">
           <h3 className="card-subtitle">Create New Notice</h3>
           <form onSubmit={handleSubmit}>
-            
-            {/* 수신 대상 선택 */}
             <div className="form-group">
               <label className="form-label">수신 대상 (Target Audience)</label>
               <div className="role-selector">
-                <label className={`role-option ${role === 'ALL' ? 'active' : ''}`}>
-                  <input type="radio" name="role" value="ALL" checked={role === 'ALL'} onChange={(e) => setRole(e.target.value)} />
-                  전체 (ALL)
-                </label>
-                <label className={`role-option ${role === 'DLV' ? 'active' : ''}`}>
-                  <input type="radio" name="role" value="DLV" checked={role === 'DLV'} onChange={(e) => setRole(e.target.value)} />
-                  기사님 (DLV)
-                </label>
-                <label className={`role-option ${role === 'PTN' ? 'active' : ''}`}>
-                  <input type="radio" name="role" value="PTN" checked={role === 'PTN'} onChange={(e) => setRole(e.target.value)} />
-                  제휴처 (PTN)
-                </label>
+                {['ALL', 'DLV', 'PTN'].map((r) => (
+                  <label key={r} className={`role-option ${role === r ? 'active' : ''}`}>
+                    <input type="radio" name="role" value={r} checked={role === r} onChange={(e) => setRole(e.target.value)} />
+                    {r === 'ALL' ? '전체' : r === 'DLV' ? '기사님' : '제휴처'} ({r})
+                  </label>
+                ))}
               </div>
             </div>
 
-            {/* 제목 입력 */}
             <div className="form-group">
               <label className="form-label">제목 (Title)</label>
               <input 
-                type="text" 
-                className="notice-input" 
-                placeholder="공지사항 제목을 입력하세요" 
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                type="text" className="notice-input" placeholder="공지사항 제목" 
+                value={title} onChange={(e) => setTitle(e.target.value)}
               />
             </div>
 
-            {/* 내용 입력 */}
             <div className="form-group">
               <label className="form-label">내용 (Content)</label>
               <textarea 
-                className="notice-textarea" 
-                rows="6" 
-                placeholder="전달할 내용을 상세히 입력하세요..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                className="notice-textarea" rows="6" placeholder="내용 입력..."
+                value={content} onChange={(e) => setContent(e.target.value)}
               ></textarea>
             </div>
 
-            {/* 전송 버튼 */}
             <div className="form-actions">
-              <button type="submit" className="notice-btn-submit">
-                공지사항 발송
-              </button>
+              <button type="submit" className="notice-btn-submit">공지사항 발송</button>
             </div>
           </form>
         </div>
 
-        {/* 3. 보낸 공지 내역 (History List) - 새로 추가된 부분 */}
+        {/* 보낸 공지 내역 (서버 데이터 연동) */}
         <div className="notice-history-card">
           <h3 className="card-subtitle">Sent History (발송 내역)</h3>
           <div className="history-table-wrapper">
@@ -127,24 +112,34 @@ function Notice() {
                   <th>Target</th>
                   <th>Title</th>
                   <th>Date</th>
-                  <th>Action</th>
+                  <th>Management</th>
                 </tr>
               </thead>
               <tbody>
-                {sentNotices.map((notice) => (
-                  <tr key={notice.id}>
-                    <td><span className="target-badge">{notice.target}</span></td>
-                    <td className="text-left">
-                      <div className="history-title">{notice.title}</div>
-                      <div className="history-content-preview">{notice.content}</div>
-                    </td>
-                    <td className="text-date">{notice.date}</td>
-                    <td>
-                      <button className="btn-delete" onClick={() => handleDelete(notice.id)}>삭제</button>
-                    </td>
-                  </tr>
-                ))}
-                {sentNotices.length === 0 && (
+                {isLoading ? (
+                  <tr><td colSpan="4" className="text-center">로딩 중...</td></tr>
+                ) : show && show.length > 0 ? (
+                  show.map((notice) => (
+                    <tr key={notice.id}>
+                      <td><span className={`target-badge ${notice.targetRole}`}>{notice.targetRole}</span></td>
+                      <td className="text-left">
+                        <div className="history-title">
+                          {notice.title}
+                          {/* 상태 표시 뱃지 (선택 사항) */}
+                          {!notice.status && <span style={{fontSize:'0.7rem', color:'green', marginLeft:'5px'}}>(진행중)</span>}
+                          {notice.status && <span style={{fontSize:'0.7rem', color:'red', marginLeft:'5px'}}>(종료)</span>}
+                        </div>
+                        <div className="history-content-preview">{notice.content}</div>
+                      </td>
+                      <td className="text-date">{new Date(notice.createAt || notice.date).toLocaleDateString()}</td>
+                      <td>
+                        <button className="btn-manage" onClick={() => handleManage(notice.id)}>
+                          관리
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
                   <tr>
                     <td colSpan="4" className="no-data">발송된 공지사항이 없습니다.</td>
                   </tr>
@@ -154,7 +149,6 @@ function Notice() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
