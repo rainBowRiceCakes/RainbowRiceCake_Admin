@@ -62,7 +62,7 @@ function Settlement() {
   const [viewType, setViewType] = useState('all'); // all | requested
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 9;
 
   // 필터링 로직
   const filteredData = mockSettlements.filter((item) => {

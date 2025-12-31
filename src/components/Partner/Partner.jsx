@@ -37,7 +37,7 @@ function Partner() {
   const [viewType, setViewType] = useState('all'); // all | pending
   const [searchPartner, setSearchPartner] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 9;
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // 모달 상태
 
   // --- Handlers ---

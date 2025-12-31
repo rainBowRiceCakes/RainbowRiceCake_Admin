@@ -37,7 +37,7 @@ function Riders() {
   const [viewType, setViewType] = useState('all');
   const [searchRider, setSearchRider] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 9;
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Handlers

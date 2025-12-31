@@ -75,7 +75,7 @@ export const noticeDeleteThunk = createAsyncThunk(
   'noticeDelete/noticeDeleteThunk', // Thunk 고유명
   async (id, { rejectWithValue }) => {
     try {
-      const url = `/api/admins/notice`;
+      const url = `/api/admins/notice/${id}`;
       
       const response = await axiosInstance.delete(url, id);
       if(!response.data) {
