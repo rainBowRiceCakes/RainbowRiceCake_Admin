@@ -57,14 +57,17 @@ function RiderDetail() {
   };
 
   const handleUpdate = async () => {
-    if (!window.confirm(`${editData.name} 정보를 수정하시겠습니까?`)) return;
+    if (!window.confirm(`${editData.rider_user.name} 정보를 수정하시겠습니까?`)) return;
 
     try {
-      const resultUpload = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
-      // state를 직접 수정하기보다 복사본(payload)을 만들어 전송하는 것이 안전.
+      let resultUpload = ''
       const payload = { ...editData };
 
-      payload.image = resultUpload.data.path;
+      if(file) {
+        resultUpload = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
+        payload.licenseImg = resultUpload.data.path;
+        
+      }
 
       // 불필요한 필드 제거
       delete payload.createdAt;

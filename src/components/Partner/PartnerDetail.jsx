@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Partner.css'; 
@@ -65,11 +65,14 @@ function PartnerDetail() {
     if (!window.confirm(`${editData.krName} 정보를 수정하시겠습니까?`)) return;
 
     try {
-      const resultUpload = await dispatch(postLogoImageUploadThunk(file)).unwrap();
-      // state를 직접 수정하기보다 복사본(payload)을 만들어 전송하는 것이 안전.
+      let resultUpload = ''
       const payload = { ...editData };
 
-      payload.image = resultUpload.data.path;
+      if(file) {
+        resultUpload = await dispatch(postLogoImageUploadThunk(file)).unwrap();
+        payload.logoImg = resultUpload.data.path;
+        
+      }
 
       // 불필요한 필드 제거
       delete payload.createdAt;

@@ -40,10 +40,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleStatusChange = (e) => {
-    setFormData((prev) => ({ ...prev, status: e.target.value }));
-  };
-
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -185,27 +181,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
               <div className="form-group full">
                 <label>주소 <span className="required">*</span></label>
                 <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="전체 주소 입력" required />
-              </div>
-            </div>
-
-            {/* 상태 선택 */}
-            <div className="form-row">
-              <div className="form-group full">
-                <label>운영 상태</label>
-                <div className="status-selector">
-                  <label className={`radio-label res ${formData.status === 'RES' ? 'active' : ''}`}>
-                    <input type="radio" name="status" value="RES" checked={formData.status === 'RES'} onChange={handleStatusChange} />
-                    승인
-                  </label>
-                  <label className={`radio-label req ${formData.status === 'REQ' ? 'active' : ''}`}>
-                    <input type="radio" name="status" value="REQ" checked={formData.status === 'REQ'} onChange={handleStatusChange} />
-                    대기
-                  </label>
-                  <label className={`radio-label rej ${formData.status === 'REJ' ? 'active' : ''}`}>
-                    <input type="radio" name="status" value="REJ" checked={formData.status === 'REJ'} onChange={handleStatusChange} />
-                    반려
-                  </label>
-                </div>
               </div>
             </div>
 

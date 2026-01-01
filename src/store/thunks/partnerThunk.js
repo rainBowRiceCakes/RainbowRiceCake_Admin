@@ -39,7 +39,7 @@ export const partnerCreateThunk = createAsyncThunk(
   'partnerCreate/partnerCreateThunk', // Thunk 고유명
   async (data, { rejectWithValue }) => {
     try {
-      const url = `/api/partners`;
+      const url = `/api/admins/partner`;
       
       const response = await axiosInstance.post(url, data);
       if(!response.data) {
@@ -83,7 +83,7 @@ export const postLogoImageUploadThunk = createAsyncThunk(
       
       // 폼데이터 생성
       const formData = new FormData();
-      formData.append('logoImage', file);
+      formData.append('logoImg', file);
 
       const response = await axiosInstance.post(url, formData, { headers });
 

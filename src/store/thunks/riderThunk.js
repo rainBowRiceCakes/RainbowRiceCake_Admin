@@ -59,7 +59,7 @@ export const riderUpdateThunk = createAsyncThunk(
     try {
       const url = `/api/admins/rider`;
       
-      const response = await axiosInstance.post(url, data);
+      const response = await axiosInstance.put(url, data);
       if(!response.data) {
         throw new Error('호텔정보 수정 실패');
       }
@@ -81,7 +81,7 @@ export const postLicenseImageUploadThunk = createAsyncThunk(
       
       // 폼데이터 생성
       const formData = new FormData();
-      formData.append('licenseImage', file);
+      formData.append('licenseImg', file);
 
       const response = await axiosInstance.post(url, formData, { headers });
 
