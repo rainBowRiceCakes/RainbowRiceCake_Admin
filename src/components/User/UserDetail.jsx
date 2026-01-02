@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import './User.css'; 
 
 // ★ Thunk Import (userThunk.js에 해당 함수들이 정의되어 있어야 합니다)
-import { userDetailThunk, userUpdateThunk } from '../../store/thunks/userThunk.js';
+import { userDeleteThunk, userDetailThunk, userUpdateThunk } from '../../store/thunks/userThunk.js';
 
 function UserDetail() {
   const navigate = useNavigate();
@@ -57,6 +57,21 @@ function UserDetail() {
     } catch (error) {
       console.error("수정 실패:", error);
       alert("수정 실패: " + (error.message || "알 수 없는 오류가 발생했습니다."));
+    }
+  };
+
+  // 삭제 핸들러
+  const handleDelete = async () => {
+    if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+    if (!window.confirm('rider정보와 partner정보도 함께 삭제됩니다.')) return;
+    
+    try {
+      await dispatch(userDeleteThunk(id)).unwrap();
+      alert('삭제되었습니다.');
+      navigate('/admin/user');
+    } catch (error) {
+      console.error(error);
+      alert('삭제 실패: ' + (error?.message || '알 수 없는 오류'));
     }
   };
 
@@ -128,7 +143,7 @@ function UserDetail() {
         </div>
 
         <div className="detail-actions">
-          <button className="btn-cancel" onClick={() => navigate('/admin/user')}>취소</button>
+          <button className="adm-btn delete" onClick={handleDelete}>삭제 (Delete)</button>
           <button className="btn-save" onClick={handleUpdate}>수정 완료</button>
         </div>
       </div>

@@ -33,7 +33,7 @@ function Order() {
   // 페이지 로드 및 currentPage 변경 시 실행
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
 
   // --- Handlers ---
@@ -142,8 +142,8 @@ function Order() {
             <tr className='order-table-head'>
               <th>배송번호</th>
               {/* 백엔드 레포지토리에 User include가 없어서 일단 제외하거나 Partner로 대체 */}
-              <th>출발지(Partner)</th> 
-              <th>도착지(order)</th>
+              <th>출발지</th> 
+              <th>도착지</th>
               <th>담당기사</th>
               <th>상태</th>
               <th>주문시간</th>

@@ -38,7 +38,7 @@ function User() {
   // 페이지 로드 및 페이지 변경 시 실행
   useEffect(() => {
     fetchUsers();
-  }, [currentPage]);
+  }, [fetchUsers]);
 
   // --- Handlers ---
 
@@ -122,7 +122,7 @@ function User() {
               <th>ID</th>
               <th>이름</th>
               <th>이메일</th>
-              <th>권한 (Role)</th>
+              <th>권한</th>
               <th>가입일</th>
               <th>관리</th>
             </tr>

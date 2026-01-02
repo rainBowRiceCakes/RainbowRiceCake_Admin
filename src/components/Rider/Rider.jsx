@@ -31,7 +31,7 @@ function Riders() {
 
   useEffect(() => {
     refreshList();
-  }, []);
+  }, [refreshList]);
 
   // Local State
   const [viewType, setViewType] = useState('all');
@@ -105,12 +105,12 @@ function Riders() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>isWork</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Action</th>
+              <th>이름</th>
+              <th>전화번호</th>
+              <th>활동상태</th>
+              <th>가입상태</th>
+              <th>신청일</th>
+              <th>관리</th>
             </tr>
           </thead>
           <tbody>

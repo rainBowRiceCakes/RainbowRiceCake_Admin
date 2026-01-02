@@ -125,12 +125,12 @@ const refreshList = useCallback(() => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Hotel Name</th>
-              <th>Manager</th>
-              <th>Phone</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>호텔명</th>
+              <th>매니저</th>
+              <th>전화번호</th>
+              <th>주소</th>
+              <th>활동상태</th>
+              <th>관리</th>
             </tr>
           </thead>
           <tbody>

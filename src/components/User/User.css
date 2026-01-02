@@ -1,94 +1,122 @@
 /* User.css */
 
-/* =========================================
-   1. 공통 레이아웃 & 리스트 페이지
-   ========================================= */
-
-/* 메인 컨테이너 */
+/* 1. 전체 컨테이너 (Hotel.css와 동일) */
 .user-container {
-  width: 100%;
+  position: relative;
   flex: 1;
-  box-sizing: border-box;
-  padding: var(--adm-spacing-xl);
   background-color: var(--adm-bg-primary);
+  padding: var(--adm-spacing-xl);
   min-height: 100vh;
-  position: relative; 
+  box-sizing: border-box;
 }
 
-/* 페이지 타이틀 (리스트용) */
+/* 2. 제목 */
 .user-title {
   font-size: var(--adm-font-title);
   font-weight: var(--adm-font-weight-bold);
   color: var(--adm-text-primary);
-  margin-bottom: var(--adm-spacing-m);
+  margin-bottom: var(--adm-spacing-l);
+  letter-spacing: -0.5px;
 }
 
-/* --- Header Area (Search & Buttons) --- */
+/* 3. 헤더 영역 */
 .user-main-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--adm-spacing-m);
-  width: 100%;
 }
 
+/* 토글 컨테이너 (Hotel과 스타일 통일 - 텍스트만 있는 경우도 박스 형태 유지) */
+.user-toggle-container {
+  display: flex;
+  background-color: var(--adm-bg-interactive);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-large);
+  width: fit-content;
+  align-items: center;
+}
+
+/* User는 현재 토글 버튼이 없으므로 단순 텍스트 표시용으로 스타일 조정 */
+.user-info-text {
+  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-secondary);
+}
+
+/* 우측 액션 그룹 */
 .head-action-group {
   display: flex;
-  gap: var(--adm-spacing-xs);
+  gap: var(--adm-spacing-s);
 }
 
-/* 검색 박스 */
+/* 검색창 (Hotel.css 복사) */
 .search-box {
-  background: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  border-radius: var(--adm-radius-medium);
-  padding: var(--adm-spacing-xs) var(--adm-spacing-s);
   display: flex;
   align-items: center;
-  width: 250px;
-  transition: border-color 0.2s;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
+  width: 240px;
 }
-
-.search-box:focus-within {
-  border-color: var(--adm-text-primary);
-}
-
-.search-icon {
-  font-size: var(--adm-font-base);
-}
-
+.search-icon { font-size: var(--adm-font-base); color: var(--adm-text-placeholder); margin-right: var(--adm-spacing-xs); }
 .search-input {
   border: none;
   outline: none;
-  margin-left: var(--adm-spacing-xs);
-  width: 100%;
+  padding: var(--common-spacing-xs-alt) 0;
   font-size: var(--adm-font-base);
-  color: var(--adm-text-primary);
+  width: 100%;
 }
 
-/* 버튼 스타일 */
-.btn-black {
-  background-color: var(--adm-text-primary);
-  color: var(--adm-text-contrast);
-  border: none;
+/* 버튼 스타일 (Hotel.css 복사) */
+.btn-outline {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
   padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
   border-radius: var(--adm-radius-medium);
-  cursor: pointer;
   font-weight: var(--adm-font-weight-semibold);
   font-size: var(--adm-font-base);
-  transition: opacity 0.2s;
+  cursor: pointer;
 }
+.btn-outline:hover { background-color: var(--common-bg-hover); }
 
+.btn-black {
+  background-color: var(--adm-text-primary);
+  border: 1px solid var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
 .btn-black:hover { opacity: 0.9; }
 
-/* 리스트 테이블 컨테이너 */
+/* 작은 버튼 (테이블 내부용) */
+.btn-detail {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  background-color: var(--adm-bg-interactive); 
+  color: var(--adm-text-link);
+}
+.btn-detail:hover {
+  background-color: var(--adm-border-primary);
+}
+
+
+/* 4. 본문 테이블 영역 */
 .user-main-content {
-  width: 100%; 
-  box-sizing: border-box;
-  background: var(--adm-bg-secondary);
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
   border-radius: var(--adm-radius-medium);
   box-shadow: var(--adm-shadow-light);
-  border: 1px solid var(--adm-border-primary);
   overflow: hidden;
 }
 
@@ -98,12 +126,13 @@
 }
 
 .user-table th {
+  min-width: 100px;
   text-align: left;
   padding: var(--adm-font-large) var(--adm-spacing-l);
   background-color: var(--adm-bg-tertiary);
   border-bottom: 1px solid var(--adm-border-primary);
-  color: var(--adm-text-secondary);
   font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
   font-weight: var(--adm-font-weight-semibold);
   text-transform: uppercase;
 }
@@ -113,26 +142,15 @@
   border-bottom: 1px solid var(--adm-border-secondary);
   font-size: var(--adm-font-base);
   color: var(--adm-text-primary);
+  vertical-align: middle;
 }
 
-/* 테이블 내부 버튼 */
-.btn-detail {
-  padding: 6px 12px;
-  background: var(--adm-bg-primary);
-  border: 1px solid var(--adm-border-secondary);
-  border-radius: var(--adm-radius-small);
-  cursor: pointer;
-  font-size: var(--adm-font-small);
-  color: var(--adm-text-secondary);
-  transition: all 0.2s;
-}
+.user-table tr:hover { background-color: var(--adm-bg-tertiary); }
+.user-table tr:last-child td { border-bottom: none; }
 
-.btn-detail:hover {
-  background: var(--adm-border-primary);
-  color: var(--adm-text-primary);
-}
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
 
-/* Role Badge */
+/* --- User 전용 스타일 (Role Badge) --- */
 .role-badge {
   padding: 4px 8px;
   border-radius: var(--adm-radius-small);
@@ -141,12 +159,12 @@
   text-transform: uppercase;
   display: inline-block;
 }
-.role-badge.admin {
+.role-badge.ADMIN {
   background-color: rgba(39, 174, 96, 0.1);
   color: var(--adm-accent-green);
   border: 1px solid var(--adm-accent-green);
 }
-.role-badge.user {
+.role-badge.USER {
   background-color: var(--adm-bg-interactive);
   color: var(--adm-text-secondary);
   border: 1px solid var(--adm-border-primary);
@@ -154,29 +172,24 @@
 
 
 /* =========================================
-   2. User Detail Page Styles (수정됨)
+   5. User Detail Page Styles (상세 페이지)
    ========================================= */
 
-/* 헤더 영역 (타이틀 + 뒤로가기 버튼) */
 .user-detail-header {
+  max-width: 900px;
+  margin: 0 auto var(--adm-spacing-m);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  /* ★ [핵심] 900px에 맞추고 중앙 정렬 */
-  max-width: 900px; 
-  width: 100%;
-  margin: 0 auto var(--adm-spacing-m); /* 위 0, 좌우 auto, 아래 margin */
 }
 
 .user-detail-header h2 {
-  font-size: var(--adm-font-title);
+  margin: 0;
+  font-size: 24px;
   font-weight: var(--adm-font-weight-bold);
   color: var(--adm-text-primary);
-  margin: 0;
 }
 
-/* 뒤로가기 버튼 스타일 */
 .btn-back-page {
   background: var(--adm-bg-secondary);
   border: 1px solid var(--adm-border-primary);
@@ -192,83 +205,73 @@
   color: var(--adm-text-primary);
 }
 
-/* 상세 정보 카드 */
 .user-detail-card {
   background: var(--adm-bg-secondary);
-  padding: var(--adm-spacing-xl); /* 40px */
   border-radius: var(--adm-radius-medium);
-  box-shadow: var(--adm-shadow-light);
-  border: 1px solid var(--adm-border-primary);
-  
-  /* ★ [핵심] 너비 900px 고정 및 중앙 정렬 */
+  padding: var(--adm-spacing-m);
   max-width: 900px;
-  width: 100%;
   margin: 0 auto;
+  border: 1px solid var(--adm-border-primary);
+  box-shadow: var(--adm-shadow-light);
 }
 
-/* 섹션 타이틀 */
 .section-title {
   font-size: var(--adm-font-large);
   font-weight: var(--adm-font-weight-bold);
-  color: var(--adm-text-primary); /* 색상 진하게 변경 */
+  color: var(--adm-text-primary);
   margin-bottom: var(--adm-spacing-m);
   padding-bottom: var(--adm-spacing-s);
   border-bottom: 1px solid var(--adm-border-secondary);
 }
 
-.mt-40 {
-  margin-top: 40px;
-}
+.mt-40 { margin-top: 40px; }
 
-/* Grid Layout */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--adm-spacing-m);
 }
 
-.full-width {
-  grid-column: 1 / -1;
+.full-width { grid-column: 1 / -1; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
-/* Form Elements */
 .form-group label {
-  display: block;
-  margin-bottom: var(--adm-spacing-xs);
-  font-size: var(--adm-font-small);
+  font-size: var(--common-font-base-small);
   font-weight: var(--adm-font-weight-semibold);
-  color: var(--adm-text-secondary);
+  color: var(--common-text-secondary-dark);
+  margin-bottom: var(--adm-spacing-xs);
 }
 
+/* Input Styles */
 .input-disabled {
-  background: var(--adm-bg-tertiary);
-  border: 1px solid var(--adm-border-secondary);
-  padding: var(--adm-spacing-s);
-  width: 100%;
-  border-radius: var(--adm-radius-medium);
+  background: var(--adm-bg-disabled);
+  border: 1px solid var(--adm-border-primary);
   color: var(--common-text-disabled);
+  padding: var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  cursor: not-allowed;
   font-size: var(--adm-font-base);
-  box-sizing: border-box;
 }
 
 .input-editable {
   background: var(--adm-bg-secondary);
   border: 1px solid var(--adm-border-primary);
   padding: var(--adm-spacing-s);
-  width: 100%;
-  border-radius: var(--adm-radius-medium);
+  border-radius: var(--common-border-radius-s);
   font-size: var(--adm-font-base);
   color: var(--adm-text-primary);
-  box-sizing: border-box;
   transition: border-color 0.2s;
 }
-
 .input-editable:focus {
-  border-color: var(--adm-text-primary);
   outline: none;
+  border-color: var(--adm-text-primary);
 }
 
-/* Actions */
+/* Detail Actions */
 .detail-actions {
   display: flex;
   justify-content: flex-end;
@@ -278,27 +281,10 @@
   border-top: 1px solid var(--adm-border-secondary);
 }
 
-.btn-save {
-  background: var(--adm-text-link);
-  color: var(--adm-text-contrast);
-  padding: 10px 24px;
-  border-radius: var(--adm-radius-medium);
-  border: none;
-  cursor: pointer;
-  font-weight: var(--adm-font-weight-semibold);
-  font-size: var(--adm-font-base);
-}
-
 .btn-cancel {
-  background: var(--adm-bg-interactive);
-  color: var(--adm-text-secondary);
-  padding: 10px 24px;
-  border-radius: var(--adm-radius-medium);
-  border: none;
-  cursor: pointer;
-  font-weight: var(--adm-font-weight-medium);
-  font-size: var(--adm-font-base);
+  background: var(--adm-bg-secondary); border: 1px solid var(--common-border-light); padding: var(--adm-spacing-s) var(--adm-spacing-l); border-radius: var(--common-border-radius-s); cursor: pointer; font-weight: var(--adm-font-weight-semibold);
 }
-
+.btn-save {
+  background: var(--adm-text-primary); color: var(--adm-text-contrast); border: none; padding: var(--adm-spacing-s) 30px; border-radius: var(--common-border-radius-s); cursor: pointer; font-weight: var(--adm-font-weight-semibold);
+}
 .btn-save:hover { opacity: 0.9; }
-.btn-cancel:hover { background: var(--adm-border-primary); }

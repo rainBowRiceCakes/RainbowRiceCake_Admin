@@ -364,44 +364,6 @@
   border-color: var(--adm-border-primary);
 }
 
-/* Detail Actions (Delete / Save) */
-.detail-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--adm-spacing-s);
-  margin-top: var(--adm-spacing-l);
-  padding-top: var(--adm-spacing-m);
-  border-top: 1px solid var(--adm-border-secondary);
-}
-
-.adm-btn {
-  padding: 10px 20px;
-  border-radius: var(--adm-radius-medium);
-  font-size: var(--adm-font-base);
-  font-weight: var(--adm-font-weight-semibold);
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-}
-
-.adm-btn.save {
-  background-color: var(--adm-text-link);
-  color: var(--adm-text-contrast);
-}
-.adm-btn.save:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.adm-btn.delete {
-  background-color: var(--adm-bg-secondary);
-  color: var(--adm-accent-red);
-  border: 1px solid var(--adm-border-primary);
-}
-.adm-btn.delete:hover {
-  background-color: #FFF5F5;
-  border-color: var(--adm-accent-red);
-}
 
 /* =========================================
    4. 반응형 (Media Queries)

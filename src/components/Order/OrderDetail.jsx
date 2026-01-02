@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'; // useRef 추가
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './Order.css'; 
-import { orderDetailThunk, orderUpdateThunk } from '../../store/thunks/orderThunk.js';
+import { orderDeleteThunk, orderDetailThunk, orderUpdateThunk } from '../../store/thunks/orderThunk.js';
 import { hotelShowThunk } from '../../store/thunks/hotelThunk.js';
 
 function OrderDetail() {
@@ -126,6 +126,20 @@ function OrderDetail() {
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (!editData) return <div>데이터가 없습니다.</div>;
 
+    // 삭제 핸들러
+    const handleDelete = async () => {
+      if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+      
+      try {
+        await dispatch(orderDeleteThunk(id)).unwrap();
+        alert('삭제되었습니다.');
+        navigate('/admin/order');
+      } catch (error) {
+        console.error(error);
+        alert('삭제 실패: ' + (error?.message || '알 수 없는 오류'));
+      }
+    };
+
   // ★ 호텔 필터링 로직
   const filteredHotels = show ? show.filter(hotel => 
     hotel.krName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -205,7 +219,6 @@ function OrderDetail() {
               <option value="match">기사 배정 (match)</option>
               <option value="pick">픽업 완료 (pick)</option>
               <option value="com">배송 완료 (com)</option>
-              <option value="cancel">취소 (cancel)</option>
             </select>
           </div>
 
@@ -222,7 +235,7 @@ function OrderDetail() {
         </div>
 
         <div className="detail-actions">
-          <button className="btn-cancel" onClick={() => navigate('/admin/order')}>취소</button>
+          <button className="adm-btn delete" onClick={handleDelete}>삭제 (Delete)</button>
           <button className="btn-save" onClick={handleUpdate}>수정 완료</button>
         </div>
       </div>

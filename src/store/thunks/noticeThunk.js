@@ -70,7 +70,6 @@ export const noticeUpdateThunk = createAsyncThunk(
   }
 );
 
-// server에서, save로 만들어야 함.
 export const noticeDeleteThunk = createAsyncThunk(
   'noticeDelete/noticeDeleteThunk', // Thunk 고유명
   async (id, { rejectWithValue }) => {

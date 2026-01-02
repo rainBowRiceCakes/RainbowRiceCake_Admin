@@ -21,7 +21,6 @@ const slice = createSlice({
     // extraReducers 내부
     builder
       .addCase(userIndexThunk.fulfilled, (state, action) => {
-        console.log(action.payload.data)
         const { users, pagination } = action.payload.data;
         
         state.users = users;          // 목록 교체 (기존 데이터 뒤에 붙이는게 아님!)

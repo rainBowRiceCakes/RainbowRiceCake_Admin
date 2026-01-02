@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Rider.css'; 
-import { postLicenseImageUploadThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
+import { postLicenseImageUploadThunk, riderDeleteThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
 
 function RiderDetail() {
   const navigate = useNavigate();
@@ -86,6 +86,20 @@ function RiderDetail() {
       alert('수정 실패');
     }
   };
+
+    // 삭제 핸들러
+    const handleDelete = async () => {
+      if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+      
+      try {
+        await dispatch(riderDeleteThunk(id)).unwrap();
+        alert('삭제되었습니다.');
+        navigate('/admin/rider');
+      } catch (error) {
+        console.error(error);
+        alert('삭제 실패: ' + (error?.message || '알 수 없는 오류'));
+      }
+    };
 
   if (loading) return <div>Loading...</div>;
   if (!editData) return null;
@@ -193,7 +207,7 @@ function RiderDetail() {
         </div>
 
         <div className="detail-actions">
-          <button className="btn-cancel" onClick={() => navigate('/admin/rider')}>취소</button>
+          <button className="adm-btn delete" onClick={handleDelete}>삭제 (Delete)</button>
           <button className="btn-save" onClick={handleUpdate}>수정 완료</button>
         </div>
       </div>

@@ -31,7 +31,7 @@ function Partner() {
 
   useEffect(() => {
     refreshList();
-  }, []);
+  }, [refreshList]);
 
   // --- Local States ---
   const [viewType, setViewType] = useState('all'); // all | pending
@@ -134,12 +134,12 @@ function Partner() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Store Name</th>
-              <th>Manager</th>
-              <th>Business Num</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>매장명</th>
+              <th>매니저</th>
+              <th>사업자번호</th>
+              <th>주소</th>
+              <th>가입상태</th>
+              <th>관리</th>
             </tr>
           </thead>
           <tbody>

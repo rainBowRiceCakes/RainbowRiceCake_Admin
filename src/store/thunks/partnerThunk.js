@@ -93,3 +93,20 @@ export const postLogoImageUploadThunk = createAsyncThunk(
     }
   }
 );
+
+export const partnerDeleteThunk = createAsyncThunk(
+  'partnerDelete/partnerDeleteThunk', // Thunk 고유명
+  async (id, { rejectWithValue }) => {
+    try {
+      const url = `/api/admins/partner/${id}`;
+      
+      const response = await axiosInstance.delete(url, id);
+      if(!response.data) {
+        throw new Error('호텔정보 수정 실패');
+      }
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
