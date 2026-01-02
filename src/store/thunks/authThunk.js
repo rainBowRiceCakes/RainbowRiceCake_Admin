@@ -20,7 +20,7 @@ export const reissueThunk = createAsyncThunk(
   'auth/reissueThunk',
   async (_, { rejectWithValue }) => {
     try {
-      const url = '/api/auth/admreissue';
+      const url = '/api/auth/logout';
       
       const response = await axiosInstance.post(url);
 

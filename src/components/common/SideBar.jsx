@@ -5,6 +5,7 @@ import './Sidebar.css';
 
 // ★ authSlice에서 만든 초기화 액션 import (경로 확인 필요)
 import { clearAuth } from '../../store/slices/authSlice.js';
+import { logoutThunk } from '../../store/thunks/authThunk.js';
 
 // 메뉴 설정
 const MENU_ITEMS = [
@@ -52,8 +53,9 @@ const Sidebar = () => {
   };
 
   // ★ 로그아웃 핸들러
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
+      await dispatch(logoutThunk());
       dispatch(clearAuth()); // 1. Redux 상태 초기화
       navigate('/');         // 2. 로그인 화면으로 이동
     }

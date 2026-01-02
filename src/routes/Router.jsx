@@ -5,9 +5,9 @@ import DashBoard from "../components/DashBoard.jsx";
 import Rider from "../components/Rider/Rider.jsx";
 import Partner from "../components/Partner/Partner.jsx";
 import Hotel from "../components/Hotel/Hotel.jsx";
-import Settlement from "../components/Settlement.jsx";
+import Settlement from "../components/settlement/Settlement.jsx";
 import Notice from "../components/Notice/Notice.jsx";
-import QnA from "../components/QnA.jsx";
+import QnA from "../components/QnA/QnA.jsx";
 import HotelDetail from "../components/Hotel/HotelDetail.jsx";
 import PartnerDetail from "../components/Partner/PartnerDetail.jsx";
 import RiderDetail from "../components/Rider/RiderDetail.jsx";
@@ -16,6 +16,7 @@ import OrderDetail from "../components/Order/OrderDetail.jsx";
 import User from "../components/User/User.jsx";
 import UserDetail from "../components/User/UserDetail.jsx";
 import NoticeDetail from "../components/Notice/NoticeDetail.jsx";
+import QnADetail from "../components/QnA/QnADetail.jsx";
 
 // 사용자 정의 라우트 객체
 const router = createBrowserRouter([
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       { 
         path: '/admin/qna', 
         element: <QnA />
+      },
+      { 
+        path: '/admin/qna/:id', 
+        element: <QnADetail />
       },
 
       {

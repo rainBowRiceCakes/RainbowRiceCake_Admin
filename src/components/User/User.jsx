@@ -93,7 +93,7 @@ function User() {
 
       <div className="user-main-head">
         <div className="toggle-container">
-          <span style={{fontSize:'14px', color:'#666'}}>
+          <span className="user-info-text">
             {pagination?.total ? `총 ${pagination.total}명의 회원이 있습니다.` : '회원 목록 조회'}
           </span>
         </div>

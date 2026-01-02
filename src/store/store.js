@@ -12,6 +12,7 @@ import riderShowReducer from "../store/slices/riderSlice.js";
 import orderShowReducer from "../store/slices/orderSlice.js";
 import userShowReducer from "../store/slices/userSlice.js";
 import noticeShowReducer from "../store/slices/noticeSlice.js";
+import qnaShowReducer from "../store/slices/qnaSlice.js";
 
 export default configureStore ({
   reducer: {
@@ -22,5 +23,6 @@ export default configureStore ({
     orderShow: orderShowReducer,
     userShow: userShowReducer,
     noticeShow: noticeShowReducer,
+    qnaShow: qnaShowReducer,
   }
 });
