@@ -81,9 +81,9 @@ function Order() {
   // 상태 뱃지 클래스
   const getStatusBadgeClass = (status) => {
     switch (status) {
-      case 'waiting': return 'status-badge WAITING'; // CSS 클래스명 매칭 필요
-      case 'matched': return 'status-badge MATCHED';
-      case 'complete': return 'status-badge COMPLETE';
+      case 'req': return 'status-badge WAITING'; // CSS 클래스명 매칭 필요
+      case 'mat': return 'status-badge MATCHED';
+      case 'com': return 'status-badge COMPLETE';
       case 'cancel': return 'status-badge CANCEL';
       default: return 'status-badge';
     }
