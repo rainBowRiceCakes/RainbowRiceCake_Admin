@@ -6,16 +6,6 @@ import { hotelShowThunk } from '../../store/thunks/hotelThunk.js';
 import { useNavigate } from 'react-router-dom';
 import HotelCreate from './HotelCreate';
 
-// 더미 데이터 (호텔 목록)
-// const mockHotels = [
-//     { id: 'H-1001', name: '신라호텔', manager: '김철수 지배인', phone: '02-2233-3131', address: '서울 중구 동호로 249', status: true },
-//     { id: 'H-1002', name: '조선 팰리스', manager: '이영희 매니저', phone: '02-555-1234', address: '서울 강남구 테헤란로 231', status: true },
-//     { id: 'H-1003', name: '롯데호텔 서울', manager: '박민수 팀장', phone: '02-771-1000', address: '서울 중구 을지로 30', status: false },
-//     { id: 'H-1004', name: '하얏트 리젠시', manager: '최지훈', phone: '032-745-1234', address: '인천 중구 공항로', status: true },
-//     { id: 'H-1005', name: '파라다이스 시티', manager: '정수진', phone: '1833-8855', address: '인천 중구 영종해안남로', status: false },
-//   ];
-
-
 function Hotel() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

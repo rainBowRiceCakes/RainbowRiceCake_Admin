@@ -84,7 +84,7 @@ function Order() {
       case 'req': return 'status-badge WAITING'; // CSS 클래스명 매칭 필요
       case 'mat': return 'status-badge MATCHED';
       case 'com': return 'status-badge COMPLETE';
-      case 'cancel': return 'status-badge CANCEL';
+      case 'pick': return 'status-badge PICK';
       default: return 'status-badge';
     }
   };

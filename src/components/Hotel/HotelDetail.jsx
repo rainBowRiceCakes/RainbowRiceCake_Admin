@@ -3,12 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Hotel.css';
 import { hotelDeleteThunk, hotelDetailThunk, hotelUpdateThunk } from '../../store/thunks/hotelThunk.js';
+import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
+import { useKakaoLoader } from 'react-kakao-maps-sdk';
 
 function HotelDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_MAP_API_KEY, // 발급받은 JS 키 입력
+    libraries: ["services"],
+  });
   
-  // [삭제됨] const location = useLocation(); 
   const { id } = useParams(); // URL 파라미터에서 ID 가져오기
 
   // [수정됨] location.state 확인 없이 초기값은 null (로딩 상태)
@@ -54,8 +60,11 @@ function HotelDetail() {
       delete payload.deletedAt;
 
       // address를 lan,lng으로 변경하는 처리 필요
-      payload.lat = 33.3333
-      payload.lng = 124.4444
+      const coords = await searchAddressToCoords(payload.address);
+      payload.lat = coords.lat
+      payload.lng = coords.lng
+      
+      
       await dispatch(hotelUpdateThunk(payload)).unwrap();
       
       alert('수정이 완료되었습니다.');

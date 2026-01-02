@@ -167,7 +167,7 @@
 .status-badge.MATCHED { background-color: #E3F2FD; color: #1565C0; } /* 파란색 */
 .status-badge.PICKUP { background-color: #FFF3E0; color: #E65100; } /* 주황색 */
 .status-badge.COMPLETE { background-color: #E8F5E9; color: #2E7D32; } /* 초록색 */
-.status-badge.CANCEL { background-color: #FFEBEE; color: #C62828; } /* 빨간색 */
+.status-badge.PICK { background-color: #FFEBEE; color: #da6161; } /* 빨간색 */
 
 .order-detail-btn {
   padding: 6px var(--adm-spacing-s);
