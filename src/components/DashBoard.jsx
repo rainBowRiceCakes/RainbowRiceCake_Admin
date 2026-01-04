@@ -11,6 +11,9 @@ import {
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { dashboardStatsThunk } from '../store/thunks/dashboadThunk';
+import { useEffect } from 'react';
 
 // 플러그인 등록
 ChartJS.register(
@@ -24,7 +27,7 @@ ChartJS.register(
 );
 
 // --- 최근 배송 건수 차트 ---
-export const RecentDeliveryChart = () => {
+export const RecentDeliveryChart = ({ dataValues, labels }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -68,10 +71,10 @@ export const RecentDeliveryChart = () => {
   };
 
   const data = {
-    labels: ['4/18', '4/19', '4/20', '4/21', '4/22', '4/23', '4/24', '4/25', '4/26', '4/27', '4/28'],
+    labels: labels || [],
     datasets: [
       {
-        data: [8, 16, 9, 10, 8, 8, 6, 7, 7, 6, 9],
+        data: dataValues || [],
         backgroundColor: '#9fa8da', // 이미지 속 연한 보라색
         barThickness: 20, // 막대 두께 조절
         borderRadius: 0, // 직각 막대
@@ -136,6 +139,26 @@ function DashBoard() {
   function handleOrderClick() {
     navigate('/admin/order');
   }
+
+  const dispatch = useDispatch();
+
+  // Redux Store에서 데이터와 로딩 상태를 구독
+  const { urgentOrders, chartData, loading } = useSelector((state) => state.dashboard);
+
+  console.log('Redux ChartData:', chartData);
+
+  useEffect(() => { 
+    // [초기 로딩] 컴포넌트 마운트 시 데이터 요청
+    const loadData = async () => {
+      // Promise.all을 사용하여 병렬로 요청하면 더 빠릅니다.
+      await Promise.all([
+        dispatch(dashboardStatsThunk())
+      ]);
+    };
+    loadData();
+  }, [dispatch]);
+  
+  
   return (
     <>
       <div className="dash-container">
@@ -235,7 +258,10 @@ function DashBoard() {
           <div className="chart-box">
             <h3 className="chart-title">최근 배송 건수</h3>
             <div className="chart-wrapper">
-              <RecentDeliveryChart />
+              <RecentDeliveryChart
+                labels={chartData?.labels || []}      // chartData가 없으면 빈 배열 전달
+                dataValues={chartData?.counts || []}  // chartData가 없으면 빈 배열 전달
+              />
             </div>
           </div>
         </div>
