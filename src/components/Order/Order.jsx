@@ -14,7 +14,7 @@ function Order() {
   // 백엔드 응답: { orders: [], pagination: { page, total, totalPages ... } }
   const { orders, pagination, loading } = useSelector((state) => state.orderShow);
   // --- Local States ---
-  const [sortBy, setSortBy] = useState('latest'); // 정렬 (UI용)
+  const [viewType, setViewType] = useState('all'); // 'all' | 'in_progress'
   const [searchId, setSearchId] = useState('');   // 검색
   const [currentPage, setCurrentPage] = useState(1); // ★ 현재 페이지 (서버 요청용)
   
@@ -26,22 +26,28 @@ function Order() {
   // ★ 2. 데이터 요청 함수 (페이지 변경 시 호출)
   const fetchOrders = useCallback(() => {
     // 쿼리 파라미터로 page, limit 전송
-    // from(날짜) 필터가 필요하다면 여기에 추가: { page: currentPage, limit, from: '2025-01-01' }
-    dispatch(orderIndexThunk({ page: currentPage, limit }));
-  }, [dispatch, currentPage]);
+    const params = { page: currentPage, limit };
+    
+    // '진행중' 필터일 경우, 'com' 상태 제외 파라미터 추가
+    if (viewType === 'in_progress') {
+      params.statusExclude = 'com'; 
+    }
 
-  // 페이지 로드 및 currentPage 변경 시 실행
+    dispatch(orderIndexThunk(params));
+  }, [dispatch, currentPage, limit, viewType]);
+
+  // 페이지 로드 및 currentPage, viewType 변경 시 실행
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
+  // viewType 변경 시 currentPage 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [viewType]);
+
 
   // --- Handlers ---
-
-  // 정렬 변경 (백엔드 API에 정렬 기능이 추가되면 파라미터로 보냄)
-  const handleSortChange = (type) => {
-    setSortBy(type);
-  };
 
   // 페이지 변경 핸들러
   const handlePageChange = (newPage) => {
@@ -105,16 +111,16 @@ function Order() {
         
         <div className="toggle-container">
           <button 
-            className={`toggle-btn ${sortBy === 'latest' ? 'active' : ''}`} 
-            onClick={() => handleSortChange('latest')}
+            className={`toggle-btn ${viewType === 'all' ? 'active' : ''}`} 
+            onClick={() => setViewType('all')}
           >
-            시간순 (최신)
+            모든 주문
           </button>
           <button 
-            className={`toggle-btn ${sortBy === 'status' ? 'active' : ''}`} 
-            onClick={() => handleSortChange('status')}
+            className={`toggle-btn ${viewType === 'in_progress' ? 'active' : ''}`} 
+            onClick={() => setViewType('in_progress')}
           >
-            상태별 (진행중)
+            진행중 주문
           </button>
         </div>
 
@@ -186,35 +192,61 @@ function Order() {
           </tbody>
         </table>
 
-        {/* ★ 4. 페이지네이션 (서버 데이터 기반) */}
-        {pagination && pagination.totalPages > 0 && (
-          <div className="pagination">
-            <button 
-              disabled={currentPage === 1} 
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              &lt;
-            </button>
-            
-            {/* 페이지 번호 생성 (1 ~ totalPages) */}
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(num => (
-              <button 
-                key={num} 
-                className={currentPage === num ? 'active' : ''}
-                onClick={() => handlePageChange(num)}
-              >
-                {num}
-              </button>
-            ))}
+        {/* ★ 4. 페이지네이션 (그룹 적용) */}
+        {pagination && pagination.totalPages > 1 && (() => {
+          const PAGE_GROUP_SIZE = 10; // 페이지 그룹당 10개씩 보여주기
+          const totalPages = pagination.totalPages;
+          
+          // 현재 페이지가 속한 그룹 계산
+          const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+          
+          // 현재 그룹의 시작/끝 페이지 번호 계산
+          let startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+          let endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
 
-            <button 
-              disabled={currentPage === pagination.totalPages} 
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              &gt;
-            </button>
-          </div>
-        )}
+          const pageNumbers = [];
+          for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+          }
+
+          // 이전/다음 그룹으로 이동하는 핸들러
+          const handlePrevGroup = () => {
+            const newPage = startPage - PAGE_GROUP_SIZE;
+            handlePageChange(newPage < 1 ? 1 : newPage);
+          };
+
+          const handleNextGroup = () => {
+            const newPage = startPage + PAGE_GROUP_SIZE;
+            handlePageChange(newPage > totalPages ? totalPages : newPage);
+          };
+
+          return (
+            <div className="pagination">
+              {/* 이전 그룹으로 */}
+              <button onClick={handlePrevGroup} disabled={startPage === 1}>&lt;&lt;</button>
+              
+              {/* 이전 페이지로 */}
+              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
+              
+              {/* 페이지 번호들 */}
+              {pageNumbers.map(num => (
+                <button 
+                  key={num} 
+                  className={currentPage === num ? 'active' : ''}
+                  onClick={() => handlePageChange(num)}
+                >
+                  {num}
+                </button>
+              ))}
+
+              {/* 다음 페이지로 */}
+              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
+              
+              {/* 다음 그룹으로 */}
+              <button onClick={handleNextGroup} disabled={endPage === totalPages}>&gt;&gt;</button>
+            </div>
+          );
+        })()}
       </div>
 
       <OrderCreate 

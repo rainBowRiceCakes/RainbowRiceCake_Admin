@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import './Partner.css'; 
-// ★ 이미지 업로드용 Thunk 추가 import
 import { partnerCreateThunk, postLogoImageUploadThunk } from '../../store/thunks/partnerThunk'; 
+import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
 
 function PartnerCreate({ isOpen, onClose, onRefresh }) {
   const dispatch = useDispatch();
 
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_MAP_API_KEY, 
+    libraries: ["services"],
+  });
+
   // 초기값 설정
   const initialFormState = {
-    userId: '',      // ★ User ID 입력 필드 추가
+    userId: '',      
     businessNum: '',
     krName: '',
     enName: '',
@@ -17,8 +23,9 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     phone: '',
     address: '',
     status: 'RES', 
-    lat: 37.5665,  
-    lng: 126.9780, 
+    // lat, lng는 handleSubmit에서 변환하여 덮어씌우므로 초기값은 0 또는 임의값이어도 무방함
+    lat: 0,  
+    lng: 0, 
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -32,7 +39,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
       setFile(null);
       setPreviewUrl(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const handleChange = (e) => {
@@ -48,7 +54,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     }
   };
 
-  // ★ 수정된 제출 핸들러 (JSON 전송 + 이미지 선 업로드)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,24 +66,34 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     if (!window.confirm('새로운 제휴 매장을 등록하시겠습니까?')) return;
 
     try {
+      // 주소를 좌표로 변환
+      const coords = await searchAddressToCoords(formData.address);
+      
+      if (!coords) {
+        alert("주소를 좌표로 변환할 수 없습니다. 주소를 다시 확인해주세요.");
+        return;
+      }
+
       let imagePath = null;
 
-      // 1. 이미지가 있다면 먼저 업로드
+      // 이미지가 있다면 업로드
       if (file) {
-        // postLogoImageUploadThunk는 PartnerDetail에서 사용했던 것과 동일한 것으로 가정
         const uploadResult = await dispatch(postLogoImageUploadThunk(file)).unwrap();
-        // 서버 응답 구조에 맞춰 경로 추출 (예: result.data.path)
         imagePath = uploadResult.data.path; 
       }
 
-      // 2. 최종 전송할 JSON 데이터 구성
+      // 전송할 JSON 데이터 구성
       const payload = {
         ...formData,
-        userId: Number(formData.userId), // 숫자로 변환
-        logoImg: imagePath || null,      // 업로드된 이미지 경로 (없으면 null)
+        userId: Number(formData.userId),
+        logoImg: imagePath || null,
+        lat: coords.lat,
+        lng: coords.lng
       };
 
-      // 3. 파트너 등록 요청 (JSON)
+      console.log("Partner Create Payload:", payload); // 디버깅용
+
+      // 파트너 등록 요청
       await dispatch(partnerCreateThunk(payload)).unwrap();
       
       alert('성공적으로 등록되었습니다.');
@@ -91,7 +106,6 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
     }
   };
 
-  // 배경 클릭 닫기
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -111,11 +125,10 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="modal-body modal-body-scroll">
             
-            {/* ★ [수정됨] 로고 이미지와 User ID를 한 줄에 배치 */}
             <div className="form-row">
-              {/* 왼쪽: 로고 이미지 (절반) */}
+              {/* 왼쪽: 로고 이미지 */}
               <div className="form-group">
-                <label>매장 로고 (Image)</label>
+                <label>매장 로고 (Image) <span className="required">*</span></label>
                 <div className="image-upload-wrapper small-box">
                     {previewUrl && (
                         <div className="img-preview">
@@ -126,7 +139,7 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
                 </div>
               </div>
 
-              {/* 오른쪽: User ID 입력 (절반) */}
+              {/* 오른쪽: User ID 입력 */}
               <div className="form-group">
                 <label>User ID (회원 번호) <span className="required">*</span></label>
                 <input 
@@ -136,7 +149,7 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
                   onChange={handleChange} 
                   placeholder="User ID 입력" 
                   required 
-                  style={{ height: '45px' }} /* 높이를 이미지 박스와 얼추 맞춤 */
+                  style={{ height: '45px', width: '100%', boxSizing: 'border-box' }} 
                 />
                 <p style={{fontSize:'12px', color:'#999', marginTop:'5px'}}>
                    * 등록할 파트너 계정의 User PK를 입력하세요.
@@ -161,19 +174,19 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
             
             <div className="form-row">
               <div className="form-group full">
-                <label>매장명 (영문)</label>
-                <input type="text" name="enName" value={formData.enName} onChange={handleChange} placeholder="Ex: OliveYoung Gangnam" />
+                <label>매장명 (영문) <span className="required">*</span></label>
+                <input type="text" name="enName" value={formData.enName} onChange={handleChange} placeholder="Ex: OliveYoung Gangnam" required />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>담당자</label>
-                <input type="text" name="manager" value={formData.manager} onChange={handleChange} placeholder="이름" />
+                <label>담당자 <span className="required">*</span></label>
+                <input type="text" name="manager" value={formData.manager} onChange={handleChange} placeholder="이름" required />
               </div>
               <div className="form-group">
-                <label>전화번호</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="02-0000-0000" />
+                <label>전화번호 <span className="required">*</span></label>
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="02-0000-0000" required />
               </div>
             </div>
 
@@ -184,7 +197,7 @@ function PartnerCreate({ isOpen, onClose, onRefresh }) {
               </div>
             </div>
 
-          </div> {/* modal-body 끝 */}
+          </div> 
 
           <div className="modal-footer">
             <button type="button" className="btn-cancel" onClick={onClose}>취소</button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './QnA.css';
@@ -9,29 +9,61 @@ function QnA() {
   const navigate = useNavigate();
 
   // Redux State 구독 (store 이름은 qnaShow로 가정)
-  // 응답 데이터 구조가 { data: [...] } 인지 바로 배열 [...] 인지 확인 필요.
-  // 여기서는 thunk 리턴이 response.data (전체 객체) 라고 가정하고, 실제 목록은 .data 프로퍼티에 있다고 봅니다.
-  const { show, loading } = useSelector((state) => state.qnaShow); 
+  const { qnas, pagination, loading } = useSelector((state) => state.qnaShow); 
 
+  // Local States
   const [filter, setFilter] = useState('all'); // 'all' | 'waiting'
+  const [searchTitle, setSearchTitle] = useState(''); // 실시간 입력
+  const [debouncedSearch, setDebouncedSearch] = useState(''); // 디바운싱된 검색어 (API 요청용)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // 페이지당 항목 수
 
-  // 1. 초기 데이터 로드
+  // --- 디바운싱 Effect ---
   useEffect(() => {
-    dispatch(qnaShowThunk());
-  }, [dispatch]);
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTitle);
+      setCurrentPage(1); // 검색어 변경 시 1페이지로 초기화
+    }, 500); // 500ms 지연
 
-  // 2. 필터링 로직
-  // show가 배열인지 확인 후 필터 적용
-  const listData = Array.isArray(show) ? show : (show?.data || []);
-  
-  const filteredList = listData.filter(item => {
-    if (filter === 'waiting') return item.status === false; // 답변 대기만
-    return true; // 전체
-  });
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTitle]);
+
+  // 데이터 요청 함수 (페이지네이션, 필터, 검색 포함)
+  const fetchQnAs = useCallback(() => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      search: debouncedSearch,
+    };
+    if (filter === 'waiting') {
+      params.status = false; // 답변 대기 중
+    }
+    dispatch(qnaShowThunk(params));
+  }, [dispatch, currentPage, itemsPerPage, debouncedSearch, filter]);
+
+  // 페이지 로드 및 파라미터 변경 시 실행
+  useEffect(() => {
+    fetchQnAs();
+  }, [fetchQnAs]);
+
+  // 필터 변경 시 현재 페이지와 검색어 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+    setSearchTitle('');
+    setDebouncedSearch('');
+  }, [filter]);
 
   // 상세 페이지 이동
   const handleDetailClick = (id) => {
     navigate(`/admin/qna/${id}`);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= (pagination?.totalPages || 1)) {
+      setCurrentPage(newPage);
+    }
   };
 
   return (
@@ -55,10 +87,15 @@ function QnA() {
           </button>
         </div>
         
-        {/* 검색창 (UI만 유지, 기능 구현 시 필터 로직 추가 필요) */}
+        {/* 검색창 */}
         <div className="qna-search-box">
           <span>🔍</span>
-          <input type="text" placeholder="제목, 작성자 검색" />
+          <input 
+            type="text" 
+            placeholder="제목 검색 (자동 검색)" 
+            value={searchTitle}
+            onChange={(e) => setSearchTitle(e.target.value)}
+          />
         </div>
       </div>
 
@@ -78,8 +115,8 @@ function QnA() {
           <tbody>
             {loading ? (
                <tr><td colSpan="6" style={{textAlign:'center', padding:'40px'}}>로딩 중...</td></tr>
-            ) : filteredList.length > 0 ? (
-              filteredList.map(item => (
+            ) : qnas && qnas.length > 0 ? (
+              qnas.map(item => (
                 <tr key={item.id} className="clickable-row">
                   <td className="fw-bold">{item.id}</td>
                   <td>
@@ -92,7 +129,7 @@ function QnA() {
                   </td>
                   <td className="text-left fw-bold">{item.title}</td>
                   <td>
-                    {item.question_user.name ? item.question_user.name : <span className="text-gray">비회원</span>}
+                    {item.question_user?.name ? item.question_user.name : <span className="text-gray">비회원</span>}
                   </td>
                   <td>
                     {/* qnaImg가 null이 아니고 빈 문자열도 아닐 때 아이콘 표시 */}
@@ -100,7 +137,7 @@ function QnA() {
                   </td>
                   <td>
                     <button 
-                      className="btn-black" 
+                      className="qna-btn-small gray" 
                       style={{padding: '6px 12px', fontSize:'12px'}}
                       onClick={(e) => { e.stopPropagation(); handleDetailClick(item.id); }}
                     >
@@ -115,6 +152,51 @@ function QnA() {
           </tbody>
         </table>
       </div>
+
+      {/* 페이지네이션 */}
+      {pagination && pagination.totalPages > 1 && (() => {
+          const PAGE_GROUP_SIZE = 10;
+          const totalPages = pagination.totalPages;
+          
+          const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+          
+          let startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+          let endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
+
+          const pageNumbers = [];
+          for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+          }
+
+          const handlePrevGroup = () => {
+            const newPage = startPage - PAGE_GROUP_SIZE;
+            handlePageChange(newPage < 1 ? 1 : newPage);
+          };
+
+          const handleNextGroup = () => {
+            const newPage = startPage + PAGE_GROUP_SIZE;
+            handlePageChange(newPage > totalPages ? totalPages : newPage);
+          };
+
+          return (
+            <div className="pagination">
+              <button onClick={handlePrevGroup} disabled={startPage === 1}>&lt;&lt;</button>
+              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
+              {pageNumbers.map(num => (
+                <button 
+                  key={num} 
+                  className={currentPage === num ? 'active' : ''}
+                  onClick={() => handlePageChange(num)}
+                >
+                  {num}
+                </button>
+              ))}
+              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
+              <button onClick={handleNextGroup} disabled={endPage === totalPages}>&gt;&gt;</button>
+            </div>
+          );
+        })()}
+
     </div>
   );
 }

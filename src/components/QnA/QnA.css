@@ -125,8 +125,15 @@
 .answer-input:focus { outline: none; border-color: #000; }
 
 .answer-actions { text-align: right; }
-.btn-black {
-  background: #000; color: #fff; border: none; padding: 12px 24px;
-  border-radius: 6px; font-weight: 600; cursor: pointer;
+
+.qna-btn-small {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  color: var(--adm-text-contrast);
 }
-.btn-black:hover { opacity: 0.9; }
+
+.qna-btn-small.gray { background-color: var(--adm-bg-interactive); color: var(--adm-text-link); }

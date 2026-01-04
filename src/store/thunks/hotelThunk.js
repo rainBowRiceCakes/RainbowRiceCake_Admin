@@ -3,14 +3,24 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 export const hotelShowThunk = createAsyncThunk(
   'hotelShow/hotelShowThunk', // Thunk 고유명
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const url = `/api/hotels`;
+      // params: { page, limit, status, search }
+      const queryParams = new URLSearchParams();
+
+      if (params.page) queryParams.append('page', params.page);
+      if (params.limit) queryParams.append('limit', params.limit);
+      if (params.status) queryParams.append('status', params.status);
+      if (params.search) queryParams.append('search', params.search);
+
+      const queryString = queryParams.toString();
+      const url = `/api/hotels${queryString ? `?${queryString}` : ''}`;
       
       const response = await axiosInstance.get(url);
       if(!response.data) {
         throw new Error('호텔정보 불러오기 실패');
       }
+      // 백엔드 응답이 { hotels: [], pagination: {} } 형태일 것으로 예상
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

@@ -3,11 +3,12 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 export const orderIndexThunk = createAsyncThunk(
   'orderIndex/orderIndexThunk',
-  async ({ page = 1, limit = 9, from }, { rejectWithValue }) => {
+  async ({ page = 1, limit = 9, from, statusExclude }, { rejectWithValue }) => {
     try {
       // 쿼리 파라미터 생성
       let query = `?page=${page}&limit=${limit}`;
       if (from) query += `&from=${from}`;
+      if (statusExclude) query += `&statusExclude=${statusExclude}`;
 
       const response = await axiosInstance.get(`/api/admins/orderindex${query}`);
       return response.data;

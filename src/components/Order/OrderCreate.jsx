@@ -207,15 +207,15 @@ function OrderCreate({ isOpen, onClose, onRefresh }) {
                 <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="홍길동" required />
               </div>
               <div className="form-group">
-                <label>이메일</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="example@email.com" />
+                <label>이메일 <span className="required">*</span></label>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="example@email.com" required />
               </div>
             </div>
 
             {/* 4. 짐 수량 (자동 가격 계산) */}
             <div className="form-row">
               <div className="form-group full">
-                <label style={{display:'block', marginBottom:'8px'}}>짐 수량</label>
+                <label style={{display:'block', marginBottom:'8px'}}>짐 수량 <span className="required">*</span></label>
                 <div className="luggage-grid">
                   <div className="luggage-item">
                     <span>Small</span>

@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import './Hotel.css'; // 스타일은 기존 CSS 공유
-// ★ 호텔 생성용 Thunk (실제 파일 경로에 맞게 수정하세요)
+import { useKakaoLoader } from 'react-kakao-maps-sdk'; // ★ 1. 로더 추가
+import './Hotel.css'; 
 import { hotelCreateThunk } from '../../store/thunks/hotelThunk.js';
+// ★ 2. 주소 변환 유틸 import (경로가 맞는지 확인해주세요)
+import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
 
 function HotelCreate({ isOpen, onClose, onRefresh }) {
   const dispatch = useDispatch();
+
+  // ★ 3. 카카오 맵 로드 (모달에서도 주소 변환을 위해 필요)
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_MAP_API_KEY, 
+    libraries: ["services"],
+  });
 
   // 폼 초기값
   const initialFormState = {
@@ -14,19 +22,17 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
     manager: '',
     phone: '',
     address: '',
-    status: true, // 기본값: 활동 중
+    status: true,
   };
 
   const [formData, setFormData] = useState(initialFormState);
 
-  // 모달이 열릴 때마다 폼 초기화 (선택 사항)
   useEffect(() => {
     if (isOpen) {
       setFormData(initialFormState);
     }
   }, [isOpen]);
 
-  // 입력 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -35,7 +41,6 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
     }));
   };
 
-  // 상태(Radio) 핸들러
   const handleStatusChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -43,11 +48,10 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
     }));
   };
 
-  // 등록 제출 핸들러
+  // ★ 4. 등록 제출 핸들러 수정
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 유효성 검사
     if (!formData.krName || !formData.address) {
       alert('호텔명(한글)과 주소는 필수 입력 사항입니다.');
       return;
@@ -56,37 +60,49 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
     if (!window.confirm('새로운 호텔을 등록하시겠습니까?')) return;
 
     try {
-      // TODO : 이곳에서 도로명주소 -> 위도/경도 추가하는 처리 필요
-      // formData.lat = 
-      // formData.lng = 
+      // 4-1. 주소를 좌표로 변환
+      // (searchAddressToCoords 함수가 {lat, lng} 객체를 반환한다고 가정)
+      const coords = await searchAddressToCoords(formData.address);
       
-      await dispatch(hotelCreateThunk(formData)).unwrap();
+      if (!coords) {
+        alert("주소를 찾을 수 없습니다. 올바른 주소인지 확인해주세요.");
+        return;
+      }
+
+      // 4-2. 전송할 데이터 객체 생성 (기존 formData + 좌표)
+      // 파일 업로드가 없으므로 JSON 객체 그대로 사용하면 됩니다.
+      const payload = {
+        ...formData,
+        lat: coords.lat, // 위도 추가
+        lng: coords.lng  // 경도 추가
+      };
+
+      console.log("등록 요청 데이터:", payload); // 디버깅용
+
+      // 4-3. 변환된 payload를 thunk로 전송
+      await dispatch(hotelCreateThunk(payload)).unwrap();
       
       alert('성공적으로 등록되었습니다.');
       
-      onRefresh(); // 부모 컴포넌트의 리스트 새로고침
-      onClose();   // 모달 닫기
+      onRefresh(); 
+      onClose();   
 
     } catch (error) {
       console.error('등록 실패:', error);
-      alert('호텔 등록에 실패했습니다.');
+      alert('호텔 등록에 실패했습니다. (주소 변환 실패 또는 서버 오류)');
     }
   };
 
   const handleOverlayClick = (e) => {
-    // 클릭된 요소(e.target)가 이벤트가 걸린 요소(e.currentTarget, 즉 overlay)와 같을 때만 닫기
-    // 이렇게 해야 내부의 흰색 박스를 클릭했을 때는 닫히지 않습니다.
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
-  // 모달이 닫혀있으면 아무것도 렌더링하지 않음
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      {/* ★ [수정됨] 스크롤용 클래스 추가 */}
       <div className="modal-container scrollable-modal">
         <div className="modal-header">
           <h2>New Hotel Registration</h2>
@@ -94,10 +110,9 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
         </div>
         
         <form onSubmit={handleSubmit} className="modal-form">
-          {/* ★ [수정됨] 스크롤용 클래스 추가 */}
           <div className="modal-body modal-body-scroll">
             
-            {/* 호텔명 입력 */}
+            {/* ... 기존 입력 필드들 (변경 없음) ... */}
             <div className="form-row">
               <div className="form-group full">
                 <label>호텔명 (한글) <span className="required">*</span></label>
@@ -111,7 +126,7 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
             
             <div className="form-row">
               <div className="form-group full">
-                <label>호텔명 (영문)</label>
+                <label>호텔명 (영문) <span className="required">*</span></label>
                 <input 
                   type="text" name="enName" 
                   value={formData.enName} onChange={handleChange} 
@@ -120,10 +135,9 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
               </div>
             </div>
 
-            {/* 담당자 / 전화번호 */}
             <div className="form-row">
               <div className="form-group">
-                <label>담당자</label>
+                <label>담당자 <span className="required">*</span></label>
                 <input 
                   type="text" name="manager" 
                   value={formData.manager} onChange={handleChange} 
@@ -131,7 +145,7 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
                 />
               </div>
               <div className="form-group">
-                <label>전화번호</label>
+                <label>전화번호 <span className="required">*</span></label>
                 <input 
                   type="text" name="phone" 
                   value={formData.phone} onChange={handleChange} 
@@ -140,7 +154,6 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
               </div>
             </div>
 
-            {/* 주소 */}
             <div className="form-row">
               <div className="form-group full">
                 <label>주소 <span className="required">*</span></label>
@@ -152,7 +165,6 @@ function HotelCreate({ isOpen, onClose, onRefresh }) {
               </div>
             </div>
 
-            {/* 상태 선택 */}
             <div className="form-row">
               <div className="form-group full">
                 <label>운영 상태</label>

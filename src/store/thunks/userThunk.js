@@ -3,11 +3,13 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 export const userIndexThunk = createAsyncThunk(
   'userIndex/userIndexThunk',
-  async ({ page = 1, limit = 9 }, { rejectWithValue }) => {
+  async ({ page = 1, limit = 9, search = '' }, { rejectWithValue }) => {
     try {
-      // 쿼리 파라미터 생성
-      let query = `?page=${page}&limit=${limit}`;
-      const response = await axiosInstance.get(`/api/users/show${query}`);
+      const params = new URLSearchParams({ page, limit });
+      if (search) {
+        params.append('search', search);
+      }
+      const response = await axiosInstance.get(`/api/users/show?${params.toString()}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

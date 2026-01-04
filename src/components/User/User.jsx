@@ -18,22 +18,36 @@ function User() {
   const { users, pagination, loading } = useSelector((state) => state.userShow);
   // --- Local States ---
   const [searchName, setSearchName] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState(''); // 디바운싱된 검색어 (API 요청용)
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // ★ 페이지당 개수 설정
   const limit = 9; 
 
+  // --- 디바운싱 Effect ---
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchName);
+      setCurrentPage(1); // 검색어 변경 시 1페이지로 초기화
+    }, 500); // 500ms 지연
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchName]);
+
   // ★ 2. 데이터 요청 함수
   const fetchUsers = useCallback(() => {
     // 쿼리 파라미터 구성
     const params = {
       page: currentPage,
-      limit: limit
+      limit: limit,
+      search: debouncedSearch, // 디바운싱된 검색어를 파라미터로 추가
     };
 
     dispatch(userIndexThunk(params));
-  }, [dispatch, currentPage]);
+  }, [dispatch, currentPage, limit, debouncedSearch]); // debouncedSearch를 의존성 배열에 추가
 
   // 페이지 로드 및 페이지 변경 시 실행
   useEffect(() => {
@@ -41,18 +55,6 @@ function User() {
   }, [fetchUsers]);
 
   // --- Handlers ---
-
-  // 검색 핸들러 (Enter 키)
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      setCurrentPage(1); // 검색 시 1페이지로 초기화
-      // fetchUsers는 의존성 배열에 searchName이 없으므로, 
-      // 여기서 직접 dispatch하거나 useEffect 의존성을 조정해야 함.
-      // 가장 간단한 방법: searchName을 state로 관리하고, useEffect 의존성에 넣되 디바운싱(지연) 처리.
-      // 여기서는 수동 호출 방식으로 구현:
-      dispatch(userIndexThunk({ page: 1, limit}));
-    }
-  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= (pagination?.totalPages || 1)) {
@@ -103,11 +105,10 @@ function User() {
             <span className="search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="이름 검색 (Enter)" 
+              placeholder="이름 검색 (자동 검색)" 
               className="search-input"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
-              onKeyDown={handleSearch}
             />
           </div>
           <button className="btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
@@ -157,34 +158,58 @@ function User() {
           </tbody>
         </table>
 
-        {/* 페이지네이션 (서버 데이터 기반) */}
-        {pagination && pagination.totalPages > 0 && (
-          <div className="pagination">
-            <button 
-              disabled={currentPage === 1} 
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              &lt;
-            </button>
-            
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(num => (
-              <button 
-                key={num} 
-                className={currentPage === num ? 'active' : ''}
-                onClick={() => handlePageChange(num)}
-              >
-                {num}
-              </button>
-            ))}
+        {/* 페이지네이션 (그룹 적용) */}
+        {pagination && pagination.totalPages > 1 && (() => {
+          const PAGE_GROUP_SIZE = 10;
+          const totalPages = pagination.totalPages;
+          
+          const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+          
+          let startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+          let endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
 
-            <button 
-              disabled={currentPage === pagination.totalPages} 
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              &gt;
-            </button>
-          </div>
-        )}
+          const pageNumbers = [];
+          for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+          }
+
+          const handlePrevGroup = () => {
+            const newPage = startPage - PAGE_GROUP_SIZE;
+            handlePageChange(newPage < 1 ? 1 : newPage);
+          };
+
+          const handleNextGroup = () => {
+            const newPage = startPage + PAGE_GROUP_SIZE;
+            handlePageChange(newPage > totalPages ? totalPages : newPage);
+          };
+
+          return (
+            <div className="pagination">
+              {/* 이전 그룹으로 */}
+              <button onClick={handlePrevGroup} disabled={startPage === 1}>&lt;&lt;</button>
+              
+              {/* 이전 페이지로 */}
+              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
+              
+              {/* 페이지 번호들 */}
+              {pageNumbers.map(num => (
+                <button 
+                  key={num} 
+                  className={currentPage === num ? 'active' : ''}
+                  onClick={() => handlePageChange(num)}
+                >
+                  {num}
+                </button>
+              ))}
+
+              {/* 다음 페이지로 */}
+              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
+              
+              {/* 다음 그룹으로 */}
+              <button onClick={handleNextGroup} disabled={endPage === totalPages}>&gt;&gt;</button>
+            </div>
+          );
+        })()}
       </div>
 
       {/* 등록 모달 */}

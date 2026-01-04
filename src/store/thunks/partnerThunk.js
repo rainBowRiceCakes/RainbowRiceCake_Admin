@@ -3,9 +3,16 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 export const partnerShowThunk = createAsyncThunk(
   'partnerShow/partnerShowThunk', // Thunk 고유명
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const url = `/api/partners`;
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.append('page', params.page);
+      if (params.limit) queryParams.append('limit', params.limit);
+      if (params.status) queryParams.append('status', params.status);
+      if (params.search) queryParams.append('search', params.search);
+
+      const queryString = queryParams.toString();
+      const url = `/api/partners${queryString ? `?${queryString}` : ''}`;
       
       const response = await axiosInstance.get(url);
       if(!response.data) {

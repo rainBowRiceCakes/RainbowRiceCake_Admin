@@ -90,7 +90,7 @@ function RiderCreate({ isOpen, onClose, onRefresh }) {
             {/* 면허증 이미지 */}
             <div className="form-row">
               <div className="form-group full">
-                <label>면허증 사진 (License Image)</label>
+                <label>면허증 사진 (License Image) <span className="required">*</span></label>
                 <div className="image-upload-wrapper">
                   {previewUrl && <div className="img-preview"><img src={previewUrl} alt="Preview" /></div>}
                   <input type="file" accept="image/*" onChange={handleFileChange} />
@@ -107,22 +107,22 @@ function RiderCreate({ isOpen, onClose, onRefresh }) {
 
             <div className="form-row">
               <div className="form-group">
-                <label>연락처</label>
+                <label>연락처 <span className="required">*</span></label>
                 <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="010-0000-0000" />
               </div>
                <div className="form-group">
-                <label>주소</label>
+                <label>주소 <span className="required">*</span></label>
                 <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="주소 입력" />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>은행명</label>
+                <label>은행명 <span className="required">*</span></label>
                 <input type="text" name="bank" value={formData.bank} onChange={handleChange} placeholder="예: 신한은행" />
               </div>
               <div className="form-group">
-                <label>계좌번호</label>
+                <label>계좌번호 <span className="required">*</span></label>
                 <input type="text" name="bankNum" value={formData.bankNum} onChange={handleChange} placeholder="계좌번호 입력" />
               </div>
             </div>

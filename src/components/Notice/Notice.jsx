@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './Notice.css'; 
@@ -8,34 +8,34 @@ function Notice() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // Redux Store에서 공지 리스트 가져오기
-  const { show, isLoading } = useSelector((state) => state.noticeShow); 
+  // Redux Store에서 공지 리스트 가져오기 (서버 사이드)
+  const { notices, pagination, loading } = useSelector((state) => state.noticeShow); 
 
-  // 입력 폼 상태 관리
+  // 입력 폼 상태 관리 (공지 생성용)
   const [role, setRole] = useState('ALL'); // ALL | DLV | PTN
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  // ★ 페이지네이션 상태 관리
+  // 페이지네이션 상태 관리 (공지 목록용)
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9; // 9개씩 출력 요청
+  const itemsPerPage = 5; // 요청에 따라 5개로 고정
+  const PAGE_GROUP_SIZE = 5; // 요청에 따라 5개로 고정
 
-  // 1. 초기 데이터 로드
+  // 데이터 요청
+  const fetchNotices = useCallback(() => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+    };
+    dispatch(noticeShowThunk(params));
+  }, [dispatch, currentPage, itemsPerPage]);
+
+  // 초기 데이터 로드 및 페이지 변경 시 실행
   useEffect(() => {
-    dispatch(noticeShowThunk());
-  }, [dispatch]);
+    fetchNotices();
+  }, [fetchNotices]);
 
-  // ★ 페이지네이션 계산 로직
-  // show가 null/undefined일 경우 빈 배열 처리
-  const noticeList = show || [];
-  const totalPages = Math.ceil(noticeList.length / itemsPerPage);
-  
-  const currentItems = noticeList.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // 2. 공지 발송 핸들러
+  // 공지 발송 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -56,19 +56,18 @@ function Notice() {
       await dispatch(noticeCreateThunk(newNotice)).unwrap();
       alert(`[${role}] 대상으로 공지가 발송되었습니다.`);
       
-      // 성공 후 폼 초기화 및 리스트 재조회
       setTitle('');
       setContent('');
       setRole('ALL');
-      setCurrentPage(1); // ★ 새 글 작성 시 1페이지로 이동
-      dispatch(noticeShowThunk()); 
+      setCurrentPage(1); // 새 글 작성 시 1페이지로 이동 및 목록 새로고침
+      fetchNotices(); // 목록 새로고침
     } catch (error) {
       console.error('등록 실패:', error);
       alert('공지 등록 실패: ' + (error?.message || '오류가 발생했습니다.'));
     }
   };
 
-  // 3. 상세 페이지 이동 핸들러
+  // 상세 페이지 이동 핸들러
   const handleManage = (id) => {
     navigate(`/admin/notice/${id}`);
   };
@@ -130,11 +129,10 @@ function Notice() {
                 </tr>
               </thead>
               <tbody>
-                {isLoading ? (
+                {loading ? (
                   <tr><td colSpan="4" className="text-center">로딩 중...</td></tr>
-                ) : currentItems.length > 0 ? (
-                  // ★ show.map -> currentItems.map 으로 변경
-                  currentItems.map((notice) => (
+                ) : notices && notices.length > 0 ? (
+                  notices.map((notice) => (
                     <tr key={notice.id}>
                       <td><span className={`target-badge ${notice.targetRole}`}>{notice.targetRole}</span></td>
                       <td className="text-left">
@@ -162,32 +160,54 @@ function Notice() {
             </table>
           </div>
 
-          {/* ★ 페이지네이션 UI 추가 (Hotel.jsx 스타일 재사용) */}
-          {noticeList.length > 0 && (
-            <div className="pagination">
-              <button 
-                disabled={currentPage === 1} 
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              >
-                &lt;
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-                <button 
-                  key={num} 
-                  className={currentPage === num ? 'active' : ''}
-                  onClick={() => setCurrentPage(num)}
-                >
-                  {num}
-                </button>
-              ))}
-              <button 
-                disabled={currentPage === totalPages} 
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              >
-                &gt;
-              </button>
-            </div>
-          )}
+          {/* 페이지네이션 (그룹 적용 - 서버 측) */}
+          {pagination && pagination.totalPages > 1 && (() => {
+            const totalPages = pagination.totalPages;
+            
+            const handlePageChange = (newPage) => {
+              if (newPage >= 1 && newPage <= totalPages) {
+                setCurrentPage(newPage);
+              }
+            };
+
+            const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+            
+            let startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+            let endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
+
+            const pageNumbers = [];
+            for (let i = startPage; i <= endPage; i++) {
+              pageNumbers.push(i);
+            }
+
+            const handlePrevGroup = () => {
+              const newPage = startPage - PAGE_GROUP_SIZE;
+              handlePageChange(newPage < 1 ? 1 : newPage);
+            };
+
+            const handleNextGroup = () => {
+              const newPage = startPage + PAGE_GROUP_SIZE;
+              handlePageChange(newPage > totalPages ? totalPages : newPage);
+            };
+
+            return (
+              <div className="pagination">
+                <button onClick={handlePrevGroup} disabled={startPage === 1}>&lt;&lt;</button>
+                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
+                {pageNumbers.map(num => (
+                  <button 
+                    key={num} 
+                    className={currentPage === num ? 'active' : ''}
+                    onClick={() => handlePageChange(num)}
+                  >
+                    {num}
+                  </button>
+                ))}
+                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
+                <button onClick={handleNextGroup} disabled={endPage === totalPages}>&gt;&gt;</button>
+              </div>
+            );
+          })()}
 
         </div>
       </div>

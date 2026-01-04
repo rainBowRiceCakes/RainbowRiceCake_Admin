@@ -112,7 +112,7 @@ function QnADetail() {
           <div className="q-meta-info">
             {/* 작성자 정보 */}
             <span className={`writer-tag ${detailData.userId ? 'user' : 'guest'}`}>
-              작성자: {detailData.userId || '비회원'}
+              작성자: {detailData.question_user.name || '비회원'}
             </span>
             
             {/* 작성일 */}

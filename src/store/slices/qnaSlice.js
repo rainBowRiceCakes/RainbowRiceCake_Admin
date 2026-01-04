@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { qnaShowThunk } from "../thunks/qnaThunk.js";
 
 const initialState = {
-  show: [], // 리스트 데이터가 저장될 곳
+  qnas: [], // QnA 리스트 데이터가 저장될 곳
+  pagination: null, // 페이지네이션 정보
   loading: false,
   error: null,
 }
@@ -14,11 +15,22 @@ const slice = createSlice({
 
   extraReducers: builder => {
     builder
-      .addCase(qnaShowThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.show = action.payload.data; // ★ 서버에서 받은 데이터를 Store에 저장
+      .addCase(qnaShowThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      // ... pending, rejected 처리
+      .addCase(qnaShowThunk.fulfilled, (state, action) => {
+        console.log(action.payload)
+        state.loading = false;
+        state.qnas = action.payload.data.qnas;      // ★ `qnas` 데이터를 직접 할당
+        state.pagination = action.payload.data.pagination; // ★ 페이지네이션 데이터를 할당
+      })
+      .addCase(qnaShowThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        state.qnas = [];
+        state.pagination = null;
+      });
   },
 });
 

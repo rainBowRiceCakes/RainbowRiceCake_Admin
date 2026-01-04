@@ -20,13 +20,20 @@ export const noticeCreateThunk = createAsyncThunk(
 
 export const noticeShowThunk = createAsyncThunk(
   'noticeShow/noticeShowThunk', // Thunk 고유명
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const url = `/api/admins/notice`;
-      
+      const queryParams = new URLSearchParams();
+      // limit을 5로 고정
+      queryParams.append('limit', params.limit || 5); 
+      if (params.page) queryParams.append('page', params.page);
+      if (params.search) queryParams.append('search', params.search);
+
+      const queryString = queryParams.toString();
+      const url = `/api/admins/notice${queryString ? `?${queryString}` : ''}`; // API 경로 확인
+
       const response = await axiosInstance.get(url);
       if(!response.data) {
-        throw new Error('호텔정보 불러오기 실패');
+        throw new Error('공지정보 불러오기 실패');
       }
       return response.data;
     } catch (error) {
