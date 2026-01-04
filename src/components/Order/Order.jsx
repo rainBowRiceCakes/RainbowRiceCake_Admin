@@ -71,7 +71,7 @@ function Order() {
     
     // 백엔드 데이터 구조에 맞춰 엑셀 데이터 매핑
     const excelData = orders.map(order => ({
-      id: order.id,
+      orderCode: order.orderCode,
       from: order.order_partner?.krName || 'Unknown',
       to: order.order_order?.krName || 'Unknown',
       status: order.status,
@@ -163,7 +163,7 @@ function Order() {
             ) : orders && orders.length > 0 ? (
               orders.map((order) => (
                 <tr className='order-table-body' key={order.id}>
-                  <td className="fw-bold">{order.id}</td>
+                  <td className="fw-bold">{order.orderCode}</td>
                   {/* 백엔드 include 구조: order_partner.krName */}
                   <td>{order.order_partner?.krName}</td>
                   

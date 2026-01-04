@@ -89,7 +89,7 @@ function OrderDetail() {
   };
 
   const handleUpdate = async () => {
-    if (!window.confirm(`주문(ID:${editData.id}) 정보를 수정하시겠습니까?`)) return;
+    if (!window.confirm(`주문번호:${editData.orderCode} 정보를 수정하시겠습니까?`)) return;
     
     // 유효성 검사: 호텔이 선택되지 않았을 경우
     if (!editData.hotelId) {
@@ -159,7 +159,7 @@ function OrderDetail() {
         
         <h3 className="section-title">기본 정보 (Read Only)</h3>
         <div className="detail-grid">
-           <div className="form-group"><label>Order ID</label><input type="text" value={editData.id} disabled className="input-disabled"/></div>
+           <div className="form-group"><label>Order Code</label><input type="text" value={editData.orderCode} disabled className="input-disabled"/></div>
            <div className="form-group"><label>주문 일시</label><input type="text" value={editData.createdAt} disabled className="input-disabled"/></div>
            <div className="form-group"><label>출발지</label><input type="text" value={editData.order_partner?.krName} disabled className="input-disabled"/></div>
            <div className="form-group"><label>Price</label><input type="text" value={editData.cntS * 5000 + editData.cntM * 8000 + editData.cntL * 10000} disabled className="input-disabled"/></div>
