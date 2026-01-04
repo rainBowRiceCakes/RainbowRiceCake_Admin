@@ -3,12 +3,17 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 export const orderIndexThunk = createAsyncThunk(
   'orderIndex/orderIndexThunk',
-  async ({ page = 1, limit = 9, from, statusExclude }, { rejectWithValue }) => {
+  async ({ page = 1, limit = 9, from, statusExclude, deliveryStatus, paymentStatus, startDate, endDate, orderCode }, { rejectWithValue }) => {
     try {
       // 쿼리 파라미터 생성
       let query = `?page=${page}&limit=${limit}`;
       if (from) query += `&from=${from}`;
       if (statusExclude) query += `&statusExclude=${statusExclude}`;
+      if (deliveryStatus) query += `&deliveryStatus=${deliveryStatus}`;
+      if (paymentStatus) query += `&paymentStatus=${paymentStatus}`;
+      if (startDate) query += `&startDate=${startDate}`;
+      if (endDate) query += `&endDate=${endDate}`;
+      if (orderCode) query += `&orderCode=${orderCode}`;
 
       const response = await axiosInstance.get(`/api/admins/orderindex${query}`);
       return response.data;

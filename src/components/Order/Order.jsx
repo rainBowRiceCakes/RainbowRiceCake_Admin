@@ -15,18 +15,43 @@ function Order() {
   const { orders, pagination, loading } = useSelector((state) => state.orderShow);
   // --- Local States ---
   const [viewType, setViewType] = useState('all'); // 'all' | 'in_progress'
-  const [searchId, setSearchId] = useState('');   // 검색
-  const [currentPage, setCurrentPage] = useState(1); // ★ 현재 페이지 (서버 요청용)
-  
+  const [searchOrderCode, setSearchOrderCode] = useState('');
+  const [debouncedSearchOrderCode, setDebouncedSearchOrderCode] = useState(''); // 디바운싱된 검색어 (API 요청용)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [deliveryStatusFilter, setDeliveryStatusFilter] = useState('');
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // 백엔드 기본 설정이 limit 9이므로 맞춤 (변경 가능)
-  const limit = 9; 
+  const limit = 9;
+
+  // --- 디바운싱 Effect (주문번호) ---
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchOrderCode(searchOrderCode);
+      setCurrentPage(1); // 검색어 변경 시 1페이지로 초기화
+    }, 500); // 500ms 지연
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchOrderCode]); 
 
   // ★ 2. 데이터 요청 함수 (페이지 변경 시 호출)
   const fetchOrders = useCallback(() => {
     // 쿼리 파라미터로 page, limit 전송
-    const params = { page: currentPage, limit };
+    const params = {
+      page: currentPage,
+      limit: limit,
+      deliveryStatus: deliveryStatusFilter,
+      paymentStatus: paymentStatusFilter,
+      startDate: startDate,
+      endDate: endDate,
+      orderCode: debouncedSearchOrderCode, // 디바운싱된 주문번호를 파라미터로 추가
+    };
     
     // '진행중' 필터일 경우, 'com' 상태 제외 파라미터 추가
     if (viewType === 'in_progress') {
@@ -34,7 +59,7 @@ function Order() {
     }
 
     dispatch(orderIndexThunk(params));
-  }, [dispatch, currentPage, limit, viewType]);
+  }, [dispatch, currentPage, limit, viewType, deliveryStatusFilter, paymentStatusFilter, startDate, endDate, debouncedSearchOrderCode]);
 
   // 페이지 로드 및 currentPage, viewType 변경 시 실행
   useEffect(() => {
@@ -126,17 +151,16 @@ function Order() {
 
         {/* 우측: 검색 및 액션 버튼 */}
         <div className="head-action-group">
-          <div className="search-box">
-            <span className="search-icon">🔍</span>
-            <input 
-              type="text" 
-              placeholder="주문 번호 검색" 
-              className="search-input" 
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-            />
-          </div>
-          <button className="btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
+                    <div className="search-box">
+                      <span className="search-icon">🔍</span>
+                      <input
+                        type="text"
+                        placeholder="주문 번호 검색 (자동 검색)"
+                        className="search-input"
+                        value={searchOrderCode}
+                        onChange={(e) => setSearchOrderCode(e.target.value)}
+                      />
+                    </div>          <button className="btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="btn-black" onClick={() => setIsCreateModalOpen(true)}>+ 주문 등록</button>
         </div>
       </div>
@@ -162,7 +186,7 @@ function Order() {
                <tr><td colSpan="8" style={{textAlign:'center', padding:'30px'}}>로딩 중...</td></tr>
             ) : orders && orders.length > 0 ? (
               orders.map((order) => (
-                <tr className='order-table-body' key={order.id}>
+                <tr className='order-table-body' key={order.orderCode}>
                   <td className="fw-bold">{order.orderCode}</td>
                   {/* 백엔드 include 구조: order_partner.krName */}
                   <td>{order.order_partner?.krName}</td>

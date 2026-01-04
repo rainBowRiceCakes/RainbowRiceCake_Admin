@@ -4,13 +4,14 @@ import './Order.css'; // 기존 CSS 공유
 import { orderCreateThunk } from '../../store/thunks/orderThunk.js';
 import { partnerShowThunk } from '../../store/thunks/partnerThunk.js';
 import { hotelShowThunk } from '../../store/thunks/hotelThunk.js';
+import { generateOrderNo } from '../../api/utils/orderGenerator.js';
 
 function OrderCreate({ isOpen, onClose, onRefresh }) {
   const dispatch = useDispatch();
 
   // ★ Redux에서 파트너, 호텔 목록 가져오기
-  const partnerShow = useSelector((state) => state.partnerShow.show); 
-  const hotelShow = useSelector((state) => state.hotelShow.show);
+  const partnerShow = useSelector((state) => state.partnerShow.partners); 
+  const hotelShow = useSelector((state) => state.hotelShow.hotels);
 
   // 폼 초기값
   const initialFormState = {
@@ -105,6 +106,7 @@ function OrderCreate({ isOpen, onClose, onRefresh }) {
 
     try {
       // 숫자 변환 후 전송
+      const newOrderNo = generateOrderNo();
       const payload = {
         ...formData,
         partnerId: Number(formData.partnerId),
@@ -112,6 +114,7 @@ function OrderCreate({ isOpen, onClose, onRefresh }) {
         cntS: Number(formData.cntS),
         cntM: Number(formData.cntM),
         cntL: Number(formData.cntL),
+        orderCode: newOrderNo
         // price는 이미 계산되어 있음
       };
 
