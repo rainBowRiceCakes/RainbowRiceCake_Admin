@@ -91,9 +91,18 @@ function DashBoard() {
   // 상태 구독
   const { chartData, summary, loading, urgentOrders } = useSelector((state) => state.dashboard);
 
+  // 10초마다 자동 새로고침 인터벌 추가
   useEffect(() => {
-    // 페이지 진입 시 데이터 요청
+    // 페이지 진입 시 최초 1회 실행
     dispatch(dashboardStatsThunk());
+
+    // 10초(10000ms)마다 반복 실행
+    const interval = setInterval(() => {
+      dispatch(dashboardStatsThunk());
+    }, 10000);
+
+    // 컴포넌트가 사라질 때(언마운트) 인터벌 정리 (메모리 누수 방지)
+    return () => clearInterval(interval);
   }, [dispatch]);
   
   return (
@@ -106,23 +115,20 @@ function DashBoard() {
         <div className="dash-sum-container">
           <div className="dash-sum">
             <div className="dash-sum-title">오늘의 배송 요청</div>
-            {/* <div className="dash-sum-value">{summary.todayRequests}</div> */}
             <div className="dash-sum-value">
-              {loading ? '...' : `${summary.todayRequests}건`}
+              {summary.todayRequests}건
             </div>
           </div>
           <div className="dash-sum">
             <div className="dash-sum-title">진행 중 배송</div>
-            {/* <div className="dash-sum-value">{summary.inProgress}</div> */}
             <div className="dash-sum-value">
-              {loading ? '...' : `${summary.inProgress}건`}
+              {summary.inProgress}건
             </div>
           </div>
           <div className="dash-sum">
             <div className="dash-sum-title">오늘의 완료 배송</div>
-            {/* <div className="dash-sum-value">{summary.todayCompleted}</div> */}
             <div className="dash-sum-value">
-              {loading ? '...' : `${summary.todayCompleted}건`}
+              {summary.todayCompleted}건
             </div>
           </div>
         </div>
@@ -145,10 +151,9 @@ function DashBoard() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
-                 <tr><td colSpan="5">로딩 중...</td></tr>
-              ) : urgentOrders && urgentOrders.length > 0 ? (
-                urgentOrders.map((order) => (
+              {/* 로딩 상태여도 기존 데이터가 있으면 보여주도록 조건부 렌더링 조정 가능 */}
+              {urgentOrders && urgentOrders.length > 0 ? (
+                  urgentOrders.map((order) => (
                   <tr key={order.id} className="urgent-row">
                     {/* 주문번호 */}
                     <td>{order.orderCode ? order.orderCode : '-'}</td>
@@ -169,7 +174,7 @@ function DashBoard() {
               ) : (
                 <tr>
                   <td colSpan="4" style={{textAlign: 'center', padding: '20px'}}>
-                    현재 긴급한 주문이 없습니다.
+                    {loading && urgentOrders.length === 0 ? '로딩 중...' : '현재 긴급한 주문이 없습니다.'}
                   </td>
                 </tr>
               )}
