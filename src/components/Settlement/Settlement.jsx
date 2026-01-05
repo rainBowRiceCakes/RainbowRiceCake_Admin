@@ -165,8 +165,10 @@ function Settlement() {
         </div>
       </div>
 
-      {/* --- 2. 요약 카드 --- */}
-      <div className="summary-cards-grid">
+      {/* --- 메인 콘텐츠 레이아웃 (카드 + 테이블/차트) --- */}
+      <div className="settlement-main-layout">
+        {/* --- 2. 요약 카드 --- */}
+        <div className="summary-cards-grid">
         <div className="summary-card">
           <div className="card-title">총 매출액 (Total Revenue)</div>
           <div className="card-main-value">₩ {formatNumber(summary.totalRevenue)}</div>
@@ -284,6 +286,8 @@ function Settlement() {
             {loading ? <p>차트 로딩 중...</p> : <Bar options={chartOptions} data={chartDisplayData} />}
           </div>
         </div>
+      </div>
+      {/* --- 메인 콘텐츠 레이아웃 닫기 --- */}
       </div>
     </div>
   );

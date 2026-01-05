@@ -7,6 +7,7 @@
   background-color: var(--adm-bg-primary);
   min-height: 100vh;
   box-sizing: border-box;
+  min-width: 1200px; /* 전체 최소 너비 설정으로 반응성 제거 */
 }
 
 /* --- 상단 헤더 (타이틀, 날짜 필터) --- */
@@ -15,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--adm-spacing-l);
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; 반응성 제거를 위해 제거 */
   gap: var(--adm-spacing-m);
 }
 
@@ -24,6 +25,14 @@
   font-weight: var(--adm-font-weight-bold);
   color: var(--adm-text-primary);
   margin: 0;
+}
+
+/* 메인 콘텐츠 레이아웃 (카드 + 테이블/차트) */
+.settlement-main-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--adm-spacing-l);
+  margin-top: var(--adm-spacing-l); /* 헤더와 간격 */
 }
 
 .date-filter {
@@ -48,9 +57,10 @@
 /* --- 요약 카드 --- */
 .summary-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4열 고정, 반응형 줄바꿈 제거 */
   gap: var(--adm-spacing-m);
-  margin-bottom: var(--adm-spacing-l);
+  /* margin-bottom: var(--adm-spacing-l); 제거: 부모 그리드의 gap으로 대체 */
+  grid-column: 1 / -1; /* 메인 레이아웃의 모든 열을 차지 */
 }
 .summary-card {
   background-color: var(--adm-bg-secondary);
