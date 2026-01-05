@@ -85,53 +85,6 @@ export const RecentDeliveryChart = ({ dataValues, labels }) => {
   return <Bar options={options} data={data} />;
 };
 
-// --- 오늘 vs 어제 주문 수 차트 ---
-export const OrderComparisonChart = () => {
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: (context) => `${context.raw}건`,
-        },
-      },
-    },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { color: '#555', font: { size: 12, weight: 'bold' } },
-      },
-      y: {
-        grid: { color: '#f0f0f0' },
-        ticks: { display: true, stepSize: 5, color: '#888' }, // Y축 숫자 표시
-        beginAtZero: true,
-        max: 15,
-      },
-    },
-  };
-
-  const data = {
-    labels: ['오늘', '어제', '증가 주문 수'],
-    datasets: [
-      {
-        label: '주문 수',
-        data: [12, 9, 3],
-        backgroundColor: [
-          '#9fa8da', // 오늘 (연보라)
-          '#f4e04d', // 어제 (노랑)
-          '#b0b8ef', // 증가분 (회색빛 보라)
-        ],
-        borderRadius: 4,
-        barThickness: 35, // 막대를 좀 더 두껍게
-      },
-    ],
-  };
-
-  return <Bar options={options} data={data} />;
-};
-
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -142,20 +95,14 @@ function DashBoard() {
 
   const dispatch = useDispatch();
 
-  // Redux Store에서 데이터와 로딩 상태를 구독
-  const { urgentOrders, chartData, loading } = useSelector((state) => state.dashboard);
+  // 상태 구독
+  const { chartData, summary, loading } = useSelector((state) => state.dashboard);
 
   console.log('Redux ChartData:', chartData);
 
-  useEffect(() => { 
-    // [초기 로딩] 컴포넌트 마운트 시 데이터 요청
-    const loadData = async () => {
-      // Promise.all을 사용하여 병렬로 요청하면 더 빠릅니다.
-      await Promise.all([
-        dispatch(dashboardStatsThunk())
-      ]);
-    };
-    loadData();
+  useEffect(() => {
+    // 페이지 진입 시 데이터 요청
+    dispatch(dashboardStatsThunk());
   }, [dispatch]);
   
   
@@ -169,15 +116,24 @@ function DashBoard() {
         <div className="dash-sum-container">
           <div className="dash-sum">
             <div className="dash-sum-title">오늘의 배송 요청</div>
-            <div className="dash-sum-value">12건</div>
+            {/* <div className="dash-sum-value">{summary.todayRequests}</div> */}
+            <div className="dash-sum-value">
+              {loading ? '...' : `${summary.todayRequests}건`}
+            </div>
           </div>
           <div className="dash-sum">
             <div className="dash-sum-title">진행 중 배송</div>
-            <div className="dash-sum-value">5건</div>
+            {/* <div className="dash-sum-value">{summary.inProgress}</div> */}
+            <div className="dash-sum-value">
+              {loading ? '...' : `${summary.inProgress}건`}
+            </div>
           </div>
           <div className="dash-sum">
             <div className="dash-sum-title">오늘의 완료 배송</div>
-            <div className="dash-sum-value">5건</div>
+            {/* <div className="dash-sum-value">{summary.todayCompleted}</div> */}
+            <div className="dash-sum-value">
+              {loading ? '...' : `${summary.todayCompleted}건`}
+            </div>
           </div>
         </div>
 
@@ -247,7 +203,7 @@ function DashBoard() {
             </tbody>
           </table>
 
-          {/* 하단 더보기 링크 */}
+          {/* 더보기 링크 */}
           <div className="dash-table-footer">
             <div className="view-all-link" onClick={handleOrderClick}>배송 내역 전체 보기 →</div>
           </div>
@@ -265,43 +221,7 @@ function DashBoard() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* 하단 영역 */}
-      <div className="dash-row">
-        {/* 하단 좌측 영역 */}
-        <div className="dash-box dash-col-wide">
-          <h3 className="dash-section-title">오늘 한 눈에</h3>
-          <div className="dash-summary-grid">
-            <div className="summary-item">
-              <div className="summary-label">오늘 피크 시간</div>
-              <div className="summary-value">12:00 ~ 13:30</div>
-            </div>
-            <div className="summary-item">
-              <div className="summary-label">픽업 배송 소요 시간</div>
-              <div className="summary-value">32분</div>
-            </div>
-            <div className="summary-item">
-              <div className="summary-label">지연 우려 주문</div>
-              <div className="summary-value">1건</div>
-            </div>
-            <div className="summary-item">
-              <div className="summary-label">재요청/이슈 발생</div>
-              <div className="summary-value">0건</div>
-            </div>
-          </div>
         </div>
-
-        {/* 오늘 vs 어제 차트 적용 */}
-        <div className="dash-col-narrow">
-          <div className="chart-box">
-            <h3 className="chart-title">오늘 vs 어제 주문 수</h3>
-            <div className="chart-wrapper">
-              <OrderComparisonChart />
-            </div>
-          </div>
-        </div>
-      </div>
 
       </div>
     </>

@@ -2,9 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { dashboardStatsThunk } from "../thunks/dashboadThunk";
 
 const initialState = {
-  chartData: {      // 차트 데이터 (표시용)
+  // 차트 데이터 (표시용)
+  chartData: {
     labels: [],
     counts: []
+  },
+  // 상단 요약 데이터(초기값 0으로 설정)
+  summary: {
+    todayRequests: 0,  // 오늘의 배송 요청
+    inProgress: 0,     // 진행 중 배송 (pick)
+    todayCompleted: 0  // 오늘의 완료 배송 (com + image)
   },
   loading: false,
   error: null,
@@ -31,20 +38,23 @@ const slice = createSlice({
       .addCase(dashboardStatsThunk.fulfilled, (state, action) => {
         state.loading = false;
 
-        // 백엔드 응답이 'data'인지 'result'인지 둘 다 체크 (안전 장치)
+        // 백엔드 응답 구조 유연하게 처리 (data 또는 result)
         const responseData = action.payload.data || action.payload.result;
         
+        // 차트 데이터 연결
         if (responseData?.recentDeliveryChart) {
           state.chartData = responseData.recentDeliveryChart;
-        } else {
-          console.warn("⚠️ recentDeliveryChart 데이터가 없습니다!", responseData);
+        }
+
+        // 요약 데이터 연결
+        if (responseData?.summary) {
+          state.summary = responseData.summary;
         }
       })
       // --- [요청 실패] ---
       .addCase(dashboardStatsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        console.error("🔥 데이터 로딩 실패:", action.payload);
       });
   },
 });
