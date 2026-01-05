@@ -13,6 +13,7 @@ const initialState = {
     inProgress: 0,     // 진행 중 배송 (pick)
     todayCompleted: 0  // 오늘의 완료 배송 (com + image)
   },
+  urgentOrders: [], // 긴급 주문 배열 추가
   loading: false,
   error: null,
 };
@@ -49,6 +50,11 @@ const slice = createSlice({
         // 요약 데이터 연결
         if (responseData?.summary) {
           state.summary = responseData.summary;
+        }
+
+        // 긴급 주문 연결
+        if (responseData?.urgentOrders) {
+          state.urgentOrders = responseData.urgentOrders;
         }
       })
       // --- [요청 실패] ---
