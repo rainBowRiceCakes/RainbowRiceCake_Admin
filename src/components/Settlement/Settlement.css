@@ -1,143 +1,196 @@
-/* 1. 전체 컨테이너 */
-.settlement-container {
-  flex: 1;
-  background-color: var(--adm-bg-primary);
+/* src/components/Settlement/Settlement.css */
+
+/* 전체 대시보드 컨테이너 */
+.settlement-dashboard {
+  flex: 1; /* 상위 레이아웃에서 공간을 채우도록 설정 */
   padding: var(--adm-spacing-xl);
+  background-color: var(--adm-bg-primary);
   min-height: 100vh;
   box-sizing: border-box;
+}
+
+/* --- 상단 헤더 (타이틀, 날짜 필터) --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--adm-spacing-l);
+  flex-wrap: wrap;
+  gap: var(--adm-spacing-m);
+}
+
+.dashboard-header h1 {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin: 0;
+}
+
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: var(--adm-spacing-s);
+}
+.date-filter label {
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-medium);
+}
+.month-picker-input {
+  padding: var(--adm-spacing-xs) var(--adm-spacing-s);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+  background-color: var(--adm-bg-secondary);
+}
+
+/* --- 요약 카드 --- */
+.summary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--adm-spacing-m);
+  margin-bottom: var(--adm-spacing-l);
+}
+.summary-card {
+  background-color: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-l);
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid var(--adm-border-secondary);
+  box-shadow: var(--adm-shadow-light);
+}
+.card-title {
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+  margin-bottom: var(--adm-spacing-xs);
+}
+.card-main-value {
+  font-size: 2rem;
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-xs);
+}
+.card-sub-text {
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-tertiary);
+}
+.mom-positive { color: var(--adm-accent-green); font-weight: 600; }
+.mom-negative { color: var(--adm-accent-red); font-weight: 600; }
+.mom-neutral { color: var(--adm-text-tertiary); }
+.summary-card.alert { border-left: 4px solid var(--adm-accent-red); }
+.summary-card.alert .card-title, .summary-card.alert .card-main-value { color: var(--adm-accent-red); }
+
+/* --- 하단 컨텐츠 (테이블 & 차트) Grid Layout --- */
+.settlement-content-grid {
+  display: grid;
+  grid-template-columns: 6fr 4fr; /* 6:4 비율 */
+  gap: var(--adm-spacing-l);
+  align-items: flex-start;
+}
+
+/* 차트/테이블 공통 컨테이너 */
+.chart-container,
+.table-container {
+  background-color: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-l);
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid var(--adm-border-secondary);
+  box-shadow: var(--adm-shadow-light);
+  /* margin-bottom 제거: grid-gap으로 대체 */
+}
+
+.container-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--adm-text-primary);
+}
+
+/* 차트 컨테이너 */
+.chart-container .chart-wrapper {
+  height: 400px; /* 테이블 높이에 맞춰 조정 */
+}
+
+/* 테이블 컨테이너 */
+.table-container {
   display: flex;
   flex-direction: column;
 }
 
-/* 2. 제목 */
-.settlement-title {
-  font-size: var(--adm-font-title);
-  font-weight: var(--adm-font-weight-bold);
-  color: var(--adm-text-primary);
-  margin-bottom: var(--adm-spacing-l);
-}
-
-/* 3. 상단 카드 영역 (4개) */
-.settlement-cards {
-  display: flex;
-  gap: var(--adm-spacing-m);
-  margin-bottom: 30px;
-}
-
-.settlement-card {
-  flex: 1;
-  background: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  border-radius: var(--adm-radius-medium);
-  padding: var(--adm-spacing-l);
-  box-shadow: var(--adm-shadow-light);
-}
-
-.card-label { font-size: 13px; color: var(--adm-text-secondary); margin-bottom: var(--adm-spacing-xs); font-weight: var(--adm-font-weight-semibold); }
-.card-value { font-size: var(--adm-font-title); font-weight: 800; color: var(--adm-text-primary); }
-.card-value.red { color: var(--adm-accent-red); }
-.card-value.blue { color: var(--adm-accent-blue); }
-
-/* 4. 중단 차트 영역 */
-.settlement-chart-section {
-  background: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  border-radius: var(--adm-radius-medium);
-  padding: var(--adm-spacing-l);
-  margin-bottom: 30px;
-}
-
-.chart-header { margin: 0 0 var(--adm-spacing-m) 0; font-size: var(--adm-font-large); font-weight: var(--adm-font-weight-bold); }
-.chart-wrapper { height: 300px; width: 100%; }
-
-/* 5. 하단 헤더 (토글/검색) */
-.settlement-main-head {
+.table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--adm-spacing-m);
 }
 
-.settlement-toggle-container {
-  display: flex;
-  background-color: var(--adm-bg-interactive);
-  padding: var(--adm-radius-small);
-  border-radius: var(--adm-radius-large);
-}
-
-.settlement-toggle-btn {
-  background: transparent;
-  border: none;
+.btn-excel {
   padding: var(--adm-spacing-xs) var(--adm-spacing-m);
   font-size: var(--adm-font-base);
-  font-weight: var(--adm-font-weight-medium);
-  color: var(--adm-text-tertiary);
+  background-color: #1d6f42; /* Excel Green */
+  color: white;
+  border: none;
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
   cursor: pointer;
-  border-radius: 20px;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s;
+}
+.btn-excel:hover {
+  background-color: #145a32;
 }
 
-.settlement-toggle-btn.active {
-  background-color: var(--adm-text-primary);
-  color: var(--adm-text-contrast);
-  font-weight: var(--adm-font-weight-bold);
-  box-shadow: var(--adm-shadow-interactive);
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* 테이블이 너무 길 경우 가로 스크롤 */
 }
 
-.settlement-action-group { display: flex; gap: var(--adm-spacing-s); }
-
-.settlement-search-box {
-  display: flex;
-  align-items: center;
-  background-color: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  border-radius: var(--adm-radius-medium);
-  padding: 0 var(--adm-spacing-s);
-  width: 240px;
+.settlement-table {
+  width: 100%;
+  border-collapse: collapse;
 }
-.settlement-search-input { border: none; outline: none; padding: 10px 0; font-size: var(--adm-font-base); width: 100%; margin-left: var(--adm-spacing-xs); }
-
-.settlement-btn-outline {
-  background: var(--adm-bg-secondary); border: 1px solid var(--adm-border-primary); color: var(--adm-text-primary);
-  padding: 10px var(--adm-spacing-m); border-radius: var(--adm-radius-medium); font-weight: var(--adm-font-weight-semibold); cursor: pointer;
+.settlement-table th, .settlement-table td {
+  padding: var(--adm-spacing-s) var(--adm-spacing-m);
+  text-align: left;
+  border-bottom: 1px solid var(--adm-border-secondary);
+  vertical-align: middle;
 }
-.settlement-btn-black {
-  background: var(--adm-text-primary); border: 1px solid var(--adm-text-primary); color: #FFF;
-  padding: 10px var(--adm-spacing-m); border-radius: var(--adm-radius-medium); font-weight: var(--adm-font-weight-semibold); cursor: pointer;
-}
-
-/* 6. 테이블 영역 */
-.settlement-main-content {
-  background: var(--adm-bg-secondary);
-  border: 1px solid var(--adm-border-primary);
-  border-radius: var(--adm-radius-medium);
-  overflow: hidden;
-  margin-bottom: var(--adm-spacing-xl); /* 하단 여백 */
-}
-
-.settlement-table { width: 100%; border-collapse: collapse; }
 .settlement-table th {
-  text-align: left; padding: var(--adm-font-large) var(--adm-spacing-l);
-  background: var(--adm-bg-tertiary); border-bottom: 1px solid var(--adm-border-primary);
-  font-size: var(--adm-font-small); color: var(--adm-text-secondary); font-weight: var(--adm-font-weight-semibold); text-transform: uppercase;
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+  background-color: var(--adm-bg-tertiary);
+  text-transform: uppercase;
 }
 .settlement-table td {
-  padding: var(--adm-font-large) var(--adm-spacing-l); border-bottom: 1px solid var(--adm-border-secondary);
-  font-size: var(--adm-font-base); color: var(--adm-text-primary); vertical-align: middle;
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
 }
-.fw-bold { font-weight: var(--adm-font-weight-bold); }
-
-.bank-info { display: flex; flex-direction: column; font-size: 13px; }
-.bank-name { font-weight: var(--adm-font-weight-semibold); color: #333; }
-.account-num { color: #888; font-size: var(--adm-font-small); }
-
-.status-badge { padding: var(--adm-radius-small) var(--adm-spacing-xs); border-radius: var(--adm-radius-small); font-size: var(--adm-font-tiny); font-weight: var(--adm-font-weight-bold); }
-.status-badge.REQUESTED { background: #FFF3E0; color: #E65100; } /* 주황색 */
-.status-badge.COMPLETED { background: #E8F5E9; color: #2E7D32; } /* 초록색 */
-
-.settlement-btn-small {
-  padding: 6px var(--adm-spacing-s); border-radius: var(--adm-radius-small); border: none; font-size: var(--adm-font-small);
-  font-weight: var(--adm-font-weight-semibold); cursor: pointer; color: white;
+.settlement-table tr:last-child td {
+  border-bottom: none;
 }
-.settlement-btn-small.blue { background: var(--adm-accent-blue); }
-.text-gray { color: #AAA; }
+.settlement-table td[colspan="4"] {
+  text-align: center;
+  padding: 3rem;
+  color: var(--adm-text-tertiary);
+}
+
+/* 정산 상태 뱃지 */
+.status-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-req { /* 정산 대기 */
+  background-color: #fff3cd;
+  color: #856404;
+}
+.status-com { /* 정산 완료 */
+  background-color: #d4edda;
+  color: #155724;
+}
+.status-rej { /* 정산 거부 */
+  background-color: #f8d7da;
+  color: #721c24;
+}

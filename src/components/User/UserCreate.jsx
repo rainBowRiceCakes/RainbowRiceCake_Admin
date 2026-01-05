@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './User.css'; 
 import { useDispatch } from 'react-redux';
 import { userCreateThunk } from '../../store/thunks/userThunk.js';
