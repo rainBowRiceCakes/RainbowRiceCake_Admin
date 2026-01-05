@@ -1,15 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { settlementShowThunk } from "../thunks/settlementThunk.js";
+import { settlementShowThunk, settlementSumUpThunk } from "../thunks/settlementThunk.js";
 
 const initialState = {
   settlements: [], // 정산 리스트 데이터
+  summary: {
+    totalRevenue: 0,
+    totalOrderCount: 0,
+    activeRiderCount: 0,
+    paymentErrorCount: 0,
+  }, // 정산 요약 데이터
   pagination: null, // 페이지네이션 정보
   loading: false,
   error: null,
 }
 
 const settlementSlice = createSlice({
-  name: 'settlementShow',
+  name: 'settlement',
   initialState: initialState,
   reducers: {},
 
@@ -21,12 +27,24 @@ const settlementSlice = createSlice({
       })
       .addCase(settlementShowThunk.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload.data)
-        // 백엔드 응답이 { data: { settlements: [], pagination: {} } } 형태일 것으로 가정
         state.settlements = action.payload.data.settlements; 
         state.pagination = action.payload.data.pagination;
       })
       .addCase(settlementShowThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // settlementSumUpThunk
+      .addCase(settlementSumUpThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(settlementSumUpThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.summary = action.payload.data;
+        console.log(action.payload.data);
+      })
+      .addCase(settlementSumUpThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

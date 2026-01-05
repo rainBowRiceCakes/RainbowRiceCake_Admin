@@ -107,6 +107,38 @@
   color: var(--adm-text-primary);
 }
 
+/* 테이블 헤더 액션 그룹 (검색창 + 버튼) */
+.table-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--adm-spacing-s); /* 요소 간 간격 */
+}
+
+/* 검색창 */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
+  width: 200px; /* 적당한 너비 */
+  height: 40px; /* 버튼 높이와 맞춤 */
+}
+.search-icon { 
+  font-size: var(--adm-font-base); 
+  color: var(--adm-text-placeholder); 
+  margin-right: var(--adm-spacing-xs); 
+}
+.search-input {
+  border: none;
+  outline: none;
+  padding: 0; /* 부모 search-box에서 패딩 처리 */
+  font-size: var(--adm-font-base);
+  width: 100%;
+  background-color: transparent; /* 부모 배경 따름 */
+}
+
 /* 차트 컨테이너 */
 .chart-container .chart-wrapper {
   height: 400px; /* 테이블 높이에 맞춰 조정 */
@@ -125,7 +157,7 @@
 }
 
 .btn-excel {
-  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  padding: 10px var(--adm-spacing-m); /* 다른 버튼과 패딩 맞춤 */
   font-size: var(--adm-font-base);
   background-color: #1d6f42; /* Excel Green */
   color: white;
@@ -134,6 +166,7 @@
   font-weight: var(--adm-font-weight-semibold);
   cursor: pointer;
   transition: background-color 0.2s;
+  height: 40px; /* 검색창 높이와 맞춤 */
 }
 .btn-excel:hover {
   background-color: #145a32;
@@ -193,4 +226,38 @@
 .status-rej { /* 정산 거부 */
   background-color: #f8d7da;
   color: #721c24;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.pagination button {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
+  padding: 8px 12px;
+  border-radius: var(--adm-radius-small);
+  cursor: pointer;
+  font-size: var(--adm-font-base);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: var(--adm-bg-tertiary);
+  color: var(--adm-text-link);
+}
+
+.pagination button.active {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  border-color: var(--adm-text-primary);
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }

@@ -1,5 +1,9 @@
 .app_container {
   display: flex;
-  justify-content: center;
   background-color: #F4F6F8;
+}
+
+.main-content {
+  flex-grow: 1; /* 남은 공간을 모두 차지 */
+  min-width: 0;  /* 컨텐츠가 부모보다 작아질 수 있도록 허용 (핵심) */
 }

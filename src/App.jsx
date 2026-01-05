@@ -19,7 +19,9 @@ function App() {
     <div className='app_container'>
       {/* 로그인 된 경우에만 사이드바를 보여줌 */}
       {isLoggedIn && <SideBar />}
-      <Outlet />
+      <main className='main-content'>
+        <Outlet />
+      </main>
     </div>
   );
 }

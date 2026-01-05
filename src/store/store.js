@@ -14,7 +14,7 @@ import userShowReducer from "../store/slices/userSlice.js";
 import noticeShowReducer from "../store/slices/noticeSlice.js";
 import qnaShowReducer from "../store/slices/qnaSlice.js";
 import dashboardReducer from "../store/slices/dashboadSlice.js";
-import settlementShowReducer from "../store/slices/settlementSlice.js";
+import settlementReducer from "../store/slices/settlementSlice.js";
 
 export default configureStore ({
   reducer: {
@@ -27,6 +27,6 @@ export default configureStore ({
     noticeShow: noticeShowReducer,
     qnaShow: qnaShowReducer,
     dashboard: dashboardReducer,
-    settlementShow: settlementShowReducer,
+    settlement: settlementReducer,
   }
 });
