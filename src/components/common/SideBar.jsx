@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; // ★ Redux 훅 추가
-import './Sidebar.css'; 
+import './Sidebar.css';
 
 // ★ authSlice에서 만든 초기화 액션 import (경로 확인 필요)
 import { clearAuth } from '../../store/slices/authSlice.js';
@@ -36,7 +36,7 @@ const Sidebar = () => {
       setActiveMenu(currentMenu.id);
     } else {
       // admin 경로가 아니면 대시보드 기본값 혹은 비활성 처리
-      setActiveMenu("dashboard"); 
+      setActiveMenu("dashboard");
     }
   }, [location.pathname]);
 
@@ -55,9 +55,9 @@ const Sidebar = () => {
   // ★ 로그아웃 핸들러
   const handleLogout = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
+      navigate('/');         // 2. 로그인 화면으로 이동
       await dispatch(logoutThunk());
       dispatch(clearAuth()); // 1. Redux 상태 초기화
-      navigate('/');         // 2. 로그인 화면으로 이동
     }
   };
 
@@ -71,12 +71,12 @@ const Sidebar = () => {
       <div className="side-flexbox">
         {/* 로고 영역 */}
         <div className="side-title" onClick={handleLogoClick}>RainBowRiceCake</div>
-        
+
         {/* 메뉴 목록 */}
         {MENU_ITEMS.map((menu) => (
-          <div 
+          <div
             key={menu.id}
-            className={`side-menu ${activeMenu === menu.id ? "active" : ""}`} 
+            className={`side-menu ${activeMenu === menu.id ? "active" : ""}`}
             onClick={() => handleMenuClick(menu)}
           >
             {menu.name}
