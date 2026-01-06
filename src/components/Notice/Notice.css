@@ -9,6 +9,7 @@
   flex: 1;
   background-color: var(--adm-bg-primary);
   padding: var(--mng-container-padding);
+  min-width: 1200px;
   min-height: 100vh;
   box-sizing: border-box;
   position: relative; /* 뒤로가기 버튼 위치 기준 */

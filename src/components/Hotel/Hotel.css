@@ -4,6 +4,7 @@
   flex: 1;
   background-color: var(--adm-bg-primary);
   padding: var(--adm-spacing-xl);
+  min-width: 1200px;
   min-height: 100vh;
   box-sizing: border-box;
 }

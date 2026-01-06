@@ -5,9 +5,9 @@
   flex: 1; /* 상위 레이아웃에서 공간을 채우도록 설정 */
   padding: var(--adm-spacing-xl);
   background-color: var(--adm-bg-primary);
+  min-width: 1200px; /* 전체 최소 너비 설정으로 반응성 제거 */
   min-height: 100vh;
   box-sizing: border-box;
-  min-width: 1200px; /* 전체 최소 너비 설정으로 반응성 제거 */
 }
 
 /* --- 상단 헤더 (타이틀, 날짜 필터) --- */
@@ -226,10 +226,10 @@
   white-space: nowrap;
 }
 .status-req { /* 정산 대기 */
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #EEEEEE;
+  color: #000000;
 }
-.status-com { /* 정산 완료 */
+.status-res { /* 정산 완료 */
   background-color: #d4edda;
   color: #155724;
 }
@@ -270,4 +270,155 @@
 .pagination button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+/* --- 재정산 요청 버튼 --- */
+.btn-action {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: var(--adm-font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.btn-retry {
+  background-color: var(--adm-accent-orange);
+  color: white;
+}
+
+.btn-retry:hover {
+  background-color: #d87b00; /* Darker orange */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- 모달 --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-xl);
+  border-radius: var(--adm-radius-large);
+  box-shadow: var(--adm-shadow-strong);
+  width: 100%;
+  max-width: 500px;
+  animation: modal-fade-in 0.3s ease;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--adm-text-primary);
+  margin-top: 0;
+  margin-bottom: var(--adm-spacing-l);
+}
+
+.modal-content p {
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-secondary);
+}
+
+.modal-content p strong {
+  color: var(--adm-text-primary);
+  font-weight: 600;
+}
+
+/* --- 모달 폼 --- */
+.form-group {
+  margin-bottom: var(--adm-spacing-m);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: var(--adm-spacing-s);
+  font-size: var(--adm-font-base);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  background-color: var(--adm-bg-primary);
+  color: var(--adm-text-primary);
+  box-sizing: border-box; /* padding이 width에 포함되도록 */
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* --- 모달 액션 버튼 --- */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--adm-spacing-s);
+  margin-top: var(--adm-spacing-xl);
+}
+
+.modal-actions .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--adm-radius-medium);
+  font-size: var(--adm-font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-actions .btn-secondary {
+  background-color: var(--adm-bg-tertiary);
+  color: var(--adm-text-primary);
+  border: 1px solid var(--adm-border-secondary);
+}
+
+.modal-actions .btn-secondary:hover {
+  background-color: var(--adm-border-primary);
+}
+
+.modal-actions .btn-primary {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+}
+
+.modal-actions .btn-primary:hover {
+  opacity: 0.85;
+}
+
+.modal-actions .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: var(--adm-accent-red);
+  font-weight: 600;
 }

@@ -5,6 +5,7 @@
   flex: 1; /* 부모가 flex일 때 남은 공간을 모두 차지함 */
   background-color: var(--adm-bg-primary); /* 전체 배경: 아주 연한 회색 (Uber Style) */
   padding: var(--adm-spacing-xl);
+  min-width: 1200px;
   min-height: 100vh;
   box-sizing: border-box;
 }

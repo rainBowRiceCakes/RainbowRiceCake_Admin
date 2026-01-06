@@ -5,10 +5,11 @@ export const settlementShowThunk = createAsyncThunk(
   'settlementShow/settlementShowThunk', // Thunk 고유명
   async (params = {}, { rejectWithValue }) => {
     try {
-      // params: { page, month, status, search }
+      // params: { page, limit, month, status, search }
       const queryParams = new URLSearchParams();
 
       if (params.page) queryParams.append('page', params.page);
+      if (params.limit) queryParams.append('limit', params.limit);
       if (params.month) queryParams.append('month', params.month);
       if (params.status) queryParams.append('status', params.status);
       if (params.search) queryParams.append('search', params.search);
@@ -47,6 +48,59 @@ export const settlementSumUpThunk = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
+    }
+  }
+);
+
+
+export const settlementThreeMonthThunk = createAsyncThunk(
+  'settlementThreeMonth/settlementThreeMonthThunk', // Thunk 고유명
+  async (_, { rejectWithValue }) => {
+    try {
+      const url = `/api/settlements/three-months-total`;
+      
+      const response = await axiosInstance.get(url);
+      console.log(response.data)
+      if(!response.data) {
+        throw new Error('차트정보 불러오기 실패');
+      }
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const getSettlementDetailThunk = createAsyncThunk(
+  'settlement/getSettlementDetail',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/api/settlements/${id}`);
+      if (!response.data) {
+        throw new Error('정산 상세 정보 불러오기 실패');
+      }
+      return response.data.data; // 컨트롤러의 createBaseResponse 구조에 따라 data.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const retrySettlementThunk = createAsyncThunk(
+  'settlement/retrySettlement',
+  async ({ id, bankAccount, bankCode, memo }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/api/settlements/${id}/retry`, {
+        bankAccount,
+        bankCode,
+        memo,
+      });
+      if (!response.data) {
+        throw new Error('정산 재시도 실패');
+      }
+      return response.data.data; // 컨트롤러의 createBaseResponse 구조에 따라 data.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );

@@ -3,6 +3,7 @@
   flex: 1; /* 화면 꽉 채우기 */
   background-color: var(--adm-bg-primary); /* 배경: 연한 회색 */
   padding: var(--adm-spacing-xl);
+  min-width: 1200px;
   min-height: 100vh;
   box-sizing: border-box;
 }
