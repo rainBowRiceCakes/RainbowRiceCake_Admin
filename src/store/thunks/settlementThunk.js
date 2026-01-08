@@ -5,14 +5,11 @@ export const settlementShowThunk = createAsyncThunk(
   'settlementShow/settlementShowThunk', // Thunk 고유명
   async (params = {}, { rejectWithValue }) => {
     try {
-      // params: { page, limit, month, status, search }
+      // params: { year, month }
       const queryParams = new URLSearchParams();
 
-      if (params.page) queryParams.append('page', params.page);
-      if (params.limit) queryParams.append('limit', params.limit);
+      if (params.year) queryParams.append('year', params.year);
       if (params.month) queryParams.append('month', params.month);
-      if (params.status) queryParams.append('status', params.status);
-      if (params.search) queryParams.append('search', params.search);
 
       const queryString = queryParams.toString();
       const url = `/api/settlements${queryString ? `?${queryString}` : ''}`;
@@ -60,7 +57,6 @@ export const settlementThreeMonthThunk = createAsyncThunk(
       const url = `/api/settlements/three-months-total`;
       
       const response = await axiosInstance.get(url);
-      console.log(response.data)
       if(!response.data) {
         throw new Error('차트정보 불러오기 실패');
       }

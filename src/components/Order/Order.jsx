@@ -84,7 +84,7 @@ function Order() {
   // 엑셀 다운로드
   const handleDownloadExcel = () => {
     const columns = [
-      { header: 'Order ID', key: 'id', width: 15 },
+      { header: 'Order ID', key: 'orderCode', width: 15 },
       { header: '출발지', key: 'from', width: 20 },
       { header: '도착지', key: 'to', width: 20 },
       { header: '상태', key: 'status', width: 12 },

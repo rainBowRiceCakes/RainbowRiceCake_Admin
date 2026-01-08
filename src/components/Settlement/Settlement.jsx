@@ -47,8 +47,8 @@ function Settlement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const itemsPerPage = 5;
-
+  const itemsPerPage = 5; // 페이지당 5개 출력
+  
   // 재시도 모달 관련 상태
   const [showRetryModal, setShowRetryModal] = useState(false);
   const [selectedSettlementId, setSelectedSettlementId] = useState(null);
@@ -56,19 +56,21 @@ function Settlement() {
   const [bankAccountInput, setBankAccountInput] = useState('');
   const [memoInput, setMemoInput] = useState('');
 
-
-  // Redux store에서 데이터 가져오기
+  // Redux store에서 원본 데이터 (필터링 전) 가져오기
   const { 
-    settlements: paginatedData, // 이제 서버가 페이지네이션한 데이터를 직접 사용
-    pagination,
+    settlements: allFetchedSettlements, // 서버에서 받아온 해당 월의 모든 정산 데이터
     summary,
     chartData,
     loading, 
     error,
-    settlementDetail, // 새로 추가
+    settlementDetail,
   } = useSelector((state) => state.settlement);
 
-  const totalPages = pagination?.totalPages || 1;
+  const [filteredSettlementList, setFilteredSettlementList] = useState([]); // 검색어 필터링된 데이터
+  const [currentItems, setCurrentItems] = useState([]); // 현재 페이지에 보여줄 데이터
+
+  // totalPages는 이제 클라이언트에서 계산
+  const totalPages = Math.ceil(filteredSettlementList.length / itemsPerPage) || 1;
   const backendChartData = chartData || { labels: [], data: [] };
 
   // 검색어 디바운싱 처리
@@ -83,23 +85,42 @@ function Settlement() {
     };
   }, [searchTerm]);
 
-  // 데이터 요청 Effect (월, 페이지, 검색어 변경 시)
+  // 데이터 요청 Effect (월 변경 시)
   useEffect(() => {
     const [year, month] = selectedMonth.split('-');
 
-    // 정산 목록 요청 (서버 사이드 페이지네이션)
-    dispatch(settlementShowThunk({ 
-      month: selectedMonth, 
-      page: currentPage,
-      limit: itemsPerPage,
-      search: debouncedSearchTerm
-    }));
+    // 정산 목록 요청 (서버로부터 해당 월의 전체 데이터 조회)
+    dispatch(settlementShowThunk({ year, month }));
     
     // 월 변경 시에만 요약 및 차트 데이터 갱신
     dispatch(settlementSumUpThunk({ year, month }));
     dispatch(settlementThreeMonthThunk());
+    
+    // 월 변경 시 검색어 및 페이지 초기화
+    setSearchTerm('');
+    setDebouncedSearchTerm('');
+    setCurrentPage(1);
+  }, [dispatch, selectedMonth]);
 
-  }, [dispatch, selectedMonth, currentPage, debouncedSearchTerm]);
+  // 클라이언트 측 필터링 및 페이지네이션 처리 Effect (전체 데이터, 검색어, 페이지 변경 시)
+  useEffect(() => {
+    let filtered = allFetchedSettlements;
+
+    // 검색어 필터링
+    if (debouncedSearchTerm) {
+      const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.settlement_rider?.rider_user?.name?.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    }
+    setFilteredSettlementList(filtered);
+
+    // 페이지네이션 적용
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setCurrentItems(filtered.slice(startIndex, endIndex));
+
+  }, [allFetchedSettlements, debouncedSearchTerm, currentPage, itemsPerPage]);
 
 
   // settlementDetail이 로드되면 모달 입력 필드 초기화
@@ -142,10 +163,10 @@ function Settlement() {
     );
   };
   
-  // 엑셀 다운로드 핸들러 (현재 페이지 기준)
+  // 엑셀 다운로드 핸들러 (필터링된 전체 데이터 기준)
   const handleExcelDownload = () => {
-    // 이제 paginatedData가 현재 페이지의 데이터이므로, 별도 필터링 없이 사용
-    if (!paginatedData || paginatedData.length === 0) {
+    // 이제 filteredSettlementList가 검색어 필터링된 전체 데이터이므로, 이를 사용
+    if (!filteredSettlementList || filteredSettlementList.length === 0) {
       alert('다운로드할 데이터가 없습니다.');
       return;
     }
@@ -155,13 +176,13 @@ function Settlement() {
       { header: '정산월', key: 'period', width: 20 },
       { header: '상태', key: 'statusText', width: 15 },
     ];
-    const excelData = paginatedData.map(item => ({
+    const excelData = filteredSettlementList.map(item => ({ // filteredSettlementList 사용
       riderName: item.settlement_rider?.rider_user?.name || '알 수 없음',
       totalAmount: item.totalAmount,
       period: `${item.year}-${String(item.month).padStart(2, '0')}`,
       statusText: STATUS_MAP[item.status]?.text || item.status,
     }));
-    excelDown(excelData, `Settlement_${selectedMonth}_page${currentPage}`, columns);
+    excelDown(excelData, `Settlement_${selectedMonth}_filtered_data`, columns); // 파일명도 변경
   };
 
   // 재시도 모달 열기
@@ -193,13 +214,10 @@ function Settlement() {
       })).unwrap(); // unwrap을 사용하여 Promise를 풀고 성공/실패 처리
       alert('정산 재시도 요청이 성공적으로 처리되었습니다.');
       handleCloseRetryModal();
-      // 재시도 성공 후 목록 새로고침
-      dispatch(settlementShowThunk({ 
-        month: selectedMonth, 
-        page: currentPage,
-        limit: itemsPerPage,
-        search: debouncedSearchTerm
-      }));
+      // 재시도 성공 후 목록 및 상단 카드 데이터 새로고침
+      const [year, month] = selectedMonth.split('-');
+      dispatch(settlementShowThunk({ year, month }));
+      dispatch(settlementSumUpThunk({ year, month })); // 요약 카드 데이터 새로고침
     } catch (err) {
       alert(`정산 재시도 실패: ${err}`);
       console.error('Retry settlement failed:', err);
@@ -312,8 +330,8 @@ function Settlement() {
                   <tr><td colSpan="5">목록 로딩 중...</td></tr>
                 ) : error ? (
                   <tr><td colSpan="5">오류가 발생했습니다.</td></tr>
-                ) : paginatedData && paginatedData.length > 0 ? (
-                  paginatedData.map((item) => (
+                ) : currentItems && currentItems.length > 0 ? (
+                  currentItems.map((item) => (
                     <tr key={item.id}>
                       <td>{item.settlement_rider?.rider_user?.name || '알 수 없음'}</td>
                       <td>₩{formatNumber(item.totalAmount)}</td>

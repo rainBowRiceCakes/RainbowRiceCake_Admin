@@ -17,7 +17,6 @@ const initialState = {
     paymentErrorCount: 0,
   }, // 정산 요약 데이터
   chartData: {},
-  pagination: null, // 페이지네이션 정보
   settlementDetail: null, // 정산 상세 정보
   loading: false,
   error: null,
@@ -37,8 +36,7 @@ const settlementSlice = createSlice({
       })
       .addCase(settlementShowThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.settlements = action.payload.data.settlements; 
-        state.pagination = action.payload.data.pagination;
+        state.settlements = action.payload.data.settlements;
       })
       .addCase(settlementShowThunk.rejected, (state, action) => {
         state.loading = false;
