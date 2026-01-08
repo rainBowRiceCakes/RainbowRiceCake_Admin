@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './QnA.css'; 
 import { qnaDeleteThunk, qnaDetailThunk, qnaUpdateThunk } from '../../store/thunks/qnaThunk';
+import ImgView from '../../api/utils/imgView.jsx';
 
 function QnADetail() {
   const { id } = useParams();
@@ -15,6 +16,19 @@ function QnADetail() {
   
   // 답변 입력 상태
   const [responseText, setResponseText] = useState('');
+
+  const [imgViewOpen, setImgViewOpen] = useState(false);
+  const [imgViewSrc, setImgViewSrc] = useState("");
+  const [imgViewAlt, setImgViewAlt] = useState("");
+
+  const openImgView = (src, alt = "image") => {
+    if (!src) return;
+    setImgViewSrc(src);
+    setImgViewAlt(alt);
+    setImgViewOpen(true);
+  };
+
+  const closeImgView = () => setImgViewOpen(false);
 
   // 1. 초기 데이터 로드 (unwrap 사용)
   useEffect(() => {
@@ -131,7 +145,7 @@ function QnADetail() {
           <div className="q-content-box">
             {/* 이미지 렌더링 (경로 존재 시) */}
             {detailData.qnaImg && (
-              <div className="q-img-wrapper">
+              <div className="q-img-wrapper" onClick={() => openImgView(detailData.qnaImg)}>
                 {/* 서버에서 저장된 경로(path)를 src에 바인딩 */}
                 {/* 필요시 앞에 도메인(http://localhost:8080 등) 추가 로직 필요 */}
                 <img 
@@ -168,6 +182,12 @@ function QnADetail() {
         </div>
 
       </div>
+      <ImgView 
+        isOpen={imgViewOpen}
+        onClose={closeImgView}
+        src={imgViewSrc}
+        alt={imgViewAlt}
+      />
     </div>
   );
 }

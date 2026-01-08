@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './Rider.css'; // 스크롤 CSS (.modal-body-scroll) 필요
-import { riderCreateThunk } from '../../store/thunks/riderThunk.js';
+import { riderCreateThunk, postLicenseImageUploadThunk } from '../../store/thunks/riderThunk.js';
 
 function RiderCreate({ isOpen, onClose, onRefresh }) {
   const dispatch = useDispatch();
@@ -51,26 +51,32 @@ function RiderCreate({ isOpen, onClose, onRefresh }) {
     if (!window.confirm('새로운 기사를 등록하시겠습니까?')) return;
 
     try {
-      const submitData = new FormData();
+      let imagePath = null;
 
-      // 1. JSON Data
-      const riderData = { ...formData };
-      const jsonBlob = new Blob([JSON.stringify(riderData)], { type: "application/json" });
-      submitData.append("requestDto", jsonBlob);
-
-      // 2. File Data
+      // 이미지가 있다면 업로드 먼저 실행
       if (file) {
-        submitData.append("licenseImg", file);
+        const uploadResult = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
+        imagePath = uploadResult.data.path; // `uploadResult.data.path`로 경로를 가져옴
       }
 
-      await dispatch(riderCreateThunk(submitData)).unwrap();
+      // 전송할 최종 JSON 페이로드 구성
+      const payload = {
+        ...formData,
+        userId: Number(formData.userId),
+        licenseImg: imagePath, // 이미지 경로 추가
+      };
+
+      console.log("Rider Create Payload:", payload); // 디버깅용
+
+      // 라이더 등록 요청
+      await dispatch(riderCreateThunk(payload)).unwrap();
       
-      alert('등록되었습니다.');
+      alert('성공적으로 등록되었습니다.');
       onRefresh();
       onClose();
     } catch (error) {
-      console.error(error);
-      alert('등록 실패');
+      console.error('등록 실패:', error);
+      alert('등록 실패: ' + (error.message || '알 수 없는 오류'));
     }
   };
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Rider.css'; 
 import { postLicenseImageUploadThunk, riderDeleteThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
+import ImgView from '../../api/utils/imgView.jsx';
 
 function RiderDetail() {
   const navigate = useNavigate();
@@ -13,6 +14,19 @@ function RiderDetail() {
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  const [imgViewOpen, setImgViewOpen] = useState(false);
+  const [imgViewSrc, setImgViewSrc] = useState("");
+  const [imgViewAlt, setImgViewAlt] = useState("");
+
+  const openImgView = (src, alt = "image") => {
+    if (!src) return;
+    setImgViewSrc(src);
+    setImgViewAlt(alt);
+    setImgViewOpen(true);
+  };
+
+  const closeImgView = () => setImgViewOpen(false);
 
   useEffect(() => {
     async function fetchDetail() {
@@ -141,7 +155,7 @@ function RiderDetail() {
           <div className="form-group full-width">
             <label>면허증 (License Image)</label>
             <div className="image-upload-wrapper">
-              {previewUrl && <div className="img-preview"><img src={previewUrl} alt="License" /></div>}
+              {previewUrl && <div className="img-preview" onClick={() => openImgView(previewUrl)}><img src={previewUrl} alt="License" /></div>}
               <input type="file" accept="image/*" onChange={handleFileChange} />
             </div>
           </div>
@@ -211,6 +225,12 @@ function RiderDetail() {
           <button className="btn-save" onClick={handleUpdate}>수정 완료</button>
         </div>
       </div>
+      <ImgView 
+        isOpen={imgViewOpen}
+        onClose={closeImgView}
+        src={imgViewSrc}
+        alt={imgViewAlt}
+      />
     </div>
   );
 }

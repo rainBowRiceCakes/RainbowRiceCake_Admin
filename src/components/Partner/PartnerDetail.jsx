@@ -7,6 +7,7 @@ import { partnerDeleteThunk, partnerDetailThunk, partnerUpdateThunk, postLogoIma
 import InvoiceSendModal from '../invoice/Invoice.jsx'; // (경로 확인 필요)
 // ★ 2. 주소 변환 유틸 import
 import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
+import ImgView from '../../api/utils/imgView.jsx';
 
 function PartnerDetail() {
   const navigate = useNavigate();
@@ -28,6 +29,19 @@ function PartnerDetail() {
   const [file, setFile] = useState(null); 
   // 인보이스 모달 상태
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  
+  const [imgViewOpen, setImgViewOpen] = useState(false);
+  const [imgViewSrc, setImgViewSrc] = useState("");
+  const [imgViewAlt, setImgViewAlt] = useState("");
+
+  const openImgView = (src, alt = "image") => {
+    if (!src) return;
+    setImgViewSrc(src);
+    setImgViewAlt(alt);
+    setImgViewOpen(true);
+  };
+
+  const closeImgView = () => setImgViewOpen(false);
 
   // 1. 상세 데이터 조회
   useEffect(() => {
@@ -179,7 +193,7 @@ function PartnerDetail() {
             <label>매장 로고 (Logo Image)</label>
             <div className="image-upload-wrapper">
               {previewUrl && (
-                <div className="img-preview">
+                <div className="img-preview" onClick={() => openImgView(previewUrl)}>
                   <img src={previewUrl} alt="Logo Preview" />
                 </div>
               )}
@@ -262,6 +276,12 @@ function PartnerDetail() {
           partnerName={editData.krName}
         />
       )}
+      <ImgView 
+        isOpen={imgViewOpen}
+        onClose={closeImgView}
+        src={imgViewSrc}
+        alt={imgViewAlt}
+      />
     </div>
   );
 }

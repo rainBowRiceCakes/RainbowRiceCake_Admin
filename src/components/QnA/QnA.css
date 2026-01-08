@@ -138,3 +138,7 @@
 }
 
 .qna-btn-small.gray { background-color: var(--adm-bg-interactive); color: var(--adm-text-link); }
+
+.q-img-wrapper:hover {
+  cursor: pointer;
+}
