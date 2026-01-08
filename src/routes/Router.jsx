@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         children: [
           { path: '/admin/dashboard', element: <DashBoard /> },
           { path: '/admin/order', element: <Order /> },
-          { path: '/admin/order/:id', element: <OrderDetail /> },
+          { path: '/admin/order/:orderCode', element: <OrderDetail /> },
           { path: '/admin/user', element: <User /> },
           { path: '/admin/user/:id', element: <UserDetail /> },
           { path: '/admin/rider', element: <Rider /> },

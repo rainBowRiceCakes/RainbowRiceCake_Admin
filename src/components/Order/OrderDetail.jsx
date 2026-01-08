@@ -8,7 +8,7 @@ import { hotelShowThunk } from '../../store/thunks/hotelThunk.js';
 function OrderDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { orderCode } = useParams();
 
   // Redux Data
   const { show } = useSelector((state) => state.hotelShow);
@@ -26,7 +26,7 @@ function OrderDetail() {
     async function fetchData() {
       try {
         setLoading(true);
-        const orderResult = await dispatch(orderDetailThunk(id)).unwrap();
+        const orderResult = await dispatch(orderDetailThunk(orderCode)).unwrap();
         const data = orderResult.data;
         
         setEditData({
@@ -48,7 +48,7 @@ function OrderDetail() {
       }
     }
     fetchData();
-  }, [dispatch, id, navigate]);
+  }, [dispatch, orderCode, navigate]);
 
   // ★ [추가] 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
@@ -103,7 +103,7 @@ function OrderDetail() {
                             + Number(editData.cntL || 0) * 10000;
 
       const payload = {
-        id: editData.id,
+        orderCode: editData.orderCode,
         status: editData.status,
         name: editData.name,
         email: editData.email,
@@ -131,7 +131,7 @@ function OrderDetail() {
       if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
       
       try {
-        await dispatch(orderDeleteThunk(id)).unwrap();
+        await dispatch(orderDeleteThunk(orderCode)).unwrap();
         alert('삭제되었습니다.');
         navigate('/admin/order');
       } catch (error) {
@@ -216,7 +216,7 @@ function OrderDetail() {
             <label>주문 상태 (Status)</label>
             <select name="status" value={editData.status} onChange={handleStatusChange} className="select-editable">
               <option value="req">요청됨 (req)</option>
-              <option value="match">기사 배정 (match)</option>
+              <option value="mat">기사 배정 (mat)</option>
               <option value="pick">픽업 완료 (pick)</option>
               <option value="com">배송 완료 (com)</option>
             </select>

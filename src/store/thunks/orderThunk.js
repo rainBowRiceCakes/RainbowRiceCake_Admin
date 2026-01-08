@@ -28,9 +28,9 @@ export const orderIndexThunk = createAsyncThunk(
 // 1. 상세 조회
 export const orderDetailThunk = createAsyncThunk(
   'orderDetail/orderDetailThunk',
-  async (id, { rejectWithValue }) => {
+  async (orderCode, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/admins/order/${id}`);
+      const response = await axiosInstance.get(`/api/admins/order/${orderCode}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

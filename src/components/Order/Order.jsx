@@ -121,8 +121,9 @@ function Order() {
   };
 
   const handleManageClick = (order) => {
+    console.log(order.orderCode)
     // '/admin/order/:id' 경로로 이동하며, order 데이터를 state로 넘겨줍니다.
-    navigate(`/admin/order/${order.id}`);
+    navigate(`/admin/order/${order.orderCode}`);
   };
 
   return (
