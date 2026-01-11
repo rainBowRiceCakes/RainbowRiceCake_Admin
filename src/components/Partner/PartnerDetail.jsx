@@ -1,55 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useKakaoLoader } from 'react-kakao-maps-sdk'; // ★ 1. 로더 추가
+import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import './Partner.css'; 
 import { partnerDeleteThunk, partnerDetailThunk, partnerUpdateThunk, postLogoImageUploadThunk } from '../../store/thunks/partnerThunk.js';
-import InvoiceSendModal from '../invoice/Invoice.jsx'; // (경로 확인 필요)
-// ★ 2. 주소 변환 유틸 import
+import InvoiceSendModal from '../invoice/Invoice.jsx';
 import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
 import ImgView from '../../api/utils/imgView.jsx';
+import AddressModal from '../common/AddressModal.jsx'; // AddressModal 임포트
 
 function PartnerDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  // ★ 3. 카카오 맵 로드
   useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_MAP_API_KEY, 
     libraries: ["services"],
   });
 
-  // 데이터 상태
   const [editData, setEditData] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  // 이미지 관련 상태
   const [previewUrl, setPreviewUrl] = useState(null); 
   const [file, setFile] = useState(null); 
-  // 인보이스 모달 상태
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false); // 주소 모달 상태
   
   const [imgViewOpen, setImgViewOpen] = useState(false);
   const [imgViewSrc, setImgViewSrc] = useState("");
   const [imgViewAlt, setImgViewAlt] = useState("");
 
-  const openImgView = (src, alt = "image") => {
-    if (!src) return;
-    setImgViewSrc(src);
-    setImgViewAlt(alt);
-    setImgViewOpen(true);
-  };
-
-  const closeImgView = () => setImgViewOpen(false);
-
-  // 1. 상세 데이터 조회
+  // 상세 데이터 조회
   useEffect(() => {
     async function fetchDetail() {
       try {
         setLoading(true);
         const result = await dispatch(partnerDetailThunk(id)).unwrap();
-        setEditData(result.data);
+        const { address, ...rest } = result.data;
+        // 주소 관련 필드를 UI 상태로 추가
+        setEditData({
+          ...rest,
+          address: address || '', // 기존 주소
+          postcode: '',
+          detailAddress: ''
+        });
         
         if (result.data.logoImg) {
           setPreviewUrl(result.data.logoImg); 
@@ -64,18 +58,51 @@ function PartnerDetail() {
     fetchDetail();
   }, [dispatch, id, navigate]);
 
-  // 2. 입력 핸들러
+  const openImgView = (src, alt = "image") => {
+    if (!src) return;
+    setImgViewSrc(src);
+    setImgViewAlt(alt);
+    setImgViewOpen(true);
+  };
+  const closeImgView = () => setImgViewOpen(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditData(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'phone') {
+      const cleaned = value.replace(/[^\d]/g, '');
+      let formatted = cleaned;
+
+      if (cleaned.startsWith('02') && cleaned.length > 2) {
+        // 서울 지역번호 형식 (2-4-4)
+        if (cleaned.length <= 6) {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2)}`;
+        } else {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2, 6)}-${cleaned.slice(6, 10)}`;
+        }
+      } else if (!cleaned.startsWith('02') && cleaned.length > 3) {
+        // 그 외 번호 형식
+        if (cleaned.length <= 7) {
+          // 중간 번호 3자리 또는 4자리 입력 중
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+        } else if (cleaned.length <= 10) {
+          // 10자리 번호: 3-3-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+        } else {
+          // 11자리 번호: 3-4-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+        }
+      }
+      setEditData(prev => ({ ...prev, phone: formatted }));
+    } else {
+      setEditData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
-  // 3. 상태 변경 핸들러
   const handleStatusChange = (e) => {
     setEditData(prev => ({ ...prev, status: e.target.value }));
   };
 
-  // 4. 이미지 파일 변경 핸들러
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -84,13 +111,23 @@ function PartnerDetail() {
     }
   };
 
-  // ★ 5. 수정 완료 핸들러 (좌표 변환 추가)
+  // 주소 검색 완료 핸들러 (AddressModal로부터 데이터를 받음)
+  const handleAddressComplete = (data) => {
+    setEditData(prev => ({
+      ...prev,
+      postcode: data.postcode,
+      address: data.address,
+    }));
+    setIsAddressModalOpen(false); // 모달 닫기
+  };
+
+  // 수정 완료 핸들러
   const handleUpdate = async () => {
     if (!window.confirm(`${editData.krName} 정보를 수정하시겠습니까?`)) return;
 
     try {
-      // 5-1. 주소 -> 좌표 변환
-      const coords = await searchAddressToCoords(editData.address);
+      const fullAddress = `${editData.address} ${editData.detailAddress || ''}`.trim();
+      const coords = await searchAddressToCoords(fullAddress);
       
       if (!coords) {
         alert("주소를 좌표로 변환할 수 없습니다. 주소를 다시 확인해주세요.");
@@ -99,26 +136,22 @@ function PartnerDetail() {
 
       const payload = { ...editData };
 
-      // 5-2. 이미지 업로드 (파일이 변경된 경우만)
       if(file) {
         const resultUpload = await dispatch(postLogoImageUploadThunk(file)).unwrap();
         payload.logoImg = resultUpload.data.path;
       }
 
-      // 5-3. 변환된 좌표 데이터 추가
+      payload.address = fullAddress;
       payload.lat = coords.lat;
       payload.lng = coords.lng;
 
-      // 불필요한 필드 제거
+      delete payload.postcode;
+      delete payload.detailAddress;
       delete payload.createdAt;
       delete payload.updatedAt;
       delete payload.deletedAt;
-      // 백엔드 구조에 따라 partner_user 객체가 있으면 에러가 날 수 있으므로 제거 권장
       delete payload.partner_user; 
 
-      console.log("Partner Update Payload:", payload); // 디버깅용
-
-      // 5-4. API 전송
       await dispatch(partnerUpdateThunk(payload)).unwrap();
         
       alert('수정이 완료되었습니다.');
@@ -130,7 +163,6 @@ function PartnerDetail() {
     }
   };
 
-  // 삭제 핸들러
   const handleDelete = async () => {
     if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
     
@@ -149,6 +181,12 @@ function PartnerDetail() {
 
   return (
     <div className="partner-container">
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onComplete={handleAddressComplete}
+      />
+
       <button className="btn-back-page" onClick={() => navigate('/admin/partner')}>&lt; 목록으로 돌아가기</button>
 
       <div className="partner-detail-header">
@@ -158,7 +196,6 @@ function PartnerDetail() {
       <div className="partner-detail-card">
         <div className="detail-grid">
           
-          {/* 읽기 전용 영역 */}
           <div className="form-group">
             <label>Partner ID (수정 불가)</label>
             <input type="text" value={editData.id} disabled className="input-disabled" />
@@ -188,7 +225,6 @@ function PartnerDetail() {
 
           <hr className="divider full-width" />
 
-          {/* 수정 가능 영역 */}
           <div className="form-group full-width">
             <label>매장 로고 (Logo Image)</label>
             <div className="image-upload-wrapper">
@@ -203,7 +239,7 @@ function PartnerDetail() {
 
           <div className="form-group full-width">
              <label>사업자 번호 (Business Num)</label>
-             <input type="text" name="businessNum" value={editData.businessNum} onChange={handleInputChange} className="input-editable" />
+             <input type="text" name="businessNum" value={editData.businessNum || ''} onChange={handleInputChange} className="input-editable" />
           </div>
 
           <div className="form-group full-width">
@@ -224,9 +260,39 @@ function PartnerDetail() {
             <input type="text" name="phone" value={editData.phone} onChange={handleInputChange} className="input-editable" />
           </div>
 
-          <div className="form-group full-width">
+          <div className="form-group-address full-width">
             <label>주소 (Address)</label>
-            <input type="text" name="address" value={editData.address} onChange={handleInputChange} className="input-editable" />
+            <div className="address-row">
+              <input 
+                type="text" 
+                name="postcode" 
+                value={editData.postcode || ''} 
+                placeholder="우편번호" 
+                readOnly 
+                className="input-disabled" 
+              />
+              <button onClick={() => setIsAddressModalOpen(true)} className="btn-search-address">우편번호 검색</button>
+            </div>
+            <div className="address-row">
+              <input 
+                type="text" 
+                name="address" 
+                value={editData.address || ''} 
+                placeholder="주소" 
+                readOnly 
+                className="input-disabled"
+              />
+            </div>
+            <div className="address-row">
+              <input 
+                type="text" 
+                name="detailAddress" 
+                value={editData.detailAddress || ''} 
+                placeholder="상세주소 입력" 
+                onChange={handleInputChange} 
+                className="input-editable"
+              />
+            </div>
           </div>
 
           <div className="form-group full-width">
@@ -246,7 +312,6 @@ function PartnerDetail() {
               </label>
             </div>
           </div>
-
         </div>
 
         <div className="detail-actions">

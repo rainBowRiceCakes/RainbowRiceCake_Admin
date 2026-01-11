@@ -31,9 +31,9 @@ const slice = createSlice({
       })
       // 재발급 성공
       .addCase(reissueThunk.fulfilled, (state, action) => {
-        const { accessToken, name } = action.payload.data;
-        state.accessToken = accessToken;
-        state.name = name;
+        const reissueData = action.payload.data;
+        state.accessToken = reissueData.accessToken;
+        state.name = reissueData.admin.name;
         state.isLoggedIn = true;
         state.isCheckingAuth = false;
       })

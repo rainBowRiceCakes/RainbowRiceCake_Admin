@@ -49,7 +49,35 @@ function RiderDetail() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditData(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'phone') {
+      const cleaned = value.replace(/[^\d]/g, '');
+      let formatted = cleaned;
+
+      if (cleaned.startsWith('02') && cleaned.length > 2) {
+        // 서울 지역번호 형식 (2-4-4)
+        if (cleaned.length <= 6) {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2)}`;
+        } else {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2, 6)}-${cleaned.slice(6, 10)}`;
+        }
+      } else if (!cleaned.startsWith('02') && cleaned.length > 3) {
+        // 그 외 번호 형식
+        if (cleaned.length <= 7) {
+          // 중간 번호 3자리 또는 4자리 입력 중
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+        } else if (cleaned.length <= 10) {
+          // 10자리 번호: 3-3-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+        } else {
+          // 11자리 번호: 3-4-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+        }
+      }
+      setEditData(prev => ({ ...prev, phone: formatted }));
+    } else {
+      setEditData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleFileChange = (e) => {
