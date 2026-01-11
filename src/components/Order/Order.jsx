@@ -98,7 +98,7 @@ function Order() {
     const excelData = orders.map(order => ({
       orderCode: order.orderCode,
       from: order.order_partner?.krName || 'Unknown',
-      to: order.order_order?.krName || 'Unknown',
+      to: order.order_hotel?.krName || 'Unknown',
       status: order.status,
       createdAt: order.createdAt,
       price: order.price
