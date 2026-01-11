@@ -109,7 +109,7 @@ function Partner() {
             <span className="partner-search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="매장명 검색" 
+              placeholder="매장명 검색 (자동 검색)" 
               className="partner-search-input" 
               value={searchPartner} 
               onChange={(e) => setSearchPartner(e.target.value)} 

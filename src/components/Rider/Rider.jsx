@@ -101,7 +101,7 @@ function Riders() {
         <div className="rider-action-group">
           <div className="rider-search-box">
             <span className="rider-search-icon">🔍</span>
-            <input type="text" placeholder="이름, 전화번호 검색" className="rider-search-input" value={searchRider} onChange={(e) => setSearchRider(e.target.value)} />
+            <input type="text" placeholder="이름 검색 (자동 검색)" className="rider-search-input" value={searchRider} onChange={(e) => setSearchRider(e.target.value)} />
           </div>
           <button className="rider-btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="rider-btn-black" onClick={() => setIsCreateModalOpen(true)}>+ 기사 등록</button>

@@ -251,7 +251,7 @@ function Settlement() {
     <div className="settlement-dashboard">
       {/* --- 1. 상단 헤더 --- */}
       <div className="dashboard-header">
-        <h1>정산 현황 대시보드</h1>
+        <h1>Settlement(정산 대시보드)</h1>
         <div className="date-filter">
           <label htmlFor="month-picker">조회 월</label>
           <DatePicker

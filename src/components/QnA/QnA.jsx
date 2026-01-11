@@ -68,7 +68,7 @@ function QnA() {
 
   return (
     <div className="qna-container">
-      <div className="qna-title">QnA Management (문의 관리)</div>
+      <div className="qna-title">QnA (문의 관리)</div>
       
       {/* 헤더 (토글 필터) */}
       <div className="qna-head">
@@ -108,7 +108,7 @@ function QnA() {
               <th>답변상태</th>
               <th>제목</th>
               <th>유저명</th>
-              <th>Image 여부</th>
+              <th>사진 여부</th>
               <th>관리</th>
             </tr>
           </thead>

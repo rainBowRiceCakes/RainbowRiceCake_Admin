@@ -122,10 +122,10 @@ function Notice() {
             <table className="history-table">
               <thead>
                 <tr>
-                  <th>Target</th>
-                  <th>Title</th>
-                  <th>Date</th>
-                  <th>Management</th>
+                  <th>권한</th>
+                  <th>제목</th>
+                  <th>등록날짜</th>
+                  <th>관리</th>
                 </tr>
               </thead>
               <tbody>
@@ -143,7 +143,7 @@ function Notice() {
                         </div>
                         <div className="history-content-preview">{notice.content}</div>
                       </td>
-                      <td className="text-date">{new Date(notice.createAt || notice.date).toLocaleDateString()}</td>
+                      <td className="text-date">{(notice.createdAt ? notice.createdAt.slice(0, 10) : '-')}</td>
                       <td>
                         <button className="btn-manage" onClick={() => handleManage(notice.id)}>
                           관리

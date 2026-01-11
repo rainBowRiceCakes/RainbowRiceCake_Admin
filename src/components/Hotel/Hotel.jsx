@@ -100,7 +100,7 @@ function Hotel() {
         <div className="hotel-action-group">
                     <div className="hotel-search-box">
                       <span className="hotel-search-icon">🔍</span>
-                      <input type="text" placeholder="호텔명" className="hotel-search-input" value={searchHotel} onChange={(e) => setSearchHotel(e.target.value)} />
+                      <input type="text" placeholder="호텔명 (자동 검색)" className="hotel-search-input" value={searchHotel} onChange={(e) => setSearchHotel(e.target.value)} />
                     </div>
           <button className="hotel-btn-outline" onClick={handleDownloadExcel}>엑셀 다운로드</button>
           <button className="hotel-btn-black" onClick={() => setIsCreateModalOpen(true)}>+ 호텔 등록</button>
