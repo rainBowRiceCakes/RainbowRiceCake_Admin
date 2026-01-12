@@ -29,7 +29,7 @@ export const partnerDetailThunk = createAsyncThunk(
   'partnerDetail/partnerDetailThunk', // Thunk 고유명
   async (id, { rejectWithValue }) => {
     try {
-      const url = `/api/partners/${id}`;
+      const url = `/api/admins/partner/${id}`;
       
       const response = await axiosInstance.get(url);
       if(!response.data) {
