@@ -269,13 +269,15 @@
   cursor: not-allowed;
 }
 
-.input-editable, .select-editable {
+.order-detail-card .input-editable:not(:disabled), 
+.order-detail-card .select-editable:not(:disabled) {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--adm-border-primary);
   border-radius: var(--adm-radius-small);
   font-size: var(--adm-font-base);
   transition: border-color 0.2s;
+  background-color: var(--adm-bg-secondary);
 }
 
 .input-editable:focus, .select-editable:focus {

@@ -257,7 +257,7 @@
   font-size: var(--adm-font-base);
 }
 
-.input-editable {
+.user-detail-card .input-editable:not(:disabled) {
   background: var(--adm-bg-secondary);
   border: 1px solid var(--adm-border-primary);
   padding: var(--adm-spacing-s);

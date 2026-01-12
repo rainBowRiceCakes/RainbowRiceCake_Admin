@@ -385,3 +385,11 @@
     gap: var(--adm-spacing-s);
   }
 }
+
+/* Specificity override for input backgrounds */
+.notice-form-card .notice-input:not(:disabled),
+.notice-form-card .notice-textarea:not(:disabled),
+.notice-card .adm-input:not(.readonly):not(:disabled),
+.notice-card .adm-textarea:not(:disabled) {
+  background-color: var(--adm-bg-secondary);
+}

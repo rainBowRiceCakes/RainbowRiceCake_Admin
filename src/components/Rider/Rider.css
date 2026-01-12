@@ -183,6 +183,21 @@
   margin: 0 auto;
 }
 
+.rider-detail-card .input-editable:not(:disabled) {
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  padding: var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.rider-detail-card .input-editable:focus {
+  outline: none;
+  border-color: var(--adm-text-primary);
+}
+
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -247,12 +247,13 @@
   cursor: not-allowed;
 }
 
-.input-editable {
+.hotel-detail-card .input-editable:not(:disabled) {
   border: 1px solid var(--adm-border-primary);
   padding: var(--adm-spacing-s);
   border-radius: var(--common-border-radius-s);
   font-size: var(--common-font-base-large);
   transition: border 0.2s;
+  background-color: var(--adm-bg-secondary);
 }
 .input-editable:focus {
   outline: none;
