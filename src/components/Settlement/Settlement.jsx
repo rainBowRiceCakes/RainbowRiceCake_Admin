@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker'; // DatePicker 컴포넌트 추가
 import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker CSS 추가
+import dayjs from 'dayjs';
 import {
   Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 }
@@ -22,10 +23,8 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 // YYYY-MM 형식의 현재 월 문자열을 생성하는 함수
 const getCurrentYearMonth = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  return `${year}-${month}`;
+  const oneMonthAgo = dayjs().subtract(1, 'month');
+  return oneMonthAgo.format('YYYY-MM');
 };
 
 // 숫자 포맷팅 함수
