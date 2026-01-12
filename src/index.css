@@ -4,6 +4,42 @@
   box-sizing: border-box;
 }
 
+/* 페이지네이션 */
+.pagination {
+  display: flex; justify-content: center; align-items: center; gap: var(--adm-spacing-xs); padding: var(--adm-spacing-m);
+  border-top: 1px solid var(--adm-border-secondary);
+}
+.pagination button {
+  background: #FFF; border: 1px solid var(--adm-border-primary);
+  width: 32px; height: 32px; border-radius: var(--adm-radius-small);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.pagination button:hover:not(:disabled):not(.active) { background: var(--adm-bg-primary); }
+.pagination button:disabled { opacity: 0.5; cursor: default; }
+.pagination button.active { background: var(--adm-text-primary); color: #FFF; border-color: var(--adm-text-primary); }
+
+/* --- Common Detail Page Styles --- */
+.btn-back-page {
+  position: absolute;
+  top: var(--adm-spacing-xl);
+  right: var(--adm-spacing-xl);
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--common-border-light);
+  padding: var(--adm-spacing-xs) var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  cursor: pointer;
+  color: var(--common-text-secondary-dark);
+  z-index: 10;
+  transition: all 0.2s;
+}
+.btn-back-page:hover { 
+  color: var(--adm-text-primary);
+  background-color: var(--common-bg-hover);
+  border-color: #bbb;
+}
+
 :root {
   --mng-sidebar-width: 240px;
   --mng-sidebar-title-font-color: #adb5bd;
@@ -20,4 +56,112 @@
   --mng-font-size-sub-title: 16px;
   --mng-font-size-content: 12px;
   --mng-container-padding: 20px;
+
+  /* --- Admin Style Variables --- */
+  --adm-bg-primary: #F6F6F6;
+  --adm-bg-secondary: #FFFFFF;
+  --adm-bg-tertiary: #FAFAFA;
+  --adm-bg-interactive: #EEEEEE;
+  
+  --adm-text-primary: #000000;
+  --adm-text-secondary: #5E5E5E;
+  --adm-text-tertiary: #757575;
+  --adm-text-contrast: #FFFFFF;
+  --adm-text-placeholder: #999999;
+  --adm-text-link: #333333;
+
+  --adm-border-primary: #E0E0E0;
+  --adm-border-secondary: #F0F0F0;
+
+  --adm-accent-blue: #276EF1;
+  --adm-accent-red: #D93025;
+  --adm-accent-green: #27AE60;
+  --adm-accent-orange: #F2994A;
+
+  --adm-shadow-light: 0 1px 3px rgba(0,0,0,0.02);
+  --adm-shadow-interactive: 0 2px 4px rgba(0,0,0,0.1);
+
+  --adm-radius-large: 24px;
+  --adm-radius-medium: 8px;
+  --adm-radius-small: 4px;
+
+  --adm-spacing-xl: 40px;
+  --adm-spacing-l: 24px;
+  --adm-spacing-m: 20px;
+  --adm-spacing-s: 12px;
+  --adm-spacing-xs: 8px;
+
+  --adm-font-title: 28px;
+  --adm-font-large: 16px;
+  --adm-font-base: 14px;
+  --adm-font-small: 12px;
+  --adm-font-tiny: 11px;
+
+  --adm-font-weight-bold: 700;
+  --adm-font-weight-semibold: 600;
+  --adm-font-weight-medium: 500;
+
+  /* --- Common Component Variables --- */
+  --common-bg-hover: #F9F9F9;
+  --common-text-secondary-dark: #555;
+  --common-border-light: #CCC;
+  --common-color-error: #EB5757;
+  --common-color-warning-dark: #E65100;
+  --common-text-disabled: #888;
+
+  --common-border-radius-s: 6px;
+  --common-spacing-xxs: 2px;
+  --common-spacing-xs-alt: 10px;
+
+  --common-font-base-small: 13px;
+  --common-font-base-large: 15px;
+
+  --common-toggle-width: 50px;
+  --common-toggle-height: 26px;
+  --common-toggle-handle-radius: 13px; /* half of height */
+  --common-toggle-handle-size: 22px;
+}
+
+/* 어드민 버튼 css*/
+/* Detail Actions (Delete / Save) */
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--adm-spacing-s);
+  margin-top: var(--adm-spacing-l);
+  padding-top: var(--adm-spacing-m);
+  border-top: 1px solid var(--adm-border-secondary);
+}
+
+.adm-btn {
+  padding: 10px 20px;
+  border-radius: var(--adm-radius-medium);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.adm-btn.save {
+  background-color: var(--adm-text-link);
+  color: var(--adm-text-contrast);
+}
+.adm-btn.save:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.adm-btn.delete {
+  background-color: var(--adm-bg-secondary);
+  color: var(--adm-accent-red);
+  border: 1px solid var(--adm-border-primary);
+}
+.adm-btn.delete:hover {
+  background-color: #FFF5F5;
+  border-color: var(--adm-accent-red);
+}
+
+.img-preview:hover {
+  cursor: pointer;
 }

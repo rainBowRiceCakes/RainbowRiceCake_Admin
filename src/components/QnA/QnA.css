@@ -1,0 +1,144 @@
+/* QnA.css */
+
+/* 1. 컨테이너 */
+.qna-container {
+  flex: 1;
+  background-color: #F6F6F6;
+  padding: 40px;
+  min-width: 1200px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.qna-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* 2. 목록 헤더 */
+.qna-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.qna-toggle-group {
+  display: flex;
+  background: #EEEEEE;
+  padding: 4px;
+  border-radius: 24px;
+}
+
+.toggle-btn {
+  background: transparent; border: none; padding: 8px 20px;
+  border-radius: 20px; font-weight: 500; color: #757575; cursor: pointer;
+  transition: all 0.3s;
+}
+.toggle-btn.active { background: #000; color: #fff; font-weight: 700; }
+
+.qna-search-box {
+  background: #fff; border: 1px solid #E0E0E0; border-radius: 8px;
+  padding: 0 12px; display: flex; align-items: center; width: 240px;
+}
+.qna-search-box input { border: none; outline: none; width: 100%; padding: 10px; font-size: 14px;}
+
+/* 3. 테이블 스타일 */
+.qna-table-wrapper {
+  background: #fff; border-radius: 8px; border: 1px solid #E0E0E0; overflow: hidden;
+}
+.qna-table { width: 100%; border-collapse: collapse; }
+.qna-table th {
+  text-align: left; padding: 16px 24px; background: #FAFAFA;
+  border-bottom: 1px solid #E0E0E0; font-size: 12px; color: #5E5E5E;
+}
+.qna-table td {
+  padding: 16px 24px; border-bottom: 1px solid #F0F0F0; font-size: 14px; vertical-align: middle;
+}
+.clickable-row { cursor: pointer; transition: background 0.2s; }
+.clickable-row:hover { background-color: #F9F9F9; }
+
+.fw-bold { font-weight: 600; }
+.text-left { text-align: left; }
+.text-email { color: #555; font-style: italic; }
+.text-gray { color: #AAA; }
+.img-icon { font-size: 16px; }
+.no-data { text-align: center; color: #999; padding: 40px !important; }
+
+/* 상태 점 (List) */
+.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+.status-dot.waiting { background: #F2994A; } /* 대기중: 주황 */
+.status-dot.complete { background: #27AE60; } /* 완료: 초록 */
+
+/* 4. 상세 페이지 스타일 */
+.qna-detail-wrapper {
+  position: relative;
+  flex: 1;
+  background-color: #F6F6F6;
+  padding: 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.qna-detail-card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #E0E0E0;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative; /* for status positioning if needed, though static should be fine */
+}
+
+.detail-status {
+  margin-bottom: 24px;
+  text-align: left; /* Aligns the badge to the left */
+}
+
+.status-badge { 
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.status-badge.waiting { background: #FFF3E0; color: #E65100; }
+.status-badge.complete { background: #E8F5E9; color: #2E7D32; }
+
+.q-title { font-size: 22px; margin: 0 0 10px 0; }
+.q-meta-info { margin-bottom: 20px; font-size: 13px; color: #888; }
+.writer-tag { padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; }
+.writer-tag.user { background: #E3F2FD; color: #1565C0; }
+.writer-tag.guest { background: #F5F5F5; color: #666; }
+
+.q-content-box {
+  background: #FAFAFA; padding: 20px; border-radius: 8px; min-height: 100px;
+  line-height: 1.6; color: #333;
+}
+.q-img-wrapper { margin-top: 20px; }
+.q-img-wrapper img { max-width: 100%; border-radius: 6px; border: 1px solid #EEE; }
+
+.divider { border: 0; border-top: 1px solid #EEE; margin: 30px 0; }
+
+.answer-input {
+  width: 100%; padding: 16px; border: 1px solid #E0E0E0; border-radius: 8px;
+  font-size: 15px; box-sizing: border-box; resize: vertical; margin-bottom: 20px;
+}
+.answer-input:focus { outline: none; border-color: #000; }
+
+.answer-actions { text-align: right; }
+
+.qna-btn-small {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  color: var(--adm-text-contrast);
+}
+
+.qna-btn-small.gray { background-color: var(--adm-bg-interactive); color: var(--adm-text-link); }
+
+.q-img-wrapper:hover {
+  cursor: pointer;
+}

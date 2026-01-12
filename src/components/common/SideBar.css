@@ -1,0 +1,87 @@
+.sidebar-container {
+  width: 250px;
+  background-color: var(--adm-bg-secondary);
+  border-right: 1px solid #E2E2E2; /* 얇은 경계선 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 상단 영역 (로고 + 메뉴) */
+.side-flexbox {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--adm-spacing-m);
+}
+
+/* 로고 영역 (이미지 들어갈 곳) */
+.side-title {
+  height: 80px; /* 로고가 들어갈 넉넉한 높이 */
+  padding: 0 var(--adm-spacing-l);
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--adm-text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: var(--adm-spacing-m);
+}
+
+.side-title:hover {
+  cursor: pointer;
+}
+
+/* 메뉴 아이템 공통 스타일 */
+.side-menu {
+  padding: var(--adm-font-base) var(--adm-spacing-l);
+  font-size: 15px;
+  color: var(--adm-text-secondary); /* 선택 안 됐을 땐 연한 회색 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: var(--adm-font-weight-medium);
+  display: flex;
+  align-items: center;
+  border-left: var(--adm-radius-small) solid transparent; /* 선택바 자리 미리 확보 */
+}
+
+/* 메뉴 호버 효과 */
+.side-menu:hover {
+  background-color: var(--adm-bg-primary);
+  color: var(--adm-text-primary);
+}
+
+/* 선택된 메뉴 효과 */
+.side-menu.active {
+  color: var(--adm-text-primary);
+  font-weight: var(--adm-font-weight-bold);
+  background-color: #F3F3F3;
+  border-left: var(--adm-radius-small) solid var(--adm-text-primary);
+}
+
+/* 하단 정보 영역 */
+.side-info {
+  padding: var(--adm-spacing-l);
+  border-top: 1px solid #E2E2E2;
+  background-color: var(--adm-bg-tertiary);
+}
+
+.side-admin {
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-link);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+.side-logout {
+  font-size: 13px;
+  color: var(--adm-text-placeholder);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.side-logout:hover {
+  color: var(--adm-accent-red); /* 로그아웃 hover시 경고색(빨강) */
+}

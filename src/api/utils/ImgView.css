@@ -1,0 +1,70 @@
+/**
+ * @file src/api/utils/ImgView.css
+ * @description 마이페이지에서 사진 클릭 시 모달 띄우는 처리
+ * 250108 v1.0.0 wook init
+ */
+
+/* 화면 꽉 채우는 이미지 뷰어 모달 */
+
+.imgview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.imgview-close {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.imgview-box {
+  width: min(1100px, 100%);
+  height: min(90vh, 920px);
+  display: flex;
+}
+
+.imgview-inner {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imgview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ✅ 핵심: contain으로 전체 이미지 보이게 */
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .imgview-box {
+    width: 100%;
+    height: 92vh;
+  }
+  .imgview-inner {
+    border-radius: 14px;
+  }
+}

@@ -1,0 +1,290 @@
+/* User.css */
+
+/* 1. 전체 컨테이너 (Hotel.css와 동일) */
+.user-container {
+  position: relative;
+  flex: 1;
+  background-color: var(--adm-bg-primary);
+  padding: var(--adm-spacing-xl);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.user-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+  letter-spacing: -0.5px;
+}
+
+/* 3. 헤더 영역 */
+.user-main-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--adm-spacing-m);
+}
+
+/* 토글 컨테이너 (Hotel과 스타일 통일 - 텍스트만 있는 경우도 박스 형태 유지) */
+.user-toggle-container {
+  display: flex;
+  background-color: var(--adm-bg-interactive);
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-large);
+  width: fit-content;
+  align-items: center;
+}
+
+/* User는 현재 토글 버튼이 없으므로 단순 텍스트 표시용으로 스타일 조정 */
+.user-info-text {
+  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-secondary);
+}
+
+/* 우측 액션 그룹 */
+.head-action-group {
+  display: flex;
+  gap: var(--adm-spacing-s);
+}
+
+/* 검색창 (Hotel.css 복사) */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
+  width: 240px;
+}
+.search-icon { font-size: var(--adm-font-base); color: var(--adm-text-placeholder); margin-right: var(--adm-spacing-xs); }
+.search-input {
+  border: none;
+  outline: none;
+  padding: var(--common-spacing-xs-alt) 0;
+  font-size: var(--adm-font-base);
+  width: 100%;
+}
+
+/* 버튼 스타일 (Hotel.css 복사) */
+.btn-outline {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.btn-outline:hover { background-color: var(--common-bg-hover); }
+
+.btn-black {
+  background-color: var(--adm-text-primary);
+  border: 1px solid var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  padding: var(--common-spacing-xs-alt) var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.btn-black:hover { opacity: 0.9; }
+
+/* 작은 버튼 (테이블 내부용) */
+.btn-detail {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  background-color: var(--adm-bg-interactive); 
+  color: var(--adm-text-link);
+}
+.btn-detail:hover {
+  background-color: var(--adm-border-primary);
+}
+
+
+/* 4. 본문 테이블 영역 */
+.user-main-content {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-shadow: var(--adm-shadow-light);
+  overflow: hidden;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th {
+  min-width: 100px;
+  text-align: left;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  background-color: var(--adm-bg-tertiary);
+  border-bottom: 1px solid var(--adm-border-primary);
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.user-table td {
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+  vertical-align: middle;
+}
+
+.user-table tr:hover { background-color: var(--adm-bg-tertiary); }
+.user-table tr:last-child td { border-bottom: none; }
+
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
+
+/* --- User 전용 스타일 (Role Badge) --- */
+.role-badge {
+  padding: 4px 8px;
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-tiny);
+  font-weight: var(--adm-font-weight-bold);
+  text-transform: uppercase;
+  display: inline-block;
+}
+.role-badge.ADMIN {
+  background-color: rgba(39, 174, 96, 0.1);
+  color: var(--adm-accent-green);
+  border: 1px solid var(--adm-accent-green);
+}
+.role-badge.USER {
+  background-color: var(--adm-bg-interactive);
+  color: var(--adm-text-secondary);
+  border: 1px solid var(--adm-border-primary);
+}
+
+
+/* =========================================
+   5. User Detail Page Styles (상세 페이지)
+   ========================================= */
+
+.user-detail-header {
+  max-width: 900px;
+  margin: 0 auto var(--adm-spacing-m);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-detail-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+}
+
+.btn-back-page {
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  padding: 8px 16px;
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+  color: var(--adm-text-secondary);
+  transition: all 0.2s;
+}
+.btn-back-page:hover {
+  background-color: var(--common-bg-hover);
+  color: var(--adm-text-primary);
+}
+
+.user-detail-card {
+  background: var(--adm-bg-secondary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-m);
+  max-width: 900px;
+  margin: 0 auto;
+  border: 1px solid var(--adm-border-primary);
+  box-shadow: var(--adm-shadow-light);
+}
+
+.section-title {
+  font-size: var(--adm-font-large);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-m);
+  padding-bottom: var(--adm-spacing-s);
+  border-bottom: 1px solid var(--adm-border-secondary);
+}
+
+.mt-40 { margin-top: 40px; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--adm-spacing-m);
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: var(--common-font-base-small);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--common-text-secondary-dark);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+/* Input Styles */
+.input-disabled {
+  background: var(--adm-bg-disabled);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--common-text-disabled);
+  padding: var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  cursor: not-allowed;
+  font-size: var(--adm-font-base);
+}
+
+.user-detail-card .input-editable:not(:disabled) {
+  background: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  padding: var(--adm-spacing-s);
+  border-radius: var(--common-border-radius-s);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+  transition: border-color 0.2s;
+}
+.input-editable:focus {
+  outline: none;
+  border-color: var(--adm-text-primary);
+}
+
+/* Detail Actions */
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--adm-spacing-s);
+  margin-top: var(--adm-spacing-xl);
+  padding-top: var(--adm-spacing-m);
+  border-top: 1px solid var(--adm-border-secondary);
+}
+
+.btn-cancel {
+  background: var(--adm-bg-secondary); border: 1px solid var(--common-border-light); padding: var(--adm-spacing-s) var(--adm-spacing-l); border-radius: var(--common-border-radius-s); cursor: pointer; font-weight: var(--adm-font-weight-semibold);
+}
+.btn-save {
+  background: var(--adm-text-primary); color: var(--adm-text-contrast); border: none; padding: var(--adm-spacing-s) 30px; border-radius: var(--common-border-radius-s); cursor: pointer; font-weight: var(--adm-font-weight-semibold);
+}
+.btn-save:hover { opacity: 0.9; }

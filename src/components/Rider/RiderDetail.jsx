@@ -1,0 +1,266 @@
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import './Rider.css'; 
+import { postLicenseImageUploadThunk, riderDeleteThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
+import ImgView from '../../api/utils/imgView.jsx';
+
+function RiderDetail() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const [editData, setEditData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  const [imgViewOpen, setImgViewOpen] = useState(false);
+  const [imgViewSrc, setImgViewSrc] = useState("");
+  const [imgViewAlt, setImgViewAlt] = useState("");
+
+  const openImgView = (src, alt = "image") => {
+    if (!src) return;
+    setImgViewSrc(src);
+    setImgViewAlt(alt);
+    setImgViewOpen(true);
+  };
+
+  const closeImgView = () => setImgViewOpen(false);
+
+  useEffect(() => {
+    async function fetchDetail() {
+      try {
+        setLoading(true);
+        const result = await dispatch(riderDetailThunk(id)).unwrap();
+        setEditData(result.data);
+        if (result.data.licenseImg) {
+          setPreviewUrl(result.data.licenseImg); 
+        }
+      } catch (error) {
+        alert("기사 정보를 불러올 수 없습니다.");
+        navigate('/admin/rider');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDetail();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'phone') {
+      const cleaned = value.replace(/[^\d]/g, '');
+      let formatted = cleaned;
+
+      if (cleaned.startsWith('02') && cleaned.length > 2) {
+        // 서울 지역번호 형식 (2-4-4)
+        if (cleaned.length <= 6) {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2)}`;
+        } else {
+          formatted = `${cleaned.slice(0, 2)}-${cleaned.slice(2, 6)}-${cleaned.slice(6, 10)}`;
+        }
+      } else if (!cleaned.startsWith('02') && cleaned.length > 3) {
+        // 그 외 번호 형식
+        if (cleaned.length <= 7) {
+          // 중간 번호 3자리 또는 4자리 입력 중
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+        } else if (cleaned.length <= 10) {
+          // 10자리 번호: 3-3-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+        } else {
+          // 11자리 번호: 3-4-4 형식
+          formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+        }
+      }
+      setEditData(prev => ({ ...prev, phone: formatted }));
+    } else {
+      setEditData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    }
+  };
+
+  // Status 핸들러
+  const handleStatusChange = (e) => {
+    setEditData(prev => ({ ...prev, status: e.target.value }));
+  };
+
+  // ★ isWorking 토글 핸들러
+  const handleWorkingToggle = () => {
+    setEditData(prev => ({ ...prev, isWorking: !prev.isWorking }));
+  };
+
+  const handleUpdate = async () => {
+    if (!window.confirm(`${editData.rider_user.name} 정보를 수정하시겠습니까?`)) return;
+
+    try {
+      let resultUpload = ''
+      const payload = { ...editData };
+
+      if(file) {
+        resultUpload = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
+        payload.licenseImg = resultUpload.data.path;
+        
+      }
+
+      // 불필요한 필드 제거
+      delete payload.createdAt;
+      delete payload.updatedAt;
+      delete payload.deletedAt;
+
+      // TODO: address를 lan,lng으로 변경하는 처리 필요
+
+      // API 전송
+      await dispatch(riderUpdateThunk(payload)).unwrap();
+        
+      alert('수정이 완료되었습니다.');
+      navigate('/admin/rider');
+    } catch (e) {
+      console.error(e);
+      alert('수정 실패');
+    }
+  };
+
+    // 삭제 핸들러
+    const handleDelete = async () => {
+      if (!window.confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+      
+      try {
+        await dispatch(riderDeleteThunk(id)).unwrap();
+        alert('삭제되었습니다.');
+        navigate('/admin/rider');
+      } catch (error) {
+        console.error(error);
+        alert('삭제 실패: ' + (error?.message || '알 수 없는 오류'));
+      }
+    };
+
+  if (loading) return <div>Loading...</div>;
+  if (!editData) return null;
+
+  return (
+    <div className="rider-container">
+      <button className="btn-back-page" onClick={() => navigate('/admin/rider')}>&lt; 목록으로 돌아가기</button>
+
+      <div className="rider-detail-header">
+        <h2>기사 상세 정보 수정</h2>
+      </div>
+
+      <div className="rider-detail-card">
+        <div className="detail-grid">
+          
+          {/* Read Only */}
+          <div className="form-group">
+            <label>ID (불가)</label>
+            <input type="text" value={editData.id} disabled className="input-disabled" />
+          </div>
+          <div className="form-group">
+            <label>User ID (불가)</label>
+            <input type="text" value={editData.userId} disabled className="input-disabled" />
+          </div>
+          <div className="form-group">
+            <label>가입일</label>
+            <input type="text" value={editData.createdAt || '-'} disabled className="input-disabled" />
+          </div>
+          <div className="form-group">
+            <label>수정일</label>
+            <input type="text" value={editData.updatedAt || '-'} disabled className="input-disabled" />
+          </div>
+
+          <hr className="divider full-width" />
+
+          {/* Editable */}
+          
+          {/* 면허증 이미지 */}
+          <div className="form-group full-width">
+            <label>면허증 (License Image)</label>
+            <div className="image-upload-wrapper">
+              {previewUrl && <div className="img-preview" onClick={() => openImgView(previewUrl)}><img src={previewUrl} alt="License" /></div>}
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>기사명</label>
+            <input type="text" name="name" value={editData.rider_user.name} onChange={handleInputChange} className="input-editable" />
+          </div>
+           <div className="form-group">
+            <label>연락처</label>
+            <input type="text" name="phone" value={editData.phone} onChange={handleInputChange} className="input-editable" />
+          </div>
+
+          <div className="form-group full-width">
+            <label>주소</label>
+            <input type="text" name="address" value={editData.address} onChange={handleInputChange} className="input-editable" />
+          </div>
+
+          <div className="form-group">
+            <label>은행</label>
+            <input type="text" name="bank" value={editData.bank} onChange={handleInputChange} className="input-editable" />
+          </div>
+          <div className="form-group">
+            <label>계좌번호</label>
+            <input type="text" name="bankNum" value={editData.bankNum} onChange={handleInputChange} className="input-editable" />
+          </div>
+
+          <div className="form-group full-width">
+            <label>픽업 시간 (Pickup At)</label>
+            <input type="text" name="pickupAt" value={editData.pickupAt || ''} onChange={handleInputChange} placeholder="예: 09:00 - 18:00" className="input-editable" />
+          </div>
+
+          {/* ★ isWorking 토글 스위치 */}
+          <div className="form-group full-width">
+            <label>출근 상태 (isWorking)</label>
+            <div className="toggle-wrapper" onClick={handleWorkingToggle}>
+              <div className={`toggle-switch ${editData.isWorking ? 'on' : 'off'}`}>
+                <div className="toggle-handle"></div>
+              </div>
+              <span className="toggle-label">{editData.isWorking ? '출근 (ON)' : '퇴근 (OFF)'}</span>
+            </div>
+          </div>
+
+          {/* Status (3 Buttons) */}
+          <div className="form-group full-width">
+            <label>승인 상태 (Status)</label>
+            <div className="status-selector">
+              <label className={`radio-label res ${editData.status === 'RES' ? 'active' : ''}`}>
+                <input type="radio" value="RES" checked={editData.status === 'RES'} onChange={handleStatusChange} />
+                승인
+              </label>
+              <label className={`radio-label req ${editData.status === 'REQ' ? 'active' : ''}`}>
+                <input type="radio" value="REQ" checked={editData.status === 'REQ'} onChange={handleStatusChange} />
+                대기
+              </label>
+              <label className={`radio-label rej ${editData.status === 'REJ' ? 'active' : ''}`}>
+                <input type="radio" value="REJ" checked={editData.status === 'REJ'} onChange={handleStatusChange} />
+                거절
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="detail-actions">
+          <button className="adm-btn delete" onClick={handleDelete}>삭제 (Delete)</button>
+          <button className="btn-save" onClick={handleUpdate}>수정 완료</button>
+        </div>
+      </div>
+      <ImgView 
+        isOpen={imgViewOpen}
+        onClose={closeImgView}
+        src={imgViewSrc}
+        alt={imgViewAlt}
+      />
+    </div>
+  );
+}
+
+export default RiderDetail;

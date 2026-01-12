@@ -1,0 +1,395 @@
+/* Notice.css */
+
+/* =========================================
+   1. 공통 레이아웃 (Common Layout)
+   ========================================= */
+
+/* 메인 컨테이너 */
+.notice-container {
+  flex: 1;
+  background-color: var(--adm-bg-primary);
+  padding: var(--mng-container-padding);
+  min-width: 1200px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative; /* 뒤로가기 버튼 위치 기준 */
+}
+
+/* 페이지 제목 */
+.notice-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+}
+
+/* 카드 공통 스타일 (폼, 리스트, 상세) */
+.notice-form-card, 
+.notice-history-card,
+.notice-card {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xl);
+  box-shadow: var(--adm-shadow-light);
+}
+
+/* 카드 서브타이틀 */
+.card-subtitle, 
+.card-title {
+  font-size: var(--mng-font-size-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-top: 0;
+  margin-bottom: var(--adm-spacing-m);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  padding-bottom: var(--adm-spacing-s);
+}
+
+/* =========================================
+   2. Notice.jsx (리스트 & 생성 페이지)
+   ========================================= */
+
+/* 레이아웃 래퍼 (좌우 배치) */
+.notice-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--adm-spacing-l);
+  width: 100%;
+  max-width: 1600px;
+}
+
+/* 좌측: 작성 폼, 우측: 리스트 */
+.notice-form-card,
+.notice-history-card {
+  flex: 1;
+  height: fit-content;
+  min-width: 0; /* Flex 자식 요소 말줄임표 작동 보장 */
+}
+
+/* --- Form Elements --- */
+
+.form-group {
+  margin-bottom: var(--adm-spacing-m);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+  margin-bottom: var(--adm-spacing-xs);
+}
+
+/* Role Selector (Segmented Control 스타일) */
+.role-selector {
+  display: flex;
+  gap: var(--adm-spacing-xs);
+  background-color: var(--adm-bg-tertiary); /* 연한 회색 배경 */
+  padding: 4px;
+  border-radius: var(--adm-radius-medium);
+  width: fit-content;
+}
+
+.role-option {
+  padding: 8px 16px;
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary);
+  cursor: pointer;
+  border-radius: var(--adm-radius-small);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.role-option input[type="radio"] {
+  display: none;
+}
+
+.role-option.active {
+  background-color: var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive);
+}
+
+.role-option:hover:not(.active) {
+  color: var(--adm-text-primary);
+}
+
+/* Inputs & Textarea */
+.notice-input,
+.notice-textarea,
+.adm-input,
+.adm-textarea {
+  width: 100%;
+  padding: var(--adm-spacing-s);
+  font-size: var(--adm-font-base);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  background-color: var(--adm-bg-secondary);
+  color: var(--adm-text-primary);
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.notice-input:focus, .notice-textarea:focus,
+.adm-input:focus, .adm-textarea:focus {
+  outline: none;
+  border-color: var(--adm-text-link);
+  background-color: var(--common-bg-hover);
+}
+
+.notice-textarea, .adm-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Submit Button Area */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--adm-spacing-l);
+}
+
+.notice-btn-submit {
+  background-color: var(--adm-text-link);
+  color: var(--adm-text-contrast);
+  border: none;
+  padding: 10px 24px;
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-semibold);
+  border-radius: var(--adm-radius-medium);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.notice-btn-submit:hover {
+  opacity: 0.9;
+}
+
+/* --- History Table --- */
+
+.history-table-wrapper {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  text-align: left;
+  padding: var(--adm-spacing-s);
+  background-color: var(--adm-bg-tertiary);
+  border-bottom: 1px solid var(--adm-border-primary);
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
+  white-space: nowrap;
+}
+
+.history-table td {
+  padding: var(--adm-spacing-s);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  vertical-align: middle;
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+}
+
+/* Target Badges */
+.target-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: var(--adm-radius-small);
+  font-weight: var(--adm-font-weight-bold);
+  font-size: var(--adm-font-tiny);
+}
+.target-badge.ALL { background-color: #E8F5E9; color: #2E7D32; } /* Green Light */
+.target-badge.DLV { background-color: #E3F2FD; color: #1565C0; } /* Blue Light */
+.target-badge.PTN { background-color: #F3E5F5; color: #7B1FA2; } /* Purple Light */
+
+/* Table Text Truncation */
+.history-title {
+  font-weight: var(--adm-font-weight-semibold);
+  margin-bottom: 4px;
+  font-size: var(--adm-font-base);
+}
+
+.history-content-preview {
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.text-date {
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Manage Button (Action) */
+.btn-manage {
+  background-color: var(--adm-bg-primary);
+  border: 1px solid var(--adm-border-primary);
+  padding: 6px 12px;
+  border-radius: var(--adm-radius-small);
+  color: var(--adm-text-secondary);
+  font-size: var(--adm-font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-manage:hover {
+  background-color: var(--adm-border-primary);
+  color: var(--adm-text-primary);
+}
+
+
+/* =========================================
+   3. NoticeDetail.jsx (상세 페이지 전용)
+   ========================================= */
+
+/* 상세 페이지 헤더 영역 (타이틀) - RiderDetail 스타일 참고 */
+.notice-header {
+  max-width: 900px; /* RiderDetail과 동일한 너비 */
+  margin: var(--adm-spacing-l) auto var(--adm-spacing-m); /* 중앙 정렬 및 하단 여백 */
+  text-align: left; /* 좌측 정렬 */
+}
+
+.page-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin: 0 0 var(--adm-spacing-xs) 0; /* 상단 여백 제거 */
+}
+
+.page-subtitle {
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-tertiary);
+}
+
+/* 컨텐츠 래퍼 - 중앙 정렬을 위한 설정 */
+.notice-content-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 메인 카드 스타일 - RiderDetail 스타일 참고 */
+.notice-card {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: var(--adm-spacing-xl);
+  box-shadow: var(--adm-shadow-light);
+  
+  /* 크기 및 정렬 수정 */
+  width: 100%;
+  max-width: 900px; /* 넓어진 너비 */
+  margin: 0 auto;   /* 중앙 정렬 */
+}
+
+/* 카드 내부 헤더 Row (Status 포함) */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--adm-spacing-l);
+  padding-bottom: var(--adm-spacing-m);
+  border-bottom: 1px solid var(--adm-border-secondary);
+}
+
+/* Status Toggle Badge */
+.status-badge-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-bold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Active: Green */
+.status-badge-toggle.active {
+  background-color: rgba(39, 174, 96, 0.1); 
+  color: var(--adm-accent-green);
+  border: 1px solid var(--adm-accent-green);
+}
+/* Inactive: Red */
+.status-badge-toggle.inactive {
+  background-color: rgba(217, 48, 37, 0.1); 
+  color: var(--adm-accent-red);
+  border: 1px solid var(--adm-accent-red);
+}
+
+.status-badge-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--adm-shadow-interactive);
+}
+
+/* 상세 폼 레이아웃 */
+.detail-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--adm-spacing-m);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--adm-spacing-m);
+}
+.form-group.half {
+  flex: 1;
+}
+
+/* Readonly Input */
+.adm-input.readonly {
+  background-color: var(--adm-bg-primary); /* 회색 배경 */
+  color: var(--adm-text-tertiary);
+  cursor: not-allowed;
+  border-color: var(--adm-border-primary);
+}
+
+
+/* =========================================
+   4. 반응형 (Media Queries)
+   ========================================= */
+
+@media (max-width: 1024px) {
+  /* 태블릿/모바일: 좌우 배치 -> 상하 배치 */
+  .notice-content-wrapper {
+    flex-direction: column;
+  }
+  
+  .history-content-preview {
+    max-width: 100%; /* 너비 제한 해제 */
+  }
+
+  .form-row {
+    flex-direction: column; /* 상세 페이지 input row도 세로로 */
+    gap: var(--adm-spacing-s);
+  }
+}
+
+/* Specificity override for input backgrounds */
+.notice-form-card .notice-input:not(:disabled),
+.notice-form-card .notice-textarea:not(:disabled),
+.notice-card .adm-input:not(.readonly):not(:disabled),
+.notice-card .adm-textarea:not(:disabled) {
+  background-color: var(--adm-bg-secondary);
+}

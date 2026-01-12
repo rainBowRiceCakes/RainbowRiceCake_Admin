@@ -1,0 +1,224 @@
+/* DashBoard.css */
+
+/* 1. 전체 컨테이너 */
+.dash-container {
+  flex: 1; /* 부모가 flex일 때 남은 공간을 모두 차지함 */
+  background-color: var(--adm-bg-primary); /* 전체 배경: 아주 연한 회색 (Uber Style) */
+  padding: var(--adm-spacing-xl);
+  min-width: 1200px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 페이지 타이틀 */
+.dash-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold); /* Bold */
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+  letter-spacing: -0.5px;
+}
+
+/* 3. 요약 위젯 컨테이너 (Flex Row) */
+.dash-sum-container {
+  display: flex;
+  gap: var(--adm-spacing-m); /* 카드 사이 간격 */
+  margin-bottom: 30px;
+}
+
+/* 4. 개별 요약 카드 (White Box) */
+.dash-sum {
+  flex: 1; /* 3개의 카드가 동일한 너비를 가짐 */
+  background-color: var(--adm-bg-secondary);
+  padding: var(--adm-spacing-l);
+  border-radius: var(--adm-radius-medium); /* 살짝 둥근 모서리 */
+  border: 1px solid var(--adm-border-primary); /* 옅은 테두리 */
+  box-shadow: var(--adm-shadow-light); /* 아주 은은한 그림자 */
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+/* 카드 내부 텍스트 */
+.dash-sum-title {
+  font-size: 13px;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary); /* 보조 텍스트 색상 */
+  margin-bottom: var(--adm-spacing-xs);
+  text-transform: uppercase; /* 대문자로 변환 */
+}
+
+.dash-sum-value {
+  font-size: 36px;
+  font-weight: 800; /* Extra Bold */
+  color: var(--adm-text-primary);
+}
+
+/* [중단/하단] 레이아웃 Row */
+.dash-row {
+  display: flex;
+  gap: var(--adm-spacing-m); /* 좌우 박스 사이 간격 (20px) */
+  margin-bottom: var(--adm-spacing-m); /* 아래 행과의 간격 */
+}
+
+/* 중단 영역 */
+/* 1. 테이블 기본 구조 */
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px; /* 본문 폰트 사이즈 */
+  margin-bottom: 10px;
+}
+
+/* 2. 테이블 헤더 (th) */
+.dash-table th {
+  text-align: left;
+  font-size: 12px;
+  color: var(--adm-text-secondary); /* 회색 텍스트 */
+  font-weight: var(--adm-font-weight-medium);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--adm-border-secondary); /* 연한 밑줄 */
+}
+
+/* 3. 테이블 바디 (td) */
+.dash-table td {
+  padding: 16px 0;
+  vertical-align: middle;
+  border-bottom: 1px solid #f5f5f5; /* 아주 연한 구분선 */
+  color: var(--adm-text-primary);
+}
+
+/* 텍스트 유틸리티 클래스 */
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
+.text-center { text-align: center; }
+.text-urgent { 
+  color: var(--adm-accent-red); /* 빨간색 텍스트 (긴급) */
+  font-weight: var(--adm-font-weight-bold);
+}
+
+/* 4. 상태 뱃지 (Pill Shape) */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px; /* 둥근 알약 모양 */
+  font-size: 11px;
+  font-weight: var(--adm-font-weight-bold);
+  color: #fff; /* 글자는 흰색 */
+  text-align: center;
+  min-width: 60px;
+}
+
+/* 뱃지 색상 변형 */
+.status-badge.success { background-color: var(--adm-accent-green); } /* 녹색 (배송완료) */
+.status-badge.warning { background-color: var(--adm-accent-orange); } /* 주황 (배송중) */
+.status-badge.danger  { background-color: var(--adm-accent-red); }    /* 빨강 (지연/이슈) */
+
+
+/* 5. 사진 확인 아이콘 (Circle) */
+.photo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%; /* 완전한 원형 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* 중앙 정렬 */
+  font-size: 12px;
+  color: #fff;
+}
+
+/* 아이콘 색상 변형 */
+.photo-icon.success { background-color: var(--adm-accent-green); } /* 녹색 체크 */
+.photo-icon.warning { background-color: var(--adm-accent-orange); } /* 주황색 점 */
+.photo-icon.danger  { background-color: var(--adm-accent-red); }    /* 빨강색 점 */
+
+/* 공통 박스 스타일 (흰색 배경, 그림자) */
+.dash-box {
+  background-color: var(--adm-bg-secondary);
+  border-radius: var(--adm-radius-medium);
+  border: 1px solid var(--adm-border-primary);
+  box-shadow: var(--adm-shadow-light);
+  padding: var(--adm-spacing-l);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* [비율 설정] 이미지와 동일한 2:1 비율 */
+.dash-col-wide {
+  flex: 2; /* 좌측 넓은 영역 (약 66%) */
+  min-width: 0; /* Flexbox 내부 컨텐츠 넘침 방지 */
+}
+
+.dash-col-narrow {
+  flex: 1; /* 우측 좁은 영역 (약 33%) */
+  min-width: 0;
+}
+
+/* 섹션 내부 타이틀 */
+.dash-section-title {
+  font-size: 18px;
+  font-weight: var(--adm-font-weight-bold);
+  margin-bottom: var(--adm-spacing-m);
+  color: var(--adm-text-primary);
+}
+
+/* 2x2 그리드 컨테이너 */
+.dash-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 1:1 비율로 2열 */
+  grid-template-rows: auto auto;  /* 2행 */
+  gap: var(--adm-spacing-m);      /* 아이템 사이 간격 (20px) */
+  flex-grow: 1;                   /* 박스 높이에 맞춰 꽉 차게 */
+}
+
+/* 그리드 아이템 (회색 박스) */
+.summary-item {
+  background-color: var(--adm-bg-interactive); /* #EEEEEE (회색) */
+  border-radius: var(--adm-radius-medium);     /* 둥근 모서리 */
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 그리드 아이템 내부 텍스트 */
+.summary-label {
+  font-size: 13px;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-size: 18px;
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+}
+
+/* 차트 컨테이너 박스 스타일 (이미지 참조) */
+.chart-box {
+  background-color: #ffffff;
+  border-radius: 12px;       /* 둥근 모서리 */
+  border: 1px solid var(--adm-border-primary);
+  padding: 24px 30px;        /* 내부 패딩 */
+  height: 100%;              /* 부모 높이에 맞춤 */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 차트 타이틀 스타일 */
+.chart-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #000;
+  text-align: left;
+}
+
+/* 차트 영역 (캔버스 감싸는 div) */
+.chart-wrapper {
+  flex: 1; /* 남은 공간 모두 차지 */
+  position: relative;
+  min-height: 200px; /* 최소 높이 확보 */
+}

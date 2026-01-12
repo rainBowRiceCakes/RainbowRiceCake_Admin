@@ -1,0 +1,440 @@
+/* 1. 전체 컨테이너 */
+.order-container {
+  flex: 1; /* 화면 꽉 채우기 */
+  background-color: var(--adm-bg-primary); /* 배경: 연한 회색 */
+  padding: var(--adm-spacing-xl);
+  min-width: 1200px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 2. 제목 */
+.order-title {
+  font-size: var(--adm-font-title);
+  font-weight: var(--adm-font-weight-bold);
+  color: var(--adm-text-primary);
+  margin-bottom: var(--adm-spacing-l);
+  letter-spacing: -0.5px;
+}
+
+/* 3. 헤더 영역 (Flexbox) */
+.order-main-head {
+  display: flex;
+  justify-content: space-between; /* 양 끝 정렬 */
+  align-items: center;
+  margin-bottom: var(--adm-spacing-m);
+}
+
+.toggle-container {
+  display: flex;
+  background-color: var(--adm-bg-interactive); /* 연한 회색 배경 */
+  padding: var(--adm-radius-small);
+  border-radius: var(--adm-radius-large); /* 둥근 알약 모양 */
+  width: fit-content; /* 내용물만큼만 넓이 차지 */
+}
+
+/* 토글 버튼 기본 (선택 안 된 상태) */
+.toggle-btn {
+  background: transparent; /* 배경 투명 */
+  border: none;
+  padding: var(--adm-spacing-xs) var(--adm-spacing-m);
+  font-size: var(--adm-font-base);
+  font-weight: var(--adm-font-weight-medium);
+  color: var(--adm-text-tertiary); /* 선택 안 됐을 때 글자색 */
+  cursor: pointer;
+  border-radius: 20px; /* 버튼도 둥글게 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* ★ 선택된 버튼 (Active) */
+.toggle-btn.active {
+  background-color: var(--adm-text-primary); /* Uber Black 배경 */
+  color: var(--adm-text-contrast); /* 흰색 글씨 */
+  font-weight: var(--adm-font-weight-bold);
+  box-shadow: var(--adm-shadow-interactive); /* 살짝 그림자 */
+}
+
+/* 버튼에 마우스 올렸을 때 */
+.toggle-btn:hover:not(.active) {
+  background-color: var(--adm-border-primary); /* 살짝 진해짐 */
+  color: var(--adm-text-link);
+}
+
+/* 우측 액션 그룹 */
+.head-action-group {
+  display: flex;
+  gap: var(--adm-spacing-s);
+}
+
+/* 검색창 */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  padding: 0 var(--adm-spacing-s);
+  width: 240px;
+}
+.search-icon { font-size: var(--adm-font-base); color: var(--adm-text-placeholder); margin-right: var(--adm-spacing-xs); }
+.search-input {
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  font-size: var(--adm-font-base);
+  width: 100%;
+}
+
+/* 버튼 스타일 (공통) */
+.btn-outline {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  color: var(--adm-text-primary);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.btn-outline:hover { background-color: #F9F9F9; }
+
+.btn-black {
+  background-color: var(--adm-text-primary);
+  border: 1px solid var(--adm-text-primary);
+  color: var(--adm-text-contrast);
+  padding: 10px var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+  font-weight: var(--adm-font-weight-semibold);
+  font-size: var(--adm-font-base);
+  cursor: pointer;
+}
+.btn-black:hover { opacity: 0.9; }
+
+
+/* 4. 본문 테이블 영역 (Card UI) */
+.order-main-content {
+  background-color: var(--adm-bg-secondary);
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-medium);
+  box-shadow: var(--adm-shadow-light);
+  overflow: hidden; /* 둥근 모서리 유지 */
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th {
+  min-width: 130px;
+  text-align: left;
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  background-color: var(--adm-bg-tertiary);
+  border-bottom: 1px solid var(--adm-border-primary);
+  font-size: var(--adm-font-small);
+  color: var(--adm-text-secondary);
+  font-weight: var(--adm-font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.order-table td {
+  padding: var(--adm-font-large) var(--adm-spacing-l);
+  border-bottom: 1px solid var(--adm-border-secondary);
+  font-size: var(--adm-font-base);
+  color: var(--adm-text-primary);
+  vertical-align: middle;
+}
+
+.order-table-check-box {
+  min-width: 30px;
+}
+
+.order-table tr:hover { background-color: var(--adm-bg-tertiary); }
+.order-table tr:last-child td { border-bottom: none; }
+
+.fw-bold { font-weight: var(--adm-font-weight-bold); }
+
+/* 상태 배지 스타일 */
+.status-badge {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: var(--adm-font-tiny);
+  font-weight: var(--adm-font-weight-bold);
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-badge.WAITING { background-color: #F5F5F5; color: var(--adm-text-secondary); }
+.status-badge.MATCHED { background-color: #E3F2FD; color: #1565C0; } /* 파란색 */
+.status-badge.PICKUP { background-color: #FFF3E0; color: #E65100; } /* 주황색 */
+.status-badge.COMPLETE { background-color: #E8F5E9; color: #2E7D32; } /* 초록색 */
+.status-badge.PICK { background-color: #FFEBEE; color: #da6161; } /* 빨간색 */
+
+.order-detail-btn {
+  padding: 6px var(--adm-spacing-s);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* --- OrderDetail Page Styles --- */
+
+/* 제목 헤더 영역 */
+.order-detail-header {
+  display: flex; /* Flexbox 적용 */
+  justify-content: space-between; /* 제목은 왼쪽, 버튼은 오른쪽 끝으로 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 24px; /* 아래 카드와 간격 */
+  padding-bottom: 10px;
+  max-width: 1000px; /* order-detail-card와 동일한 최대 너비 설정 */
+  margin: 0 auto 24px auto; /* 중앙 정렬, 아래 카드와의 간격 유지 */
+}
+
+.order-detail-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0; /* 기본 마진 제거 */
+  text-align: left; /* 좌측 정렬 강제 */
+}
+
+/* 뒤로가기 버튼 (위치 재조정) */
+.btn-back-page {
+  /* position: absolute;  <-- 이거 지움 (흐름에 맡김) */
+  /* top: ... right: ...  <-- 이것도 지움 */
+  
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  /* Flex 아이템으로서 동작 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-back-page:hover {
+  background-color: #F9F9F9;
+  color: #000;
+  border-color: #CCC;
+}
+
+/* (참고) 카드 박스 등 나머지 스타일은 그대로 유지 */
+.order-detail-card {
+  background: #FFFFFF;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #E0E0E0;
+  max-width: 1000px;
+  margin: 0 auto 40px auto; /* 중앙 정렬 */
+}
+
+/* 화면이 좁을 때 1열로 변경 */
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* 폼 요소 스타일 */
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--adm-font-small);
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+}
+
+.input-disabled {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--adm-border-secondary);
+  background-color: var(--adm-bg-tertiary);
+  color: var(--common-text-disabled);
+  border-radius: var(--adm-radius-small);
+  cursor: not-allowed;
+}
+
+.order-detail-card .input-editable:not(:disabled), 
+.order-detail-card .select-editable:not(:disabled) {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-small);
+  font-size: var(--adm-font-base);
+  transition: border-color 0.2s;
+  background-color: var(--adm-bg-secondary);
+}
+
+.input-editable:focus, .select-editable:focus {
+  border-color: var(--adm-text-primary);
+  outline: none;
+}
+
+/* ★ 짐 수량 그리드 (반응형 해결 핵심) ★ */
+.luggage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* 최소 120px 확보, 공간 남으면 늘어남 */
+  gap: var(--adm-spacing-m);
+  background-color: var(--adm-bg-tertiary); /* 구분감 주는 배경 */
+  padding: var(--adm-spacing-m);
+  border-radius: var(--adm-radius-medium);
+}
+
+.luggage-item span {
+  display: block;
+  font-size: var(--adm-font-tiny);
+  color: var(--adm-text-tertiary);
+  margin-bottom: 4px;
+}
+
+/* 하단 액션 버튼 */
+.detail-actions {
+  margin-top: var(--adm-spacing-xl);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--adm-spacing-s);
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: var(--adm-bg-interactive);
+  border: none;
+  border-radius: var(--adm-radius-small);
+  cursor: pointer;
+  font-weight: var(--adm-font-weight-semibold);
+  color: var(--adm-text-secondary);
+}
+
+.btn-save {
+  padding: 10px 20px;
+  background-color: var(--adm-text-primary); /* Black */
+  color: var(--adm-text-contrast); /* White */
+  border: none;
+  border-radius: var(--adm-radius-small);
+  cursor: pointer;
+  font-weight: var(--adm-font-weight-semibold);
+}
+
+.btn-save:hover {
+  opacity: 0.9;
+}
+
+/* --- 검색 가능한 드롭다운 스타일 --- */
+
+/* 부모 컨테이너 (기준점) */
+.search-dropdown-container {
+  position: relative; /* 자식 absolute 배치를 위해 필수 */
+}
+
+/* 드롭다운 목록 박스 */
+.dropdown-list {
+  position: absolute;
+  top: 100%; /* 입력창 바로 아래 */
+  left: 0;
+  width: 100%;
+  max-height: 200px; /* 너무 길어지면 스크롤 */
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid var(--adm-border-primary);
+  border-radius: var(--adm-radius-small);
+  box-shadow: var(--adm-shadow-interactive);
+  z-index: 100; /* 다른 요소보다 위에 뜨게 */
+  margin-top: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+/* 리스트 아이템 */
+.dropdown-list li {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-list li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-list li:hover {
+  background-color: var(--adm-bg-interactive);
+}
+
+/* 검색 결과 없음 */
+.dropdown-list li.no-result {
+  color: #999;
+  cursor: default;
+  text-align: center;
+}
+
+/* 호텔 이름과 주소 스타일 */
+.hotel-name {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.hotel-addr {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* --- 짐 수량 그리드 (모달용 소형 스타일) --- */
+.luggage-grid {
+  display: grid;
+  /* 핵심: 무조건 3열로 고정하고, 비율을 1:1:1로 맞춤 */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px; /* 칸 사이 간격을 좁힘 */
+  background-color: #FAFAFA;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.luggage-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 라벨과 인풋 가운데 정렬 */
+}
+
+.luggage-item span {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* 짐 수량 입력칸 스타일 재정의 (더 작게) */
+.luggage-item input[type="number"] {
+  width: 100%;       /* 부모 너비에 맞춤 */
+  max-width: 80px;   /* 너무 커지지 않게 제한 */
+  padding: 6px;      /* 패딩을 줄여서 높이 축소 */
+  font-size: 14px;
+  text-align: center; /* 숫자 가운데 정렬 */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* 포커스 시 스타일 */
+.luggage-item input[type="number"]:focus {
+  border-color: #000;
+  outline: none;
+}
