@@ -11,7 +11,7 @@ function OrderDetail() {
   const { orderCode } = useParams();
 
   // Redux Data
-  const { show } = useSelector((state) => state.hotelShow);
+  const { hotels } = useSelector((state) => state.hotelShow);
 
   const [editData, setEditData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -141,7 +141,7 @@ function OrderDetail() {
     };
 
   // ★ 호텔 필터링 로직
-  const filteredHotels = show ? show.filter(hotel => 
+  const filteredHotels = hotels ? hotels.filter(hotel => 
     hotel.krName.toLowerCase().includes(searchTerm.toLowerCase()) || 
     hotel.address.toLowerCase().includes(searchTerm.toLowerCase())
   ) : [];
