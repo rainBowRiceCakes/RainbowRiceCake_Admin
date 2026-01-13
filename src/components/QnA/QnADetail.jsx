@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './QnA.css'; 
 import { qnaDeleteThunk, qnaDetailThunk, qnaUpdateThunk } from '../../store/thunks/qnaThunk';
-import ImgView from '../../api/utils/imgView.jsx';
+import ImgView from '../../api/utils/ImgView.jsx';
 
 function QnADetail() {
   const { id } = useParams();

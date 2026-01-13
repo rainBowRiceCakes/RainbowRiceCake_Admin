@@ -6,7 +6,7 @@ import './Partner.css';
 import { partnerDeleteThunk, partnerDetailThunk, partnerUpdateThunk, postLogoImageUploadThunk } from '../../store/thunks/partnerThunk.js';
 import InvoiceSendModal from '../invoice/Invoice.jsx';
 import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
-import ImgView from '../../api/utils/imgView.jsx';
+import ImgView from '../../api/utils/ImgView.jsx';
 import AddressModal from '../common/AddressModal.jsx'; // AddressModal 임포트
 
 function PartnerDetail() {
