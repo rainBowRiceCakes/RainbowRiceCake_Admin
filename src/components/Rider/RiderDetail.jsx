@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import './Rider.css'; 
 import { postLicenseImageUploadThunk, riderDeleteThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
 import ImgView from '../../api/utils/ImgView.jsx';
+import { searchAddressToCoords } from '../../api/utils/kakaoAddress.js';
 
 function RiderDetail() {
   const navigate = useNavigate();
@@ -104,12 +105,16 @@ function RiderDetail() {
     try {
       let resultUpload = ''
       const payload = { ...editData };
+      const fullAddress = `${editData.address} ${editData.detailAddress || ''}`.trim();
+      const coords = await searchAddressToCoords(fullAddress);
 
       if(file) {
         resultUpload = await dispatch(postLicenseImageUploadThunk(file)).unwrap();
         payload.licenseImg = resultUpload.data.path;
         
       }
+      payload.lat = coords.lat;
+      payload.lng = coords.lng;
 
       // 불필요한 필드 제거
       delete payload.createdAt;
