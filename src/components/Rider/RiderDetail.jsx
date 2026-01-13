@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './Rider.css'; 
 import { postLicenseImageUploadThunk, riderDeleteThunk, riderDetailThunk, riderUpdateThunk } from '../../store/thunks/riderThunk.js';
-import ImgView from '../../api/utils/imgView.jsx';
+import ImgView from '../../api/utils/ImgView.jsx';
 
 function RiderDetail() {
   const navigate = useNavigate();
