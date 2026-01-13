@@ -5,7 +5,7 @@ import DashBoard from "../components/DashBoard.jsx";
 import Rider from "../components/Rider/Rider.jsx";
 import Partner from "../components/Partner/Partner.jsx";
 import Hotel from "../components/Hotel/Hotel.jsx";
-import Settlement from "../components/settlement/Settlement.jsx";
+import Settlement from "../components/Settlement/Settlement.jsx";
 import Notice from "../components/Notice/Notice.jsx";
 import QnA from "../components/QnA/QnA.jsx";
 import HotelDetail from "../components/Hotel/HotelDetail.jsx";
