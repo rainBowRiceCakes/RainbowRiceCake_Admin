@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; // ★ Redux 훅 추가
-import './Sidebar.css';
+import './SideBar.css';
 
 // ★ authSlice에서 만든 초기화 액션 import (경로 확인 필요)
 import { clearAuth } from '../../store/slices/authSlice.js';
